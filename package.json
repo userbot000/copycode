@@ -1,0 +1,19 @@
+{
+  "name": "copycode-guides",
+  "version": "1.0.0",
+  "description": "מדריכי תכנות מקיפים בעברית",
+  "scripts": {
+    "build-index": "node build-search-index.js"
+  },
+  "keywords": [
+    "programming",
+    "tutorials",
+    "hebrew",
+    "guides"
+  ],
+  "author": "CopyCode",
+  "license": "MIT",
+  "dependencies": {
+    "jsdom": "^23.0.0"
+  }
+}

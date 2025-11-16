@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך Git - פקודות שימושיות - CopyCode</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: url('images/background.jpg') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .site-logo:hover {
+            color: #667eea;
+        }
+
+        .site-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding-top: 90px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1rem;
+            margin-left: 1.5rem;
+            position: sticky;
+            top: 110px;
+            height: calc(100vh - 130px);
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: #5a6c7d;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding-right: 1rem;
+        }
+
+        .nav-link.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: transparent;
+            color: #1a1a1a;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        h1 svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+            font-weight: 600;
+        }
+
+        .command-group {
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .command-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .command-wrapper {
+            position: relative;
+            margin: 0.8rem 0;
+        }
+
+        .command {
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 0.9rem 3rem 0.9rem 1rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid #333;
+            position: relative;
+            overflow-x: auto;
+        }
+
+
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+            padding: 0.4rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+        }
+
+        .copy-btn::before {
+            content: '⧉';
+            font-size: 1rem;
+        }
+
+        .copy-btn:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-color: #95a5a6;
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .copy-btn.copied::before {
+            content: '✓';
+        }
+
+        .description {
+            color: #5a6c7d;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .explanation {
+            background: #e8f4f8;
+            border-right: 3px solid #3498db;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            color: #34495e;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-right: 3px solid #f39c12;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #d68910;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 3px solid #3498db;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 2px solid #3498db;
+            }
+
+            .container {
+                margin: 0 1rem 1rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .command {
+                font-size: 0.82rem;
+                padding-left: 0.8rem;
+            }
+
+            .copy-btn {
+                position: relative;
+                display: block;
+                margin-top: 0.5rem;
+                right: 0;
+                transform: none;
+            }
+
+            .copy-btn:active {
+                transform: scale(0.95);
+            }
+
+            .command-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+
+        .icon {
+            display: inline-block;
+            margin-left: 0.5rem;
+            font-size: 0.9em;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #3498db;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="top-header">
+        <a href="index.html" class="site-logo">
+            <img src="images/logo.png" alt="לוגו האתר">
+            CopyCode
+        </a>
+        <a href="search.html" class="search-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>חיפוש</span>
+        </a>
+    </div>
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-title">תוכן עניינים</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#basics" class="nav-link">פעולות בסיסיות</a></li>
+                <li class="nav-item"><a href="#diff" class="nav-link">עבודה עם DIFF</a></li>
+                <li class="nav-item"><a href="#commits" class="nav-link">עריכת קומיטים</a></li>
+                <li class="nav-item"><a href="#undo" class="nav-link">ביטולים</a></li>
+                <li class="nav-item"><a href="#stash" class="nav-link">עבודה עם Stash</a></li>
+                <li class="nav-item"><a href="#branches" class="nav-link">ענפים ו-PR</a></li>
+                <li class="nav-item"><a href="#github-cli" class="nav-link">GitHub CLI</a></li>
+                <li class="nav-item"><a href="#sync" class="nav-link">סנכרון מוחלט</a></li>
+                <li class="nav-item"><a href="#tools" class="nav-link">כלים נוספים</a></li>
+                <li class="nav-item"><a href="#dart" class="nav-link">Dart Analysis</a></li>
+                <li class="nav-item"><a href="#custom" class="nav-link">פקודות נוספות</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+        <header>
+            <h1>
+                <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#F05032" d="M251.172 116.594L139.4 4.828c-6.433-6.437-16.873-6.437-23.314 0l-23.21 23.21 29.443 29.443c6.842-2.312 14.688-.761 20.142 4.693 5.48 5.489 7.02 13.402 4.652 20.266l28.375 28.376c6.865-2.365 14.786-.835 20.269 4.657 7.663 7.66 7.663 20.075 0 27.74-7.665 7.666-20.08 7.666-27.749 0-5.764-5.77-7.188-14.235-4.27-21.336l-26.462-26.462-.003 69.637a19.82 19.82 0 0 1 5.188 3.71c7.663 7.66 7.663 20.076 0 27.747-7.665 7.662-20.086 7.662-27.74 0-7.663-7.671-7.663-20.086 0-27.746a19.654 19.654 0 0 1 6.421-4.281V94.196a19.378 19.378 0 0 1-6.421-4.281c-5.806-5.798-7.202-14.317-4.227-21.446L81.47 39.442l-76.64 76.635c-6.44 6.443-6.44 16.884 0 23.322l111.774 111.768c6.435 6.438 16.873 6.438 23.316 0l111.251-111.249c6.438-6.44 6.438-16.887 0-23.324"/>
+                </svg>
+                מדריך Git מקיף
+            </h1>
+            <p class="subtitle">פקודות שימושיות לעבודה יומיומית</p>
+        </header>
+
+        <div class="content">
+            <!-- פעולות בסיסיות -->
+            <div class="section" id="basics">
+                <h2 class="section-title">פעולות בסיסיות</h2>
+                <div class="command-group">
+                    <div class="command-title">משיכה ודחיפה</div>
+                    
+                    <div class="description">משיכת שינויים מהשרת:</div>
+                    <div class="explanation">מביא את כל השינויים האחרונים מהמאגר המרוחק ומשלב אותם עם הענף המקומי שלך</div>
+                    <div class="command-wrapper">
+                        <div class="command">git pull</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git pull')"></button>
+                    </div>
+                    
+                    <div class="description">הוספת כל הקבצים לסטייג':</div>
+                    <div class="explanation">מוסיף את כל הקבצים שהשתנו (חדשים, ערוכים או נמחקו) לאזור ההכנה לפני הקומיט</div>
+                    <div class="command-wrapper">
+                        <div class="command">git add .</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git add .')"></button>
+                    </div>
+                    
+                    <div class="description">יצירת קומיט:</div>
+                    <div class="explanation">שומר את השינויים שבסטייג' כקומיט חדש עם הודעה תיאורית</div>
+                    <div class="command-wrapper">
+                        <div class="command">git commit -m "תיאור כלשהו"</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git commit -m \"תיאור כלשהו\"')"></button>
+                    </div>
+                    
+                    <div class="description">דחיפה לענף main:</div>
+                    <div class="explanation">שולח את הקומיטים המקומיים שלך לענף main במאגר המרוחק</div>
+                    <div class="command-wrapper">
+                        <div class="command">git push origin main</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git push origin main')"></button>
+                    </div>
+                    
+                    <div class="description">דחיפה לענף master:</div>
+                    <div class="explanation">שולח את הקומיטים המקומיים שלך לענף master במאגר המרוחק (שם ישן לענף ראשי)</div>
+                    <div class="command-wrapper">
+                        <div class="command">git push origin master</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git push origin master')"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- עבודה עם DIFF -->
+            <div class="section" id="diff">
+                <h2 class="section-title">עבודה עם DIFF</h2>
+                <div class="command-group">
+                    <div class="command-title">יצירת קבצי DIFF</div>
+                    
+                    <div class="note">
+                        <div class="note-title">⚠️ שים לב!</div>
+                        השינויים שלא בסטייג' - לא מוציא קבצים שהתווספו!!!
+                    </div>
+                    
+                    <div class="description">שינויים שלא בסטייג':</div>
+                    <div class="explanation">יוצר קובץ המכיל את כל ההבדלים בין הקבצים הנוכחיים לבין הקומיט האחרון (רק קבצים קיימים, לא חדשים)</div>
+                    <div class="command-wrapper">
+                        <div class="command">git diff > DIFF1.TXT</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git diff > DIFF1.TXT')"></button>
+                    </div>
+                    
+                    <div class="description">שינויים שבסטייג':</div>
+                    <div class="explanation">יוצר קובץ המכיל את כל השינויים שכבר הוספו לסטייג' (עם git add) ומוכנים לקומיט</div>
+                    <div class="command-wrapper">
+                        <div class="command">git diff --cached > DIFF.TXT</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git diff --cached > DIFF.TXT')"></button>
+                    </div>
+                    
+                    <div class="description">החלת DIFF:</div>
+                    <div class="explanation">מיישם את השינויים מקובץ DIFF על הקבצים הנוכחיים, תוך תיקון אוטומטי של בעיות רווחים</div>
+                    <div class="command-wrapper">
+                        <div class="command">git apply --whitespace=fix diff-commit.txt</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git apply --whitespace=fix diff-commit.txt')"></button>
+                    </div>
+                    
+                    <div class="description">יצירת DIFF לקומיט ספציפי:</div>
+                    <div class="explanation">מייצא את כל השינויים שנעשו בקומיט מסוים לקובץ טקסט (החלף XXX במזהה הקומיט המלא)</div>
+                    <div class="command-wrapper">
+                        <div class="command">git show 953e3a5747eXXX > diff-commit.txt</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git show 953e3a5747eXXX > diff-commit.txt')"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- עריכת קומיטים -->
+            <div class="section" id="commits">
+                <h2 class="section-title">עריכת קומיטים</h2>
+                <div class="grid">
+                    <div class="command-group">
+                        <div class="command-title">שינוי שם קומיט אחרון</div>
+                        <div class="explanation">משנה את הודעת הקומיט האחרון מבלי לשנות את התוכן שלו</div>
+                        <div class="command-wrapper">
+                            <div class="command">git commit --amend -m "XXXXXXX"</div>
+                            <button class="copy-btn" onclick="copyCommand(this, 'git commit --amend -m \"XXXXXXX\"')"></button>
+                        </div>
+                    </div>
+                    
+                    <div class="command-group">
+                        <div class="command-title">הוספת קבצים לקומיט אחרון</div>
+                        <div class="description">הכנסת הקבצים שבסטייג' לקומיט האחרון:</div>
+                        <div class="explanation">מוסיף קבצים נוספים לקומיט האחרון מבלי לשנות את ההודעה שלו</div>
+                        <div class="command-wrapper">
+                            <div class="command">git commit --amend --no-edit</div>
+                            <button class="copy-btn" onclick="copyCommand(this, 'git commit --amend --no-edit')"></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="command-group">
+                    <div class="command-title">דחיפה כפויה</div>
+                    <div class="description">אם כבר עודכן בגיטהאב:</div>
+                    <div class="explanation">כופה את הדחיפה גם אם יש קונפליקט עם המאגר המרוחק - משכתב את ההיסטוריה</div>
+                    <div class="command-wrapper">
+                        <div class="command">git push --force</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git push --force')"></button>
+                    </div>
+                    <div class="note">
+                        <div class="note-title">⚠️ זהירות!</div>
+                        שימוש ב-force push עלול לדרוס שינויים של אחרים
+                    </div>
+                </div>
+            </div>
+
+            <!-- ביטולים -->
+            <div class="section" id="undo">
+                <h2 class="section-title">ביטולים</h2>
+                <div class="grid">
+                    <div class="command-group">
+                        <div class="command-title">ביטול קומיט אחרון</div>
+                        <div class="explanation">מבטל את הקומיט האחרון אך שומר את השינויים בסטייג' - מאפשר לערוך ולעשות קומיט מחדש</div>
+                        <div class="command-wrapper">
+                            <div class="command">git reset --soft HEAD~1</div>
+                            <button class="copy-btn" onclick="copyCommand(this, 'git reset --soft HEAD~1')"></button>
+                        </div>
+                    </div>
+                    
+                    <div class="command-group">
+                        <div class="command-title">ביטול מיזוג</div>
+                        <div class="explanation">מבטל תהליך מיזוג (merge) שנתקע באמצע בגלל קונפליקטים ומחזיר למצב שלפני המיזוג</div>
+                        <div class="command-wrapper">
+                            <div class="command">git merge --abort</div>
+                            <button class="copy-btn" onclick="copyCommand(this, 'git merge --abort')"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stash -->
+            <div class="section" id="stash">
+                <h2 class="section-title">עבודה עם Stash</h2>
+                <div class="command-group">
+                    <div class="command-title">שמירה והוצאה</div>
+                    
+                    <div class="description">הכנסת קבצים לסטאש:</div>
+                    <div class="explanation">שומר את כל השינויים הנוכחיים בצד באופן זמני, מנקה את ספריית העבודה - שימושי כשצריך לעבור לענף אחר</div>
+                    <div class="command-wrapper">
+                        <div class="command">git stash push</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git stash push')"></button>
+                    </div>
+                    
+                    <div class="description">הכנסת רק הקבצים שבסטייג' לסטאש:</div>
+                    <div class="explanation">שומר רק את הקבצים שכבר הוספת לסטייג' (עם git add), משאיר את השאר בספריית העבודה</div>
+                    <div class="command-wrapper">
+                        <div class="command">git stash push --staged</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git stash push --staged')"></button>
+                    </div>
+                    
+                    <div class="description">הוצאה מהסטאש:</div>
+                    <div class="explanation">מחזיר את השינויים האחרונים שנשמרו בסטאש לספריית העבודה ומוחק אותם מהסטאש</div>
+                    <div class="command-wrapper">
+                        <div class="command">git stash pop</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git stash pop')"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- עבודה עם ענפים -->
+            <div class="section" id="branches">
+                <h2 class="section-title">עבודה עם ענפים ו-PR</h2>
+                <div class="command-group">
+                    <div class="command-title">משיכת Pull Request</div>
+                    <div class="description">משיכת PR:</div>
+                    <div class="explanation">מוריד Pull Request ספציפי מגיטהאב ויוצר ממנו ענף מקומי (החלף 40?? במספר ה-PR ו-branch_name בשם הענף הרצוי)</div>
+                    <div class="command-wrapper">
+                        <div class="command">git fetch origin pull/40??/head:branch_name</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git fetch origin pull/40??/head:branch_name')"></button>
+                    </div>
+                    
+                    <div class="description">מיזוג:</div>
+                    <div class="explanation">משלב את השינויים מהענף המצוין לתוך הענף הנוכחי שלך</div>
+                    <div class="command-wrapper">
+                        <div class="command">git merge branch_name</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git merge branch_name')"></button>
+                    </div>
+                </div>
+                
+                <div class="command-group">
+                    <div class="command-title">מחיקת ענפים</div>
+                    <div class="description">מחיקה מקומית:</div>
+                    <div class="explanation">מוחק ענף מקומי בכוח, גם אם יש בו שינויים שלא מוזגו (החלף giXXX בשם הענף)</div>
+                    <div class="command-wrapper">
+                        <div class="command">git branch -D giXXX</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git branch -D giXXX')"></button>
+                    </div>
+                    
+                    <div class="description">מחיקה בגיטהאב:</div>
+                    <div class="explanation">מוחק ענף מהמאגר המרוחק בגיטהאב (החלף giXXX בשם הענף)</div>
+                    <div class="command-wrapper">
+                        <div class="command">git push origin --delete giXXX</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git push origin --delete giXXX')"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub CLI -->
+            <div class="section" id="github-cli">
+                <h2 class="section-title">GitHub CLI - Actions</h2>
+                <div class="command-group">
+                    <div class="command-title">בדיקת Actions</div>
+                    
+                    <div class="description">רשימת ריצות:</div>
+                    <div class="explanation">מציג רשימה של כל הריצות האחרונות של GitHub Actions במאגר הנוכחי</div>
+                    <div class="command-wrapper">
+                        <div class="command">gh run list</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'gh run list')"></button>
+                    </div>
+                    
+                    <div class="description">בדיקת ריצה ספציפית:</div>
+                    <div class="explanation">מציג פרטים מלאים על ריצת Action ספציפית לפי מספר המזהה שלה</div>
+                    <div class="command-wrapper">
+                        <div class="command">gh run view --job=[מספר ID]</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'gh run view --job=[מספר ID]')"></button>
+                    </div>
+                    
+                    <div class="description">בדיקה אוטומטית כל 3 שניות:</div>
+                    <div class="explanation">עוקב אחרי ריצת Action בזמן אמת, מתעדכן אוטומטית כל 3 שניות עד לסיום</div>
+                    <div class="command-wrapper">
+                        <div class="command">gh run watch</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'gh run watch')"></button>
+                    </div>
+                    <div class="note">
+                        <div class="note-title">💡 טיפ</div>
+                        לאחר הפקודה, הוא מציג את התהליך הרץ - לחץ Enter
+                    </div>
+                    
+                    <div class="description">יצירת ריצת Action ידנית:</div>
+                    <div class="explanation">מפעיל ידנית workflow ספציפי על ענף main (החלף ???.yml בשם קובץ ה-workflow)</div>
+                    <div class="command-wrapper">
+                        <div class="command">gh workflow run ???.yml --ref main</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'gh workflow run ???.yml --ref main')"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- סנכרון -->
+            <div class="section" id="sync">
+                <h2 class="section-title">סנכרון מוחלט</h2>
+                <div class="command-group">
+                    <div class="command-title">איפוס מלא לגיטהאב</div>
+                    <div class="description">השוואת המאגר המקומי לגיטהאב באופן מוחלט:</div>
+                    <div class="explanation">מאפס את כל הקבצים למצב המדויק של ענף main בגיטהאב - מוחק את כל השינויים המקומיים</div>
+                    <div class="command-wrapper">
+                        <div class="command">git reset --hard origin/main</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git reset --hard origin/main')"></button>
+                    </div>
+                    <div class="explanation">מוחק את כל הקבצים והתיקיות שלא במעקב Git (untracked files)</div>
+                    <div class="command-wrapper">
+                        <div class="command">git clean -fd</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'git clean -fd')"></button>
+                    </div>
+                    <div class="note">
+                        <div class="note-title">⚠️ אזהרה!</div>
+                        פעולה זו תמחק את כל השינויים המקומיים שלא נשמרו!
+                    </div>
+                </div>
+            </div>
+
+            <!-- כלים נוספים -->
+            <div class="section" id="tools">
+                <h2 class="section-title">כלים נוספים</h2>
+                <div class="grid">
+                    <div class="command-group">
+                        <div class="command-title">Repomix</div>
+                        <div class="explanation">כלי לאריזת המאגר לקובץ אחד תוך התעלמות מקבצים מסוימים - שימושי לשיתוף עם AI</div>
+                        <div class="command-wrapper">
+                            <div class="command">repomix --ignore "assets/otzar_books.csv,assets/hebrew_books.csv,assets/metadata.json,installer/otzaria_full.iss,assets/ca/netfree_cas.pem,sivan22.pfx"</div>
+                            <button class="copy-btn" onclick="copyCommand(this, 'repomix --ignore \"assets/otzar_books.csv,assets/hebrew_books.csv,assets/metadata.json,installer/otzaria_full.iss,assets/ca/netfree_cas.pem,sivan22.pfx\"')"></button>
+                        </div>
+                    </div>
+                    
+                    <div class="command-group">
+                        <div class="command-title">VS Code</div>
+                        <div class="description">פתיחה בטאב חדש:</div>
+                        <div class="explanation">פותח את הקובץ הנוכחי בטאב חדש ב-VS Code</div>
+                        <div class="command-wrapper">
+                            <div class="command">Ctrl+Shift+P → "line: Open In New Tab"</div>
+                            <button class="copy-btn" onclick="copyCommand(this, 'Ctrl+Shift+P')"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dart -->
+            <div class="section" id="dart">
+                <h2 class="section-title">Dart Analysis Server</h2>
+                <div class="command-group">
+                    <div class="command-title">הפעלה מחדש</div>
+                    <div class="description">פתח את Command Palette:</div>
+                    <div class="explanation">פותח את תפריט הפקודות של VS Code</div>
+                    <div class="command-wrapper">
+                        <div class="command">Ctrl+Shift+P</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'Ctrl+Shift+P')"></button>
+                    </div>
+                    <div class="description">והרץ:</div>
+                    <div class="explanation">מפעיל מחדש את שרת הניתוח של Dart - פותר בעיות של שגיאות שנתקעו או ניתוח לא מדויק</div>
+                    <div class="command-wrapper">
+                        <div class="command">Dart: Restart Analysis Server</div>
+                        <button class="copy-btn" onclick="copyCommand(this, 'Dart: Restart Analysis Server')"></button>
+                    </div>
+                    <div class="note">
+                        <div class="note-title">💡 טיפ</div>
+                        בדרך כלל זה לבד מנקה שגיאות "תקועות" ומפעיל ניתוח קוד מחדש
+                    </div>
+                </div>
+            </div>
+
+            <!-- פקודות נוספות -->
+            <div class="section" id="custom">
+                <h2 class="section-title">פקודות נוספות</h2>
+                <div class="command-group">
+                    <div class="command-title">הוסף פקודות משלך</div>
+                    <div class="explanation">כאן תוכל להוסיף פקודות נוספות שאתה משתמש בהן לעיתים קרובות</div>
+                    
+                    <div id="custom-commands-container">
+                        <!-- פקודות מותאמות אישית יופיעו כאן -->
+                    </div>
+
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: #e8f4f8; border-radius: 4px; border-right: 3px solid #3498db;">
+                        <div style="font-weight: 600; margin-bottom: 0.75rem; color: #2c3e50;">הוסף פקודה חדשה:</div>
+                        <input type="text" id="new-command-title" placeholder="כותרת הפקודה" 
+                               style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #bdc3c7; border-radius: 3px; font-family: inherit;">
+                        <input type="text" id="new-command-text" placeholder="הפקודה עצמה" 
+                               style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #bdc3c7; border-radius: 3px; font-family: 'Consolas', monospace;">
+                        <textarea id="new-command-explanation" placeholder="הסבר על הפקודה (אופציונלי)" 
+                                  style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #bdc3c7; border-radius: 3px; font-family: inherit; resize: vertical; min-height: 60px;"></textarea>
+                        <button onclick="addCustomCommand()" 
+                                style="background: #3498db; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 3px; cursor: pointer; font-weight: 500; transition: background 0.2s;">
+                            הוסף פקודה
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>מדריך Git מקיף לעבודה יומיומית</p>
+            <p style="margin-top: 0.5rem; opacity: 0.7;">© 2025</p>
+        </footer>
+    </div>
+    </div>
+
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // פונקציה להעתקת פקודה
+        function copyCommand(button, command) {
+            // הסרת התו $ מההתחלה אם קיים
+            const cleanCommand = command.replace(/^\$ /, '');
+            
+            navigator.clipboard.writeText(cleanCommand).then(() => {
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('שגיאה בהעתקה:', err);
+                alert('לא ניתן להעתיק. נסה שוב.');
+            });
+        }
+
+        // סימון קישור פעיל בניווט
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            // הצגת כפתור גלילה למעלה
+            const scrollTopBtn = document.querySelector('.scroll-top');
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        // גלילה חלקה לסעיפים
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // גלילה למעלה
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // טעינת פקודות מותאמות אישית מ-localStorage
+        function loadCustomCommands() {
+            const commands = JSON.parse(localStorage.getItem('customCommands') || '[]');
+            const container = document.getElementById('custom-commands-container');
+            
+            if (commands.length === 0) {
+                container.innerHTML = '<div style="color: #7f8c8d; font-style: italic; padding: 1rem;">עדיין לא הוספת פקודות מותאמות אישית</div>';
+                return;
+            }
+
+            container.innerHTML = commands.map((cmd, index) => `
+                <div style="margin-bottom: 1rem; padding: 1rem; background: white; border: 1px solid #e1e8ed; border-radius: 4px;">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                        <div class="description" style="margin: 0;">${cmd.title}</div>
+                        <button onclick="deleteCustomCommand(${index})" 
+                                style="background: #e74c3c; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">
+                            מחק
+                        </button>
+                    </div>
+                    ${cmd.explanation ? `<div class="explanation">${cmd.explanation}</div>` : ''}
+                    <div class="command-wrapper">
+                        <div class="command">${cmd.command}</div>
+                        <button class="copy-btn" onclick="copyCommand(this, '${cmd.command.replace(/'/g, "\\'")}')"></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // הוספת פקודה מותאמת אישית
+        function addCustomCommand() {
+            const title = document.getElementById('new-command-title').value.trim();
+            const command = document.getElementById('new-command-text').value.trim();
+            const explanation = document.getElementById('new-command-explanation').value.trim();
+
+            if (!title || !command) {
+                alert('נא למלא לפחות כותרת ופקודה');
+                return;
+            }
+
+            const commands = JSON.parse(localStorage.getItem('customCommands') || '[]');
+            commands.push({ title, command, explanation });
+            localStorage.setItem('customCommands', JSON.stringify(commands));
+
+            // ניקוי השדות
+            document.getElementById('new-command-title').value = '';
+            document.getElementById('new-command-text').value = '';
+            document.getElementById('new-command-explanation').value = '';
+
+            loadCustomCommands();
+        }
+
+        // מחיקת פקודה מותאמת אישית
+        function deleteCustomCommand(index) {
+            if (!confirm('האם אתה בטוח שברצונך למחוק פקודה זו?')) {
+                return;
+            }
+
+            const commands = JSON.parse(localStorage.getItem('customCommands') || '[]');
+            commands.splice(index, 1);
+            localStorage.setItem('customCommands', JSON.stringify(commands));
+            loadCustomCommands();
+        }
+
+        // טעינת פקודות בעת טעינת הדף
+        window.addEventListener('load', loadCustomCommands);
+
+
+    </script>
+</body>
+</html>
+

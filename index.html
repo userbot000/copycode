@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CopyCode - למידה דרך פקודות</title>
+    <meta name="description" content="אוסף מדריכים מקיפים לשפות תכנות וכלי פיתוח - למידה מעשית דרך פקודות ודוגמאות">
+    <link rel="icon" href="images/logo.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: url('images/background.jpg') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #1a1a1a;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .site-logo:hover {
+            color: #667eea;
+        }
+
+        .site-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 90px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            padding: 4rem 2rem 2rem;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .philosophy {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .philosophy h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .philosophy p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #495057;
+        }
+
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .guide-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guide-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .guide-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .guide-card.python::before {
+            background: #3776ab;
+        }
+
+        .guide-card.javascript::before {
+            background: #f7df1e;
+        }
+
+        .guide-card.html-css::before {
+            background: linear-gradient(90deg, #E34F26 0%, #1572B6 100%);
+        }
+
+        .guide-card.powershell::before {
+            background: #0078D4;
+        }
+
+        .guide-card.git::before {
+            background: #f05032;
+        }
+
+        .guide-card.registry::before {
+            background: #DC143C;
+        }
+
+        .guide-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .guide-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .guide-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .guide-subtitle {
+            font-size: 0.95rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .guide-description {
+            font-size: 1rem;
+            color: #495057;
+            line-height: 1.7;
+            flex-grow: 1;
+        }
+
+        .guide-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .topic-tag {
+            background: #f8f9fa;
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #495057;
+            border: 1px solid #e9ecef;
+            font-weight: 500;
+        }
+
+        .cta {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta h2 {
+            font-size: 2rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .cta p {
+            font-size: 1.15rem;
+            color: #495057;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 4rem;
+        }
+
+        /* אנימציות */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        header {
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .tagline {
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+
+        .philosophy {
+            animation: fadeInUp 1s ease-out 0.4s backwards;
+        }
+
+        .guide-card {
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .guide-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .guide-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .guide-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .guide-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .guide-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .guide-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .guide-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .guide-card:hover .guide-icon {
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .cta {
+            animation: fadeInUp 1s ease-out 0.8s backwards;
+        }
+
+        .search-btn {
+            animation: slideInRight 0.8s ease-out 0.3s backwards;
+        }
+
+        .site-logo {
+            animation: slideInRight 0.8s ease-out backwards;
+        }
+
+        .topic-tag {
+            transition: all 0.3s ease;
+        }
+
+        .guide-card:hover .topic-tag {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .top-header {
+                padding: 0 1rem;
+            }
+
+            .site-logo {
+                font-size: 1.1rem;
+            }
+
+            .site-logo img {
+                width: 32px;
+                height: 32px;
+            }
+
+            .search-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .search-btn span {
+                display: none;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .tagline {
+                font-size: 1.1rem;
+            }
+
+            .guides-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .philosophy {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-header">
+        <a href="index.html" class="site-logo">
+            <img src="images/logo.png" alt="לוגו האתר">
+            מדריכי תכנות
+        </a>
+        <a href="search.html" class="search-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>חיפוש</span>
+        </a>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>CopyCode - מדריכים מקיפים</h1>
+            <p class="tagline">למידה מעשית דרך פקודות ודוגמאות</p>
+
+            <div class="philosophy">
+                <h2>הדרך שבה אנו מאמינים</h2>
+                <p>
+                    למידת שפת תכנות מתחילה בהצצה לפקודות פשוטות וקלות.
+                    כשמתנסים בפקודות בסיסיות, מבינים את הלוגיקה, ורואים תוצאות מיידיות -
+                    הלמידה הופכת לטבעית ומהנה.
+                    כל מדריך כאן בנוי על עיקרון זה: התחל מהפשוט, התנסה בפקודות,
+                    והתקדם בקצב שלך לנושאים מתקדמים יותר.
+                </p>
+            </div>
+        </header>
+
+        <div class="guides-grid">
+            <a href="python-guide.html" class="guide-card python">
+                <div class="guide-icon">
+                    <svg viewBox="0 0 256 255" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient x1="12.959%" y1="12.039%" x2="79.639%" y2="78.201%" id="a">
+                                <stop stop-color="#387EB8" offset="0%" />
+                                <stop stop-color="#366994" offset="100%" />
+                            </linearGradient>
+                            <linearGradient x1="19.128%" y1="20.579%" x2="90.742%" y2="88.429%" id="b">
+                                <stop stop-color="#FFE052" offset="0%" />
+                                <stop stop-color="#FFC331" offset="100%" />
+                            </linearGradient>
+                        </defs>
+                        <path
+                            d="M126.916.072c-64.832 0-60.784 28.115-60.784 28.115l.072 29.128h61.868v8.745H41.631S.145 61.355.145 126.77c0 65.417 36.21 63.097 36.21 63.097h21.61v-30.356s-1.165-36.21 35.632-36.21h61.362s34.475.557 34.475-33.319V33.97S194.67.072 126.916.072zM92.802 19.66a11.12 11.12 0 0 1 11.13 11.13 11.12 11.12 0 0 1-11.13 11.13 11.12 11.12 0 0 1-11.13-11.13 11.12 11.12 0 0 1 11.13-11.13z"
+                            fill="url(#a)" />
+                        <path
+                            d="M128.757 254.126c64.832 0 60.784-28.115 60.784-28.115l-.072-29.127H127.6v-8.745h86.441s41.486 4.705 41.486-60.712c0-65.416-36.21-63.096-36.21-63.096h-21.61v30.355s1.165 36.21-35.632 36.21h-61.362s-34.475-.557-34.475 33.32v56.013s-5.235 33.897 62.518 33.897zm34.114-19.586a11.12 11.12 0 0 1-11.13-11.13 11.12 11.12 0 0 1 11.13-11.131 11.12 11.12 0 0 1 11.13 11.13 11.12 11.12 0 0 1-11.13 11.13z"
+                            fill="url(#b)" />
+                    </svg>
+                </div>
+                <h3 class="guide-title">Python</h3>
+                <p class="guide-subtitle">השפה הכי פופולרית למתחילים</p>
+                <p class="guide-description">
+                    מדריך מקיף לשפת Python - מיסודות ועד מתקדם.
+                    למד משתנים, לולאות, פונקציות, OOP, ועבודה עם ספריות פופולריות.
+                </p>
+                <div class="guide-topics">
+                    <span class="topic-tag">יסודות</span>
+                    <span class="topic-tag">מבני נתונים</span>
+                    <span class="topic-tag">OOP</span>
+                    <span class="topic-tag">ספריות</span>
+                </div>
+            </a>
+
+            <a href="javascript-guide.html" class="guide-card javascript">
+                <div class="guide-icon">
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#F7DF1E" d="M0 0h256v256H0V0z" />
+                        <path
+                            d="M67.312 213.932l19.59-11.856c3.78 6.701 7.218 12.371 15.465 12.371 7.905 0 12.89-3.092 12.89-15.12v-81.798h24.057v82.138c0 24.917-14.606 36.259-35.916 36.259-19.245 0-30.416-9.967-36.087-21.996M152.381 211.354l19.588-11.341c5.157 8.421 11.859 14.607 23.715 14.607 9.969 0 16.325-4.984 16.325-11.858 0-8.248-6.53-11.17-17.528-15.98l-6.013-2.58c-17.357-7.387-28.87-16.667-28.87-36.257 0-18.044 13.747-31.792 35.228-31.792 15.294 0 26.292 5.328 34.196 19.247l-18.732 12.03c-4.125-7.389-8.591-10.31-15.465-10.31-7.046 0-11.514 4.468-11.514 10.31 0 7.217 4.468 10.14 14.778 14.608l6.014 2.577c20.45 8.765 31.963 17.7 31.963 37.804 0 21.654-17.012 33.51-39.867 33.51-22.339 0-36.774-10.654-43.819-24.574" />
+                    </svg>
+                </div>
+                <h3 class="guide-title">JavaScript</h3>
+                <p class="guide-subtitle">שפת האינטרנט</p>
+                <p class="guide-description">
+                    כל מה שצריך לדעת על JavaScript - מבסיס ועד ES6+.
+                    DOM manipulation, Events, Async/Await, ועבודה עם APIs.
+                </p>
+                <div class="guide-topics">
+                    <span class="topic-tag">DOM</span>
+                    <span class="topic-tag">Events</span>
+                    <span class="topic-tag">Async</span>
+                    <span class="topic-tag">ES6+</span>
+                </div>
+            </a>
+
+            <a href="html-css-guide.html" class="guide-card html-css">
+                <div class="guide-icon">
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#E34F26" d="M20 0h216l-19.6 220.2L128 256 39.6 220.2z" />
+                        <path fill="#EF652A" d="M128 23.3v209.4l87.4-24.2L232 23.3z" />
+                        <path fill="#FFF"
+                            d="M128 93.8H67.8l-2.5-28.1h63.2V38.2H33.7l.7 7.6 6.7 75.5h87.4V93.8zm0 85.4l-.2.1-32.8-8.9-2.1-23.5H65.4l4.1 46.1 60.3 16.7.2-.1v-30.4z" />
+                        <path fill="#EBEBEB"
+                            d="M128 93.8v27.5h-31.4l-2.4 26.9 33.8 9.1v30.4l-60.2-16.7-.4-5.1-6.9-77.1-.7-7.6h68.2zm0-55.6v27.5H65.7l-.6-6.7-1.3-14.6-.7-7.6h65.9z" />
+                    </svg>
+                </div>
+                <h3 class="guide-title">HTML & CSS</h3>
+                <p class="guide-subtitle">בניית אתרים מודרניים</p>
+                <p class="guide-description">
+                    מדריך מלא ל-HTML5 ו-CSS3.
+                    Semantic HTML, Flexbox, Grid, Responsive Design, Animations וספריות CSS.
+                </p>
+                <div class="guide-topics">
+                    <span class="topic-tag">HTML5</span>
+                    <span class="topic-tag">Flexbox</span>
+                    <span class="topic-tag">Grid</span>
+                    <span class="topic-tag">Responsive</span>
+                </div>
+            </a>
+
+            <a href="powershell-guide.html" class="guide-card powershell">
+                <div class="guide-icon">
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="256" height="256" rx="28" fill="#0078D4" />
+                        <path d="M40 180l80-100-80-40v140z" fill="#FFF" opacity="0.8" />
+                        <path d="M120 180l80-100-80-40v140z" fill="#FFF" />
+                        <rect x="140" y="190" width="76" height="20" rx="4" fill="#FFF" />
+                    </svg>
+                </div>
+                <h3 class="guide-title">PowerShell</h3>
+                <p class="guide-subtitle">אוטומציה ב-Windows</p>
+                <p class="guide-description">
+                    פקודות PowerShell שימושיות לעבודה יומיומית.
+                    ניהול קבצים, תהליכים, רשת, מערכת ופקודות מתקדמות.
+                </p>
+                <div class="guide-topics">
+                    <span class="topic-tag">קבצים</span>
+                    <span class="topic-tag">רשת</span>
+                    <span class="topic-tag">מערכת</span>
+                    <span class="topic-tag">אוטומציה</span>
+                </div>
+            </a>
+
+            <a href="git-guide.html" class="guide-card git">
+                <div class="guide-icon">
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#F05032"
+                            d="M251.172 116.594L139.4 4.828c-6.433-6.437-16.873-6.437-23.314 0l-23.21 23.21 29.443 29.443c6.842-2.312 14.688-.761 20.142 4.693 5.48 5.489 7.02 13.402 4.652 20.266l28.375 28.376c6.865-2.365 14.786-.835 20.269 4.657 7.663 7.66 7.663 20.075 0 27.74-7.665 7.666-20.08 7.666-27.749 0-5.764-5.77-7.188-14.235-4.27-21.336l-26.462-26.462-.003 69.637a19.82 19.82 0 0 1 5.188 3.71c7.663 7.66 7.663 20.076 0 27.747-7.665 7.662-20.086 7.662-27.74 0-7.663-7.671-7.663-20.086 0-27.746a19.654 19.654 0 0 1 6.421-4.281V94.196a19.378 19.378 0 0 1-6.421-4.281c-5.806-5.798-7.202-14.317-4.227-21.446L81.47 39.442l-76.64 76.635c-6.44 6.443-6.44 16.884 0 23.322l111.774 111.768c6.435 6.438 16.873 6.438 23.316 0l111.251-111.249c6.438-6.44 6.438-16.887 0-23.324" />
+                    </svg>
+                </div>
+                <h3 class="guide-title">Git</h3>
+                <p class="guide-subtitle">ניהול קוד וגרסאות</p>
+                <p class="guide-description">
+                    מדריך מעשי ל-Git ו-GitHub.
+                    פקודות בסיסיות, עבודה עם ענפים, Pull Requests, ופתרון בעיות נפוצות.
+                </p>
+                <div class="guide-topics">
+                    <span class="topic-tag">Commits</span>
+                    <span class="topic-tag">Branches</span>
+                    <span class="topic-tag">GitHub</span>
+                    <span class="topic-tag">Merge</span>
+                </div>
+            </a>
+
+            <a href="registry-cmd-guide.html" class="guide-card registry">
+                <div class="guide-icon">
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="256" height="256" rx="28" fill="#DC143C" />
+                        <path d="M40 60h176v20H40zm0 40h176v20H40zm0 40h176v20H40zm0 40h120v20H40z" fill="#FFF" />
+                        <circle cx="200" cy="180" r="30" fill="#FFF" />
+                        <path d="M200 165v30m-15-15h30" stroke="#DC143C" stroke-width="6" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <h3 class="guide-title">Registry CMD</h3>
+                <p class="guide-subtitle">עריכת רישום Windows</p>
+                <p class="guide-description">
+                    פקודות reg add, delete, query ועוד.
+                    התאמות מערכת, שיפור ביצועים, פרטיות ואבטחה.
+                </p>
+                <div class="guide-topics">
+                    <span class="topic-tag">Registry</span>
+                    <span class="topic-tag">ביצועים</span>
+                    <span class="topic-tag">פרטיות</span>
+                    <span class="topic-tag">אבטחה</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="cta">
+            <h2>התחל ללמוד עכשיו</h2>
+            <p>בחר מדריך, התנסה בפקודות, וראה תוצאות מיידיות</p>
+        </div>
+
+        <footer>
+            <p>כל המדריכים כוללים הסברים בעברית, דוגמאות מעשיות וכפתור העתקה לכל פקודה</p>
+            <p style="margin-top: 1rem; opacity: 0.7;">© 2025 CopyCode</p>
+        </footer>
+    </div>
+</body>
+
+</html>

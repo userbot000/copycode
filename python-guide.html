@@ -1,0 +1,2710 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך Python מקיף - CopyCode</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: url('images/background.jpg') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .site-logo:hover {
+            color: #667eea;
+        }
+
+        .site-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding-top: 90px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1rem;
+            margin-left: 1.5rem;
+            position: sticky;
+            top: 110px;
+            height: calc(100vh - 130px);
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #3776ab;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: #5a6c7d;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding-right: 1rem;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #3776ab 0%, #ffd43b 100%);
+            color: white;
+        }
+
+        .container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: transparent;
+            color: #1a1a1a;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        h1 svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3776ab;
+            font-weight: 600;
+        }
+
+        .command-group {
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .command-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .command-wrapper {
+            position: relative;
+            margin: 0.8rem 0;
+        }
+
+        .command {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 0.9rem 3rem 0.9rem 1rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid #3776ab;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+            padding: 0.4rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+        }
+
+        .copy-btn::before {
+            content: '⧉';
+            font-size: 1rem;
+        }
+
+        .copy-btn:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-color: #95a5a6;
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .copy-btn.copied::before {
+            content: '✓';
+        }
+
+        .description {
+            color: #5a6c7d;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .explanation {
+            background: #e8f4f8;
+            border-right: 3px solid #3776ab;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            color: #34495e;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-right: 3px solid #ffd43b;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #3776ab 0%, #ffd43b 100%);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 3px solid #306998;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 2px solid #3776ab;
+            }
+
+            .container {
+                margin: 0 1rem 1rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .command {
+                font-size: 0.82rem;
+                padding-left: 0.8rem;
+            }
+
+            .copy-btn {
+                position: relative;
+                display: block;
+                margin-top: 0.5rem;
+                right: 0;
+                transform: none;
+            }
+
+            .copy-btn:active {
+                transform: scale(0.95);
+            }
+
+            .command-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #3776ab;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #306998;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="top-header">
+        <a href="index.html" class="site-logo">
+            <img src="images/logo.png" alt="לוגו האתר">
+            CopyCode
+        </a>
+        <a href="search.html" class="search-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>חיפוש</span>
+        </a>
+    </div>
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-title">תוכן עניינים</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#basics" class="nav-link">יסודות Python</a></li>
+                <li class="nav-item"><a href="#datatypes" class="nav-link">טיפוסי נתונים</a></li>
+                <li class="nav-item"><a href="#strings" class="nav-link">מחרוזות</a></li>
+                <li class="nav-item"><a href="#lists" class="nav-link">רשימות ו-Tuples</a></li>
+                <li class="nav-item"><a href="#dictionaries" class="nav-link">מילונים ו-Sets</a></li>
+                <li class="nav-item"><a href="#control" class="nav-link">בקרת זרימה</a></li>
+                <li class="nav-item"><a href="#functions" class="nav-link">פונקציות</a></li>
+                <li class="nav-item"><a href="#files" class="nav-link">קבצים</a></li>
+                <li class="nav-item"><a href="#oop" class="nav-link">תכנות מונחה עצמים</a></li>
+                <li class="nav-item"><a href="#modules" class="nav-link">מודולים וחבילות</a></li>
+                <li class="nav-item"><a href="#errors" class="nav-link">טיפול בשגיאות</a></li>
+                <li class="nav-item"><a href="#comprehensions" class="nav-link">Comprehensions</a></li>
+                <li class="nav-item"><a href="#advanced" class="nav-link">נושאים מתקדמים</a></li>
+                <li class="nav-item"><a href="#stdlib" class="nav-link">ספריית תקן</a></li>
+                <li class="nav-item"><a href="#popular" class="nav-link">ספריות פופולריות</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+        <header>
+            <h1>
+                <svg viewBox="0 0 256 255" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient x1="12.959%" y1="12.039%" x2="79.639%" y2="78.201%" id="pyA">
+                            <stop stop-color="#387EB8" offset="0%" />
+                            <stop stop-color="#366994" offset="100%" />
+                        </linearGradient>
+                        <linearGradient x1="19.128%" y1="20.579%" x2="90.742%" y2="88.429%" id="pyB">
+                            <stop stop-color="#FFE052" offset="0%" />
+                            <stop stop-color="#FFC331" offset="100%" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M126.916.072c-64.832 0-60.784 28.115-60.784 28.115l.072 29.128h61.868v8.745H41.631S.145 61.355.145 126.77c0 65.417 36.21 63.097 36.21 63.097h21.61v-30.356s-1.165-36.21 35.632-36.21h61.362s34.475.557 34.475-33.319V33.97S194.67.072 126.916.072zM92.802 19.66a11.12 11.12 0 0 1 11.13 11.13 11.12 11.12 0 0 1-11.13 11.13 11.12 11.12 0 0 1-11.13-11.13 11.12 11.12 0 0 1 11.13-11.13z" fill="url(#pyA)" />
+                    <path d="M128.757 254.126c64.832 0 60.784-28.115 60.784-28.115l-.072-29.127H127.6v-8.745h86.441s41.486 4.705 41.486-60.712c0-65.416-36.21-63.096-36.21-63.096h-21.61v30.355s1.165 36.21-35.632 36.21h-61.362s-34.475-.557-34.475 33.32v56.013s-5.235 33.897 62.518 33.897zm34.114-19.586a11.12 11.12 0 0 1-11.13-11.13 11.12 11.12 0 0 1 11.13-11.131 11.12 11.12 0 0 1 11.13 11.13 11.12 11.12 0 0 1-11.13 11.13z" fill="url(#pyB)" />
+                </svg>
+                מדריך Python מקיף
+            </h1>
+            <p class="subtitle">מיסודות ועד מתקדם - כל מה שצריך לדעת על Python</p>
+        </header>
+
+        <div class="content">
+
+            <!-- יסודות Python -->
+            <section id="basics" class="section">
+                <h2 class="section-title">יסודות Python</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה Python?</div>
+                    Python היא שפת תכנות פשוטה וקלה ללמידה, מושלמת למתחילים ולמקצוענים כאחד. 
+                    היא נקראת כך על שם הסדרה "Monty Python" ולא על שם הנחש! 
+                    Python משמשת לפיתוח אתרים, ניתוח נתונים, בינוי מלאכותי, אוטומציה ועוד.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">הדפסה וקלט</h3>
+                    
+                    <p class="description">הדפסה בסיסית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">print("Hello, World!")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הדפסה עם משתנים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">name = "Python"
+print(f"Hello, {name}!")  # f-string
+print("Hello, {}!".format(name))  # format
+print("Hello, " + name + "!")  # concatenation</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">קבלת קלט מהמשתמש:</p>
+                    <div class="command-wrapper">
+                        <div class="command">name = input("Enter your name: ")
+age = int(input("Enter your age: "))</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הדפסה ללא שורה חדשה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">print("Hello", end=" ")
+print("World")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">משתנים</h3>
+                    
+                    <div class="explanation">
+                        <strong>מה זה משתנה?</strong><br>
+                        משתנה הוא כמו קופסה שאפשר לשים בה מידע. אפשר לתת לקופסה שם (כמו "age" או "name") 
+                        ולשים בה ערך (כמו 25 או "Alice"). ב-Python לא צריך להגדיר מראש איזה סוג מידע יהיה במשתנה - 
+                        Python מבין את זה לבד!
+                    </div>
+                    
+                    <p class="description">הגדרת משתנים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x = 5
+y = "Hello"
+z = 3.14
+is_valid = True</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השמה מרובה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x, y, z = 1, 2, 3
+a = b = c = 0</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">החלפת ערכים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">a, b = 5, 10
+a, b = b, a  # swap</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">בדיקת טיפוס:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x = 5
+print(type(x))  # <class 'int'>
+print(isinstance(x, int))  # True</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אופרטורים</h3>
+                    
+                    <p class="description">אופרטורים אריתמטיים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x = 10 + 5   # חיבור
+x = 10 - 5   # חיסור
+x = 10 * 5   # כפל
+x = 10 / 5   # חילוק (תמיד float)
+x = 10 // 3  # חילוק שלם (3)
+x = 10 % 3   # שארית (1)
+x = 2 ** 3   # חזקה (8)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">אופרטורי השוואה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x == y   # שווה
+x != y   # לא שווה
+x > y    # גדול מ
+x < y    # קטן מ
+x >= y   # גדול או שווה
+x <= y   # קטן או שווה</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">אופרטורים לוגיים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x and y  # וגם
+x or y   # או
+not x    # לא</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">אופרטורי השמה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x += 5   # x = x + 5
+x -= 5   # x = x - 5
+x *= 5   # x = x * 5
+x /= 5   # x = x / 5</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">הערות</h3>
+                    
+                    <p class="description">הערה בשורה אחת:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># This is a comment
+x = 5  # This is also a comment</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הערה מרובת שורות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">"""
+This is a multi-line comment
+or docstring
+"""</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- טיפוסי נתונים -->
+            <section id="datatypes" class="section">
+                <h2 class="section-title">טיפוסי נתונים</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה טיפוס נתונים?</div>
+                    <strong>טיפוס נתונים</strong> קובע איזה סוג מידע המשתנה מחזיק.<br>
+                    <strong>int</strong> - מספרים שלמים (1, 2, 100, -5)<br>
+                    <strong>float</strong> - מספרים עשרוניים (3.14, 2.5, -0.1)<br>
+                    <strong>str</strong> - טקסט ("Hello", "Python")<br>
+                    <strong>bool</strong> - אמת או שקר (True, False)<br>
+                    <strong>למה זה חשוב?</strong> לא אפשר לחבר מספר עם טקסט ישירות - צריך להמיר קודם!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">מספרים</h3>
+                    
+                    <p class="description">מספרים שלמים (int):</p>
+                    <div class="command-wrapper">
+                        <div class="command">x = 5
+y = -10
+z = 1000000</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מספרים עשרוניים (float):</p>
+                    <div class="command-wrapper">
+                        <div class="command">x = 3.14
+y = -2.5
+z = 1.5e2  # 150.0 (scientific notation)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מספרים מרוכבים (complex):</p>
+                    <div class="command-wrapper">
+                        <div class="command">x = 3 + 4j
+print(x.real)  # 3.0
+print(x.imag)  # 4.0</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">המרות בין טיפוסים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x = int(3.14)      # 3
+y = float(5)       # 5.0
+z = str(123)       # "123"
+w = int("100")     # 100</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Boolean</h3>
+                    
+                    <p class="description">ערכי אמת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">is_valid = True
+is_empty = False</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">המרה ל-Boolean:</p>
+                    <div class="command-wrapper">
+                        <div class="command">bool(1)        # True
+bool(0)        # False
+bool("")       # False
+bool("text")   # True
+bool([])       # False
+bool([1, 2])   # True</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">None</h3>
+                    
+                    <p class="description">ערך ריק:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x = None
+if x is None:
+    print("x is empty")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">פעולות מתמטיות</h3>
+                    
+                    <p class="description">פונקציות מובנות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">abs(-5)        # 5 (ערך מוחלט)
+pow(2, 3)      # 8 (חזקה)
+round(3.14159, 2)  # 3.14 (עיגול)
+max(1, 5, 3)   # 5
+min(1, 5, 3)   # 1
+sum([1, 2, 3]) # 6</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מודול math:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import math
+
+math.sqrt(16)      # 4.0 (שורש)
+math.ceil(3.2)     # 4 (עיגול למעלה)
+math.floor(3.8)    # 3 (עיגול למטה)
+math.pi            # 3.141592...
+math.e             # 2.718281...
+math.sin(math.pi/2)  # 1.0
+math.log(10)       # 2.302... (לוגריתם טבעי)
+math.log10(100)    # 2.0 (לוגריתם בסיס 10)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מספרים אקראיים</h3>
+                    
+                    <p class="description">מודול random:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import random
+
+random.random()           # מספר אקראי בין 0 ל-1
+random.randint(1, 10)     # מספר שלם אקראי בין 1 ל-10
+random.uniform(1.0, 10.0) # מספר עשרוני אקראי
+random.choice([1, 2, 3])  # בחירה אקראית מרשימה
+random.shuffle([1, 2, 3]) # ערבוב רשימה</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- מחרוזות -->
+            <section id="strings" class="section">
+                <h2 class="section-title">מחרוזות (Strings)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זו מחרוזת?</div>
+                    <strong>מחרוזת (String)</strong> - פשוט טקסט! כל דבר בין גרשיים או גרשיים כפולים.<br>
+                    <strong>למה זה חשוב?</strong> רוב התוכניות עובדות עם טקסט - שמות, כתובות, הודעות, תוכן מאתרים...<br>
+                    <strong>טיפ:</strong> מחרוזות ב-Python הן immutable - לא ניתן לשנות אותן, רק ליצור חדשות.<br>
+                    <strong>f-strings</strong> - הדרך המודרנית והנוחה ביותר לשלב משתנים בטקסט!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">יצירת מחרוזות</h3>
+                    
+                    <p class="description">מחרוזות בסיסיות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s1 = 'Hello'
+s2 = "World"
+s3 = '''Multi
+line
+string'''
+s4 = """Another
+multi-line"""</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">תווים מיוחדים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s = "Hello\nWorld"  # שורה חדשה
+s = "Hello\tWorld"  # Tab
+s = "He said \"Hi\""  # גרש כפול
+s = 'It\'s nice'  # גרש יחיד
+s = "C:\\Users\\Name"  # Backslash
+s = r"C:\Users\Name"  # Raw string (ללא escape)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">פעולות על מחרוזות</h3>
+                    
+                    <p class="description">חיבור ושכפול:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s1 = "Hello"
+s2 = "World"
+s3 = s1 + " " + s2  # "Hello World"
+s4 = "Ha" * 3  # "HaHaHa"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">אורך וגישה לתווים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s = "Python"
+len(s)      # 6
+s[0]        # 'P' (תו ראשון)
+s[-1]       # 'n' (תו אחרון)
+s[1:4]      # 'yth' (slicing)
+s[:3]       # 'Pyt' (מההתחלה)
+s[3:]       # 'hon' (עד הסוף)
+s[::2]      # 'Pto' (כל תו שני)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">בדיקות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s = "Hello World"
+"Hello" in s        # True
+"hello" in s        # False
+s.startswith("He")  # True
+s.endswith("ld")    # True</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מתודות מחרוזת</h3>
+                    
+                    <p class="description">שינוי רישיות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s = "Hello World"
+s.upper()       # "HELLO WORLD"
+s.lower()       # "hello world"
+s.capitalize()  # "Hello world"
+s.title()       # "Hello World"
+s.swapcase()    # "hELLO wORLD"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">חיפוש והחלפה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s = "Hello World"
+s.find("World")      # 6 (מיקום)
+s.find("Python")     # -1 (לא נמצא)
+s.index("World")     # 6 (זורק שגיאה אם לא נמצא)
+s.count("l")         # 3
+s.replace("World", "Python")  # "Hello Python"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פיצול וחיבור:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s = "apple,banana,orange"
+s.split(",")         # ['apple', 'banana', 'orange']
+s.split(",", 1)      # ['apple', 'banana,orange'] (מקסימום פיצולים)
+
+words = ["Hello", "World"]
+" ".join(words)      # "Hello World"
+"-".join(words)      # "Hello-World"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסרת רווחים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s = "  Hello World  "
+s.strip()       # "Hello World"
+s.lstrip()      # "Hello World  "
+s.rstrip()      # "  Hello World"
+s.strip("H")    # "ello World" (הסרת תווים ספציפיים)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">יישור:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s = "Hello"
+s.center(10)       # "  Hello   "
+s.ljust(10)        # "Hello     "
+s.rjust(10)        # "     Hello"
+s.zfill(10)        # "00000Hello"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">בדיקות תוכן:</p>
+                    <div class="command-wrapper">
+                        <div class="command">s = "Hello123"
+s.isalpha()     # False (רק אותיות?)
+s.isdigit()     # False (רק ספרות?)
+s.isalnum()     # True (אותיות או ספרות?)
+s.isspace()     # False (רק רווחים?)
+s.isupper()     # False (כולו אותיות גדולות?)
+s.islower()     # False (כולו אותיות קטנות?)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">עיצוב מחרוזות</h3>
+                    
+                    <p class="description">f-strings (Python 3.6+):</p>
+                    <div class="command-wrapper">
+                        <div class="command">name = "Alice"
+age = 25
+print(f"My name is {name} and I'm {age} years old")
+print(f"Next year I'll be {age + 1}")
+print(f"{name:>10}")  # יישור ימינה
+print(f"{age:05d}")   # 00025 (padding)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">format():</p>
+                    <div class="command-wrapper">
+                        <div class="command">"Hello, {}!".format("World")
+"Hello, {0}! {0}".format("World")
+"Hello, {name}!".format(name="Alice")
+"{:.2f}".format(3.14159)  # 3.14</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">% formatting (ישן):</p>
+                    <div class="command-wrapper">
+                        <div class="command">"Hello, %s!" % "World"
+"I'm %d years old" % 25
+"Pi is %.2f" % 3.14159</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- רשימות ו-Tuples -->
+            <section id="lists" class="section">
+                <h2 class="section-title">רשימות (Lists) ו-Tuples</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה ההבדל בין List ל-Tuple?</div>
+                    <strong>List (רשימה)</strong> - כמו מחברת שאפשר למחוק ולהוסיף בה דפים. משתמשים בסוגריים מרובעים [ ]<br>
+                    <strong>Tuple</strong> - כמו ספר קבוע שלא ניתן לשנות אותו. משתמשים בסוגריים עגולים ( )<br>
+                    <strong>מתי להשתמש במה?</strong> List כשצריך לשנות את הנתונים, Tuple כשהנתונים קבועים (כמו קואורדינטות).
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">רשימות - יצירה וגישה</h3>
+                    
+                    <p class="description">יצירת רשימות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">numbers = [1, 2, 3, 4, 5]
+mixed = [1, "hello", 3.14, True]
+empty = []
+nested = [[1, 2], [3, 4], [5, 6]]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">גישה לאיברים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">numbers = [10, 20, 30, 40, 50]
+numbers[0]      # 10 (ראשון)
+numbers[-1]     # 50 (אחרון)
+numbers[1:4]    # [20, 30, 40] (slicing)
+numbers[:3]     # [10, 20, 30]
+numbers[2:]     # [30, 40, 50]
+numbers[::2]    # [10, 30, 50] (כל שני)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שינוי איברים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">numbers = [1, 2, 3, 4, 5]
+numbers[0] = 10         # [10, 2, 3, 4, 5]
+numbers[1:3] = [20, 30] # [10, 20, 30, 4, 5]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מתודות רשימה</h3>
+                    
+                    <p class="description">הוספת איברים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">numbers = [1, 2, 3]
+numbers.append(4)           # [1, 2, 3, 4]
+numbers.insert(0, 0)        # [0, 1, 2, 3, 4]
+numbers.extend([5, 6])      # [0, 1, 2, 3, 4, 5, 6]
+numbers += [7, 8]           # [0, 1, 2, 3, 4, 5, 6, 7, 8]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסרת איברים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">numbers = [1, 2, 3, 4, 5]
+numbers.remove(3)       # [1, 2, 4, 5] (מסיר ערך)
+numbers.pop()           # מסיר ומחזיר אחרון
+numbers.pop(0)          # מסיר ומחזיר לפי אינדקס
+del numbers[0]          # מחיקה לפי אינדקס
+numbers.clear()         # מרוקן את הרשימה</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">חיפוש ומיון:</p>
+                    <div class="command-wrapper">
+                        <div class="command">numbers = [3, 1, 4, 1, 5, 9, 2]
+numbers.index(4)        # 2 (מיקום)
+numbers.count(1)        # 2 (כמה פעמים)
+numbers.sort()          # [1, 1, 2, 3, 4, 5, 9] (ממיין במקום)
+sorted(numbers)         # מחזיר רשימה ממוינת חדשה
+numbers.reverse()       # הופך את הסדר
+reversed(numbers)       # מחזיר iterator הפוך</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">העתקה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">original = [1, 2, 3]
+copy1 = original.copy()     # העתקה רדודה
+copy2 = original[:]         # העתקה רדודה
+copy3 = list(original)      # העתקה רדודה
+
+import copy
+deep = copy.deepcopy(original)  # העתקה עמוקה</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">פעולות על רשימות</h3>
+                    
+                    <p class="description">פונקציות מובנות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">numbers = [1, 2, 3, 4, 5]
+len(numbers)        # 5 (אורך)
+sum(numbers)        # 15 (סכום)
+max(numbers)        # 5 (מקסימום)
+min(numbers)        # 1 (מינימום)
+any([False, True])  # True (האם יש True?)
+all([True, True])   # True (האם הכל True?)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">לולאות על רשימות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">numbers = [1, 2, 3, 4, 5]
+
+# לולאה רגילה
+for num in numbers:
+    print(num)
+
+# עם אינדקס
+for i, num in enumerate(numbers):
+    print(f"Index {i}: {num}")
+
+# התחלה מאינדקס אחר
+for i, num in enumerate(numbers, start=1):
+    print(f"Position {i}: {num}")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Tuples</h3>
+                    
+                    <p class="description">יצירת Tuples:</p>
+                    <div class="command-wrapper">
+                        <div class="command">t1 = (1, 2, 3)
+t2 = 1, 2, 3        # ללא סוגריים
+t3 = (1,)           # tuple עם איבר אחד
+t4 = tuple([1, 2])  # המרה מרשימה</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">גישה ל-Tuples:</p>
+                    <div class="command-wrapper">
+                        <div class="command">t = (10, 20, 30, 40)
+t[0]        # 10
+t[-1]       # 40
+t[1:3]      # (20, 30)
+# t[0] = 5  # שגיאה! tuple הוא immutable</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Unpacking:</p>
+                    <div class="command-wrapper">
+                        <div class="command">t = (1, 2, 3)
+a, b, c = t         # a=1, b=2, c=3
+
+# עם *
+a, *b, c = (1, 2, 3, 4, 5)  # a=1, b=[2,3,4], c=5
+
+# החלפת ערכים
+x, y = 5, 10
+x, y = y, x         # swap</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מתודות Tuple:</p>
+                    <div class="command-wrapper">
+                        <div class="command">t = (1, 2, 3, 2, 1)
+t.count(2)      # 2
+t.index(3)      # 2</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">טיפים שימושיים</h3>
+                    
+                    <p class="description">יצירת רשימות מיוחדות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">zeros = [0] * 5             # [0, 0, 0, 0, 0]
+range_list = list(range(5))  # [0, 1, 2, 3, 4]
+range_list = list(range(1, 6))  # [1, 2, 3, 4, 5]
+range_list = list(range(0, 10, 2))  # [0, 2, 4, 6, 8]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שילוב רשימות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">list1 = [1, 2, 3]
+list2 = [4, 5, 6]
+
+# שילוב
+combined = list1 + list2  # [1, 2, 3, 4, 5, 6]
+
+# zip - שילוב מקביל
+pairs = list(zip(list1, list2))  # [(1,4), (2,5), (3,6)]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- מילונים ו-Sets -->
+            <section id="dictionaries" class="section">
+                <h2 class="section-title">מילונים (Dictionaries) ו-Sets</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה Dictionary?</div>
+                    <strong>Dictionary (מילון)</strong> - כמו מילון אמיתי! יש מילה (key) ויש הסבר (value).<br>
+                    לדוגמה: <code>{"name": "Alice", "age": 25}</code> - "name" זה המפתח, "Alice" זה הערך.<br>
+                    <strong>Set (קבוצה)</strong> - אוסף של פריטים ייחודיים ללא כפילויות, כמו קבוצה במתמטיקה.<br>
+                    <strong>למה זה שימושי?</strong> מילון מאפשר לחפש מידע מהר מאוד לפי שם, במקום לחפש לפי מיקום.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">מילונים - יצירה וגישה</h3>
+                    
+                    <p class="description">יצירת מילונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">person = {"name": "Alice", "age": 25, "city": "Tel Aviv"}
+empty = {}
+dict_from_list = dict([("a", 1), ("b", 2)])
+dict_comp = {x: x**2 for x in range(5)}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">גישה לערכים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">person = {"name": "Alice", "age": 25}
+person["name"]          # "Alice"
+person.get("name")      # "Alice"
+person.get("email", "N/A")  # "N/A" (ברירת מחדל)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שינוי והוספה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">person = {"name": "Alice"}
+person["age"] = 25          # הוספה
+person["name"] = "Bob"      # שינוי
+person.update({"city": "Tel Aviv", "age": 26})  # עדכון מרובה</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מתודות מילון</h3>
+                    
+                    <p class="description">הסרת איברים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">person = {"name": "Alice", "age": 25, "city": "Tel Aviv"}
+del person["age"]           # מחיקה
+person.pop("city")          # מחיקה והחזרת ערך
+person.popitem()            # מחיקת זוג אחרון
+person.clear()              # ריקון המילון</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">בדיקות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">person = {"name": "Alice", "age": 25}
+"name" in person        # True
+"email" in person       # False
+len(person)             # 2</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">קבלת מפתחות וערכים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">person = {"name": "Alice", "age": 25}
+person.keys()           # dict_keys(['name', 'age'])
+person.values()         # dict_values(['Alice', 25])
+person.items()          # dict_items([('name', 'Alice'), ('age', 25)])
+
+list(person.keys())     # ['name', 'age']</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">לולאות על מילונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">person = {"name": "Alice", "age": 25}
+
+# לולאה על מפתחות
+for key in person:
+    print(key, person[key])
+
+# לולאה על מפתחות וערכים
+for key, value in person.items():
+    print(f"{key}: {value}")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Sets (קבוצות)</h3>
+                    
+                    <p class="description">יצירת Sets:</p>
+                    <div class="command-wrapper">
+                        <div class="command">numbers = {1, 2, 3, 4, 5}
+empty = set()               # set ריק
+from_list = set([1, 2, 2, 3])  # {1, 2, 3} (ללא כפילויות)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הוספה והסרה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">numbers = {1, 2, 3}
+numbers.add(4)          # {1, 2, 3, 4}
+numbers.remove(2)       # {1, 3, 4} (שגיאה אם לא קיים)
+numbers.discard(5)      # ללא שגיאה אם לא קיים
+numbers.pop()           # מסיר איבר אקראי
+numbers.clear()         # ריקון</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פעולות קבוצות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+
+a | b               # {1, 2, 3, 4, 5, 6} (איחוד)
+a & b               # {3, 4} (חיתוך)
+a - b               # {1, 2} (הפרש)
+a ^ b               # {1, 2, 5, 6} (הפרש סימטרי)
+
+a.union(b)          # איחוד
+a.intersection(b)   # חיתוך
+a.difference(b)     # הפרש
+a.issubset(b)       # תת-קבוצה?
+a.issuperset(b)     # על-קבוצה?</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- בקרת זרימה -->
+            <section id="control" class="section">
+                <h2 class="section-title">בקרת זרימה (Control Flow)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה בקרת זרימה?</div>
+                    <strong>בקרת זרימה</strong> קובעת איך התוכנית "זורמת" - באיזה סדר הקוד רץ.<br>
+                    <strong>if/else</strong> - "אם... אז..." - מאפשר לתוכנית להחליט מה לעשות בהתאם לתנאי.<br>
+                    <strong>for</strong> - לולאה שעוברת על רשימה או טווח מספרים.<br>
+                    <strong>while</strong> - לולאה שממשיכה כל עוד תנאי מסוים מתקיים.<br>
+                    <strong>למה זה חשוב?</strong> בלי בקרת זרימה, התוכנית רק תריץ שורה אחר שורה ללא החלטות.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">תנאים - if/elif/else</h3>
+                    
+                    <p class="description">תנאי בסיסי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x = 10
+if x > 5:
+    print("x is greater than 5")
+elif x == 5:
+    print("x is 5")
+else:
+    print("x is less than 5")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">תנאי בשורה אחת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x = 10
+result = "big" if x > 5 else "small"
+print("yes") if x > 5 else print("no")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">תנאים מרובים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">x, y = 10, 20
+if x > 5 and y < 30:
+    print("Both conditions are true")
+
+if x > 5 or y > 30:
+    print("At least one is true")
+
+if not x < 5:
+    print("x is not less than 5")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">לולאות - for</h3>
+                    
+                    <p class="description">לולאת for בסיסית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">for i in range(5):
+    print(i)  # 0, 1, 2, 3, 4
+
+for i in range(1, 6):
+    print(i)  # 1, 2, 3, 4, 5
+
+for i in range(0, 10, 2):
+    print(i)  # 0, 2, 4, 6, 8</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">לולאה על רשימה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">fruits = ["apple", "banana", "orange"]
+for fruit in fruits:
+    print(fruit)
+
+# עם אינדקס
+for i, fruit in enumerate(fruits):
+    print(f"{i}: {fruit}")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">לולאה על מילון:</p>
+                    <div class="command-wrapper">
+                        <div class="command">person = {"name": "Alice", "age": 25}
+for key in person:
+    print(key, person[key])
+
+for key, value in person.items():
+    print(f"{key}: {value}")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">לולאות - while</h3>
+                    
+                    <p class="description">לולאת while בסיסית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">i = 0
+while i < 5:
+    print(i)
+    i += 1</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">לולאה אינסופית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">while True:
+    user_input = input("Enter 'quit' to exit: ")
+    if user_input == "quit":
+        break
+    print(f"You entered: {user_input}")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">break, continue, pass</h3>
+                    
+                    <p class="description">break - יציאה מלולאה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">for i in range(10):
+    if i == 5:
+        break
+    print(i)  # 0, 1, 2, 3, 4</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">continue - דילוג על איטרציה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">for i in range(5):
+    if i == 2:
+        continue
+    print(i)  # 0, 1, 3, 4</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">pass - ביצוע ריק:</p>
+                    <div class="command-wrapper">
+                        <div class="command">for i in range(5):
+    if i == 2:
+        pass  # לא עושה כלום
+    print(i)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">else בלולאות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">for i in range(5):
+    if i == 10:
+        break
+else:
+    print("Loop completed without break")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- פונקציות -->
+            <section id="functions" class="section">
+                <h2 class="section-title">פונקציות (Functions)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זו פונקציה?</div>
+                    <strong>פונקציה</strong> היא כמו מתכון בישול - אתה כותב פעם אחת איך לעשות משהו, ואז יכול להשתמש בזה שוב ושוב.<br>
+                    <strong>למה זה שימושי?</strong> במקום לכתוב את אותו קוד 10 פעמים, כותבים פונקציה אחת וקוראים לה 10 פעמים.<br>
+                    <strong>פרמטרים</strong> - זה המרכיבים שאתה נותן לפונקציה (כמו ביצים וקמח למתכון).<br>
+                    <strong>return</strong> - מה שהפונקציה מחזירה בסוף (כמו העוגה המוכנה).
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">הגדרת פונקציות</h3>
+                    
+                    <p class="description">פונקציה בסיסית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def greet():
+    print("Hello!")
+
+greet()  # קריאה לפונקציה</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פונקציה עם פרמטרים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def greet(name):
+    print(f"Hello, {name}!")
+
+greet("Alice")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פונקציה עם ערך החזרה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def add(a, b):
+    return a + b
+
+result = add(5, 3)  # 8</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פרמטרים עם ברירת מחדל:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def greet(name="Guest"):
+    print(f"Hello, {name}!")
+
+greet()          # "Hello, Guest!"
+greet("Alice")   # "Hello, Alice!"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">פרמטרים מתקדמים</h3>
+                    
+                    <p class="description">*args - מספר משתנה של ארגומנטים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def sum_all(*args):
+    return sum(args)
+
+sum_all(1, 2, 3)        # 6
+sum_all(1, 2, 3, 4, 5)  # 15</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">**kwargs - ארגומנטים עם שם:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def print_info(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_info(name="Alice", age=25, city="Tel Aviv")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שילוב של הכל:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def func(a, b=2, *args, **kwargs):
+    print(f"a={a}, b={b}")
+    print(f"args={args}")
+    print(f"kwargs={kwargs}")
+
+func(1, 3, 4, 5, x=10, y=20)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">פונקציות מתקדמות</h3>
+                    
+                    <p class="description">Lambda - פונקציות אנונימיות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">square = lambda x: x ** 2
+print(square(5))  # 25
+
+add = lambda a, b: a + b
+print(add(3, 4))  # 7</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פונקציות מקוננות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def outer(x):
+    def inner(y):
+        return x + y
+    return inner
+
+add_5 = outer(5)
+print(add_5(3))  # 8</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Decorators:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def my_decorator(func):
+    def wrapper():
+        print("Before function")
+        func()
+        print("After function")
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">פונקציות שימושיות</h3>
+                    
+                    <p class="description">map, filter, reduce:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># map - החלת פונקציה על כל איבר
+numbers = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x**2, numbers))  # [1, 4, 9, 16, 25]
+
+# filter - סינון
+evens = list(filter(lambda x: x % 2 == 0, numbers))  # [2, 4]
+
+# reduce - צמצום לערך אחד
+from functools import reduce
+sum_all = reduce(lambda x, y: x + y, numbers)  # 15</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- קבצים -->
+            <section id="files" class="section">
+                <h2 class="section-title">עבודה עם קבצים</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 למה צריך לעבוד עם קבצים?</div>
+                    <strong>שמירת מידע</strong> - כדי שהמידע לא יאבד כשהתוכנית נסגרת.<br>
+                    <strong>with open()</strong> - הדרך הבטוחה לפתוח קבצים. הקובץ נסגר אוטומטית בסוף!<br>
+                    <strong>מצבי פתיחה:</strong><br>
+                    • "r" - קריאה (read) - רק לקרוא מהקובץ<br>
+                    • "w" - כתיבה (write) - מוחק את הקובץ הישן וכותב חדש<br>
+                    • "a" - הוספה (append) - מוסיף בסוף הקובץ הקיים<br>
+                    <strong>encoding="utf-8"</strong> - חשוב לעברית! מבטיח שהטקסט יוצג נכון.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">קריאה וכתיבה בסיסית</h3>
+                    
+                    <p class="description">קריאת קובץ:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># קריאת כל הקובץ
+with open("file.txt", "r", encoding="utf-8") as f:
+    content = f.read()
+    print(content)
+
+# קריאה שורה אחר שורה
+with open("file.txt", "r") as f:
+    for line in f:
+        print(line.strip())</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">כתיבה לקובץ:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># כתיבה (דורס קובץ קיים)
+with open("file.txt", "w", encoding="utf-8") as f:
+    f.write("Hello, World!\n")
+    f.write("Second line\n")
+
+# הוספה לסוף הקובץ
+with open("file.txt", "a") as f:
+    f.write("Appended line\n")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">קריאת שורות לרשימה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">with open("file.txt", "r") as f:
+    lines = f.readlines()  # רשימה של שורות
+    # או
+    lines = f.read().splitlines()  # ללא \n</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מצבי פתיחה</h3>
+                    
+                    <p class="description">מצבים שונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">"r"   # קריאה (ברירת מחדל)
+"w"   # כתיבה (דורס)
+"a"   # הוספה
+"x"   # יצירה (שגיאה אם קיים)
+"r+"  # קריאה וכתיבה
+"rb"  # קריאה בינארית
+"wb"  # כתיבה בינארית</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">עבודה עם נתיבים</h3>
+                    
+                    <p class="description">מודול os:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import os
+
+os.path.exists("file.txt")     # בדיקה אם קיים
+os.path.isfile("file.txt")     # האם זה קובץ?
+os.path.isdir("folder")        # האם זו תיקייה?
+os.path.getsize("file.txt")    # גודל בבתים
+os.path.join("folder", "file.txt")  # חיבור נתיבים
+os.remove("file.txt")          # מחיקת קובץ
+os.rename("old.txt", "new.txt")  # שינוי שם</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מודול pathlib (מודרני):</p>
+                    <div class="command-wrapper">
+                        <div class="command">from pathlib import Path
+
+p = Path("file.txt")
+p.exists()              # בדיקה אם קיים
+p.is_file()             # האם זה קובץ?
+p.read_text()           # קריאת תוכן
+p.write_text("Hello")   # כתיבה
+p.unlink()              # מחיקה
+p.stat().st_size        # גודל</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">JSON ו-CSV</h3>
+                    
+                    <p class="description">עבודה עם JSON:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import json
+
+# כתיבה
+data = {"name": "Alice", "age": 25}
+with open("data.json", "w") as f:
+    json.dump(data, f, indent=2)
+
+# קריאה
+with open("data.json", "r") as f:
+    data = json.load(f)
+
+# המרה למחרוזת
+json_string = json.dumps(data)
+data = json.loads(json_string)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">עבודה עם CSV:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import csv
+
+# כתיבה
+with open("data.csv", "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Name", "Age"])
+    writer.writerow(["Alice", 25])
+
+# קריאה
+with open("data.csv", "r") as f:
+    reader = csv.reader(f)
+    for row in reader:
+        print(row)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- תכנות מונחה עצמים -->
+            <section id="oop" class="section">
+                <h2 class="section-title">תכנות מונחה עצמים (OOP)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה תכנות מונחה עצמים?</div>
+                    <strong>מחלקה (Class)</strong> - תבנית או שרטוט. כמו תוכנית לבניית בית.<br>
+                    <strong>אובייקט (Object)</strong> - דוגמה ספציפית מהמחלקה. כמו בית אמיתי שנבנה לפי התוכנית.<br>
+                    <strong>מאפיינים (Attributes)</strong> - מאפיינים של האובייקט (צבע, גודל, שם).<br>
+                    <strong>מתודות (Methods)</strong> - פעולות שהאובייקט יכול לעשות (ללכת, לדבר, לחשב).<br>
+                    <strong>למה זה שימושי?</strong> מאפשר לארגן קוד מורכב בצורה הגיונית וקלה לתחזוקה.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">מחלקות בסיסיות</h3>
+                    
+                    <p class="description">הגדרת מחלקה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def greet(self):
+        print(f"Hello, I'm {self.name}")
+
+# יצירת אובייקט
+person = Person("Alice", 25)
+person.greet()</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מתודות ומאפיינים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">class Car:
+    # מאפיין מחלקה
+    wheels = 4
+    
+    def __init__(self, brand, model):
+        # מאפייני instance
+        self.brand = brand
+        self.model = model
+    
+    def info(self):
+        return f"{self.brand} {self.model}"
+
+car = Car("Toyota", "Corolla")
+print(car.info())</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">ירושה (Inheritance)</h3>
+                    
+                    <p class="description">ירושה בסיסית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">class Animal:
+    def __init__(self, name):
+        self.name = name
+    
+    def speak(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} says Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} says Meow!"
+
+dog = Dog("Buddy")
+print(dog.speak())</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">super() - קריאה למחלקת אב:</p>
+                    <div class="command-wrapper">
+                        <div class="command">class Employee(Person):
+    def __init__(self, name, age, salary):
+        super().__init__(name, age)
+        self.salary = salary
+    
+    def info(self):
+        return f"{self.name}, {self.age}, ${self.salary}"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מתודות מיוחדות</h3>
+                    
+                    <p class="description">Magic methods:</p>
+                    <div class="command-wrapper">
+                        <div class="command">class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __str__(self):
+        return f"Point({self.x}, {self.y})"
+    
+    def __repr__(self):
+        return f"Point({self.x}, {self.y})"
+    
+    def __add__(self, other):
+        return Point(self.x + other.x, self.y + other.y)
+    
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+p1 = Point(1, 2)
+p2 = Point(3, 4)
+p3 = p1 + p2  # Point(4, 6)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Properties ו-Encapsulation</h3>
+                    
+                    <p class="description">@property decorator:</p>
+                    <div class="command-wrapper">
+                        <div class="command">class Circle:
+    def __init__(self, radius):
+        self._radius = radius
+    
+    @property
+    def radius(self):
+        return self._radius
+    
+    @radius.setter
+    def radius(self, value):
+        if value < 0:
+            raise ValueError("Radius cannot be negative")
+        self._radius = value
+    
+    @property
+    def area(self):
+        return 3.14 * self._radius ** 2
+
+circle = Circle(5)
+print(circle.area)  # 78.5
+circle.radius = 10</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- מודולים וחבילות -->
+            <section id="modules" class="section">
+                <h2 class="section-title">מודולים וחבילות</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה מודול?</div>
+                    <strong>מודול</strong> - קובץ Python שמכיל פונקציות ומחלקות שאפשר להשתמש בהן.<br>
+                    <strong>חבילה (Package)</strong> - תיקייה שמכילה מספר מודולים.<br>
+                    <strong>למה זה שימושי?</strong> במקום לכתוב הכל מאפס, משתמשים בקוד שכבר נכתב!<br>
+                    <strong>pip</strong> - מנהל החבילות של Python. מאפשר להתקין אלפי ספריות בפקודה אחת.<br>
+                    <strong>דוגמה:</strong> צריך לעבוד עם תאריכים? יש מודול datetime. צריך מספרים אקראיים? יש מודול random.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">ייבוא מודולים</h3>
+                    
+                    <p class="description">דרכי ייבוא:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import math
+print(math.pi)
+
+import math as m
+print(m.pi)
+
+from math import pi, sqrt
+print(pi)
+
+from math import *  # לא מומלץ
+print(pi)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">יצירת מודול משלך:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># mymodule.py
+def greet(name):
+    return f"Hello, {name}!"
+
+PI = 3.14159
+
+# main.py
+import mymodule
+print(mymodule.greet("Alice"))
+print(mymodule.PI)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">חבילות (Packages)</h3>
+                    
+                    <p class="description">מבנה חבילה:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># מבנה תיקיות:
+# mypackage/
+#     __init__.py
+#     module1.py
+#     module2.py
+
+# ייבוא
+from mypackage import module1
+from mypackage.module1 import function_name</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">התקנת חבילות</h3>
+                    
+                    <p class="description">pip - מנהל חבילות:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># התקנה
+pip install package_name
+
+# הסרה
+pip uninstall package_name
+
+# רשימת חבילות מותקנות
+pip list
+
+# שמירת dependencies
+pip freeze > requirements.txt
+
+# התקנה מקובץ
+pip install -r requirements.txt</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- טיפול בשגיאות -->
+            <section id="errors" class="section">
+                <h2 class="section-title">טיפול בשגיאות (Exception Handling)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 למה צריך לטפל בשגיאות?</div>
+                    <strong>שגיאות קורות!</strong> משתמש מזין טקסט במקום מספר, קובץ לא קיים, אין חיבור לאינטרנט...<br>
+                    <strong>try/except</strong> - "נסה לעשות משהו, ואם זה נכשל - עשה משהו אחר".<br>
+                    <strong>למה זה חשוב?</strong> במקום שהתוכנית תקרוס, היא תוכל להמשיך לרוץ ולהציג הודעה ידידותית למשתמש.<br>
+                    <strong>דוגמה מהחיים:</strong> כמו רשת ביטחון - אם משהו משתבש, יש לך תוכנית גיבוי.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">try/except</h3>
+                    
+                    <p class="description">טיפול בסיסי בשגיאות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">try:
+    x = 10 / 0
+except ZeroDivisionError:
+    print("Cannot divide by zero!")
+
+try:
+    num = int("abc")
+except ValueError:
+    print("Invalid number!")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">טיפול במספר שגיאות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">try:
+    # code that might fail
+    pass
+except ValueError:
+    print("Value error!")
+except TypeError:
+    print("Type error!")
+except (KeyError, IndexError):
+    print("Key or Index error!")
+except Exception as e:
+    print(f"Other error: {e}")</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">else ו-finally:</p>
+                    <div class="command-wrapper">
+                        <div class="command">try:
+    result = 10 / 2
+except ZeroDivisionError:
+    print("Error!")
+else:
+    print("Success!")  # רק אם אין שגיאה
+finally:
+    print("Always runs")  # תמיד מתבצע</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">זריקת שגיאות</h3>
+                    
+                    <p class="description">raise - זריקת שגיאה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def divide(a, b):
+    if b == 0:
+        raise ValueError("Cannot divide by zero")
+    return a / b
+
+try:
+    divide(10, 0)
+except ValueError as e:
+    print(e)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שגיאות מותאמות אישית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">class NegativeNumberError(Exception):
+    pass
+
+def sqrt(x):
+    if x < 0:
+        raise NegativeNumberError("Cannot calculate sqrt of negative")
+    return x ** 0.5
+
+try:
+    sqrt(-5)
+except NegativeNumberError as e:
+    print(e)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comprehensions -->
+            <section id="comprehensions" class="section">
+                <h2 class="section-title">Comprehensions</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה Comprehension?</div>
+                    <strong>Comprehension</strong> - דרך קצרה ואלגנטית ליצור רשימות, מילונים או קבוצות בשורה אחת!<br>
+                    <strong>במקום:</strong> לולאה של 4 שורות<br>
+                    <strong>כותבים:</strong> שורה אחת קצרה וברורה<br>
+                    <strong>למה זה מגניב?</strong> הקוד נראה יותר "פייתוני" (Pythonic) וקל יותר לקריאה אחרי שמתרגלים.<br>
+                    <strong>טיפ:</strong> אל תגזימו! אם ה-comprehension נהיה מסובך מדי, עדיף לולאה רגילה.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">List Comprehension</h3>
+                    
+                    <p class="description">יצירת רשימות:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># בסיסי
+squares = [x**2 for x in range(10)]
+# [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+# עם תנאי
+evens = [x for x in range(10) if x % 2 == 0]
+# [0, 2, 4, 6, 8]
+
+# עם if-else
+result = [x if x % 2 == 0 else -x for x in range(5)]
+# [0, -1, 2, -3, 4]
+
+# מקונן
+matrix = [[i*j for j in range(3)] for i in range(3)]
+# [[0, 0, 0], [0, 1, 2], [0, 2, 4]]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Dictionary Comprehension</h3>
+                    
+                    <p class="description">יצירת מילונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># בסיסי
+squares = {x: x**2 for x in range(5)}
+# {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+
+# עם תנאי
+evens = {x: x**2 for x in range(10) if x % 2 == 0}
+
+# הפיכת מפתחות וערכים
+original = {"a": 1, "b": 2}
+swapped = {v: k for k, v in original.items()}
+# {1: 'a', 2: 'b'}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Set Comprehension</h3>
+                    
+                    <p class="description">יצירת קבוצות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">squares = {x**2 for x in range(10)}
+# {0, 1, 4, 9, 16, 25, 36, 49, 64, 81}
+
+# ללא כפילויות
+numbers = [1, 2, 2, 3, 3, 3]
+unique = {x for x in numbers}
+# {1, 2, 3}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Generator Expression</h3>
+                    
+                    <p class="description">Generators - חסכוני בזיכרון:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># Generator expression
+squares = (x**2 for x in range(10))
+
+# שימוש
+for square in squares:
+    print(square)
+
+# המרה לרשימה
+list(squares)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- נושאים מתקדמים -->
+            <section id="advanced" class="section">
+                <h2 class="section-title">נושאים מתקדמים</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מתי להשתמש בנושאים מתקדמים?</div>
+                    <strong>Generators</strong> - כשצריך לעבור על הרבה מאוד נתונים בלי לשמור הכל בזיכרון.<br>
+                    <strong>Iterators</strong> - כשרוצים ליצור אובייקט שאפשר לעבור עליו בלולאה.<br>
+                    <strong>Context Managers</strong> - כשצריך לוודא שמשאב (כמו קובץ) נסגר תמיד, גם אם יש שגיאה.<br>
+                    <strong>Type Hints</strong> - עוזר לתעד את הקוד ולמצוא באגים לפני שהתוכנית רצה.<br>
+                    <strong>טיפ:</strong> אלו כלים מתקדמים - אל תדאגו אם לא מבינים הכל בהתחלה!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">Generators</h3>
+                    
+                    <p class="description">פונקציית Generator:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def countdown(n):
+    while n > 0:
+        yield n
+        n -= 1
+
+for num in countdown(5):
+    print(num)  # 5, 4, 3, 2, 1</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Generator עם yield from:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def chain(*iterables):
+    for iterable in iterables:
+        yield from iterable
+
+list(chain([1, 2], [3, 4], [5, 6]))
+# [1, 2, 3, 4, 5, 6]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Iterators</h3>
+                    
+                    <p class="description">יצירת Iterator:</p>
+                    <div class="command-wrapper">
+                        <div class="command">class Counter:
+    def __init__(self, max):
+        self.max = max
+        self.current = 0
+    
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.current < self.max:
+            self.current += 1
+            return self.current
+        raise StopIteration
+
+for num in Counter(5):
+    print(num)  # 1, 2, 3, 4, 5</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Context Managers</h3>
+                    
+                    <p class="description">יצירת Context Manager:</p>
+                    <div class="command-wrapper">
+                        <div class="command">class FileManager:
+    def __init__(self, filename):
+        self.filename = filename
+    
+    def __enter__(self):
+        self.file = open(self.filename, 'r')
+        return self.file
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.file.close()
+
+with FileManager('file.txt') as f:
+    content = f.read()</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Context Manager עם contextlib:</p>
+                    <div class="command-wrapper">
+                        <div class="command">from contextlib import contextmanager
+
+@contextmanager
+def timer():
+    import time
+    start = time.time()
+    yield
+    end = time.time()
+    print(f"Time: {end - start:.2f}s")
+
+with timer():
+    # code to time
+    pass</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Type Hints</h3>
+                    
+                    <p class="description">הוספת Type Hints:</p>
+                    <div class="command-wrapper">
+                        <div class="command">def greet(name: str) -> str:
+    return f"Hello, {name}!"
+
+def add(a: int, b: int) -> int:
+    return a + b
+
+from typing import List, Dict, Optional, Union
+
+def process(items: List[int]) -> Dict[str, int]:
+    return {"sum": sum(items)}
+
+def find(name: str) -> Optional[str]:
+    return name if name else None</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ספריית תקן -->
+            <section id="stdlib" class="section">
+                <h2 class="section-title">ספריית התקן (Standard Library)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זו ספריית התקן?</div>
+                    <strong>ספריית התקן</strong> - אוסף ענק של מודולים שמגיעים עם Python, ללא צורך בהתקנה!<br>
+                    <strong>"Batteries Included"</strong> - הפילוסופיה של Python: הכל כבר מוכן לשימוש.<br>
+                    <strong>למה זה מעולה?</strong> רוב הדברים הבסיסיים שתצטרכו כבר קיימים - תאריכים, קבצים, רשת, ועוד.<br>
+                    <strong>טיפ:</strong> לפני שמתקינים ספרייה חיצונית, בדקו אם יש משהו דומה בספריית התקן!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">datetime - תאריכים ושעות</h3>
+                    
+                    <p class="description">עבודה עם תאריכים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">from datetime import datetime, date, time, timedelta
+
+# תאריך ושעה נוכחיים
+now = datetime.now()
+today = date.today()
+
+# יצירת תאריך
+d = date(2025, 12, 25)
+dt = datetime(2025, 12, 25, 14, 30)
+
+# פורמט
+now.strftime("%Y-%m-%d %H:%M:%S")
+datetime.strptime("2025-12-25", "%Y-%m-%d")
+
+# חישובים
+tomorrow = today + timedelta(days=1)
+week_ago = now - timedelta(weeks=1)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">collections - מבני נתונים</h3>
+                    
+                    <p class="description">מבני נתונים שימושיים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">from collections import Counter, defaultdict, deque, namedtuple
+
+# Counter - ספירה
+words = ["apple", "banana", "apple", "orange", "banana", "apple"]
+counter = Counter(words)
+# Counter({'apple': 3, 'banana': 2, 'orange': 1})
+
+# defaultdict - ערך ברירת מחדל
+d = defaultdict(int)
+d['key'] += 1  # לא זורק שגיאה
+
+# deque - תור דו-כיווני
+q = deque([1, 2, 3])
+q.append(4)      # הוספה מימין
+q.appendleft(0)  # הוספה משמאל
+
+# namedtuple - tuple עם שמות
+Point = namedtuple('Point', ['x', 'y'])
+p = Point(1, 2)
+print(p.x, p.y)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">itertools - כלי איטרציה</h3>
+                    
+                    <p class="description">פונקציות שימושיות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">from itertools import count, cycle, repeat, chain, combinations, permutations
+
+# count - ספירה אינסופית
+for i in count(10, 2):  # 10, 12, 14, ...
+    if i > 20: break
+
+# cycle - חזרה מחזורית
+for item in cycle([1, 2, 3]):  # 1, 2, 3, 1, 2, 3, ...
+    break
+
+# chain - שרשור
+list(chain([1, 2], [3, 4]))  # [1, 2, 3, 4]
+
+# combinations - צירופים
+list(combinations([1, 2, 3], 2))  # [(1,2), (1,3), (2,3)]
+
+# permutations - תמורות
+list(permutations([1, 2, 3], 2))  # [(1,2), (1,3), (2,1), ...]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">re - ביטויים רגולריים</h3>
+                    
+                    <p class="description">Regex בסיסי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import re
+
+# חיפוש
+match = re.search(r'\d+', 'Price: 100')
+if match:
+    print(match.group())  # '100'
+
+# החלפה
+text = re.sub(r'\d+', 'X', 'Phone: 123-456')  # 'Phone: X-X'
+
+# פיצול
+re.split(r'\s+', 'hello  world')  # ['hello', 'world']
+
+# מציאת כל ההתאמות
+re.findall(r'\d+', 'I have 2 cats and 3 dogs')  # ['2', '3']
+
+# Compile לשימוש חוזר
+pattern = re.compile(r'\d+')
+pattern.findall('123 456')</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">שימושיים נוספים</h3>
+                    
+                    <p class="description">מודולים שימושיים:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># sys - מערכת
+import sys
+sys.argv        # ארגומנטים משורת הפקודה
+sys.exit()      # יציאה מהתוכנית
+
+# time - זמן
+import time
+time.sleep(1)   # המתנה שנייה
+time.time()     # timestamp
+
+# subprocess - הרצת פקודות
+import subprocess
+result = subprocess.run(['ls', '-l'], capture_output=True)
+
+# shutil - פעולות קבצים
+import shutil
+shutil.copy('src.txt', 'dst.txt')
+shutil.move('old.txt', 'new.txt')
+
+# glob - חיפוש קבצים
+import glob
+files = glob.glob('*.txt')  # כל קבצי txt</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ספריות פופולריות -->
+            <section id="popular" class="section">
+                <h2 class="section-title">ספריות פופולריות</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 למה הספריות האלה כל כך פופולריות?</div>
+                    <strong>requests</strong> - הדרך הקלה ביותר לשלוח בקשות HTTP ולעבוד עם APIs.<br>
+                    <strong>pandas</strong> - המלך של ניתוח נתונים! עובד עם טבלאות (כמו Excel) בצורה מהירה ונוחה.<br>
+                    <strong>numpy</strong> - חישובים מתמטיים מהירים במיוחד, בסיס למדעי הנתונים.<br>
+                    <strong>matplotlib</strong> - יצירת גרפים ותרשימים מקצועיים.<br>
+                    <strong>Flask/Django</strong> - בניית אתרי אינטרנט ו-APIs.<br>
+                    <strong>טיפ:</strong> התקינו רק את מה שצריך - לא צריך להתקין הכל בבת אחת!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">requests - HTTP</h3>
+                    
+                    <p class="description">בקשות HTTP:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import requests
+
+# GET request
+response = requests.get('https://api.example.com/data')
+print(response.status_code)
+print(response.json())
+
+# POST request
+data = {'key': 'value'}
+response = requests.post('https://api.example.com', json=data)
+
+# Headers
+headers = {'Authorization': 'Bearer token'}
+response = requests.get('https://api.example.com', headers=headers)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">pandas - ניתוח נתונים</h3>
+                    
+                    <p class="description">עבודה עם DataFrames:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import pandas as pd
+
+# יצירת DataFrame
+df = pd.DataFrame({
+    'name': ['Alice', 'Bob', 'Charlie'],
+    'age': [25, 30, 35],
+    'city': ['Tel Aviv', 'Jerusalem', 'Haifa']
+})
+
+# קריאה מקובץ
+df = pd.read_csv('data.csv')
+df = pd.read_excel('data.xlsx')
+
+# פעולות בסיסיות
+df.head()           # 5 שורות ראשונות
+df.info()           # מידע על DataFrame
+df.describe()       # סטטיסטיקות
+df['age'].mean()    # ממוצע
+df[df['age'] > 25]  # סינון
+
+# שמירה
+df.to_csv('output.csv', index=False)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">numpy - חישובים מספריים</h3>
+                    
+                    <p class="description">מערכים ומטריצות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import numpy as np
+
+# יצירת מערכים
+arr = np.array([1, 2, 3, 4, 5])
+zeros = np.zeros((3, 3))
+ones = np.ones((2, 4))
+random = np.random.rand(3, 3)
+
+# פעולות
+arr + 10            # חיבור סקלר
+arr * 2             # כפל
+arr.mean()          # ממוצע
+arr.sum()           # סכום
+arr.reshape(5, 1)   # שינוי צורה
+
+# מטריצות
+matrix = np.array([[1, 2], [3, 4]])
+matrix.T            # טרנספוזה
+np.dot(matrix, matrix)  # כפל מטריצות</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">matplotlib - גרפים</h3>
+                    
+                    <p class="description">יצירת גרפים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">import matplotlib.pyplot as plt
+
+# Line plot
+x = [1, 2, 3, 4, 5]
+y = [1, 4, 9, 16, 25]
+plt.plot(x, y)
+plt.xlabel('X axis')
+plt.ylabel('Y axis')
+plt.title('My Plot')
+plt.show()
+
+# Bar chart
+plt.bar(['A', 'B', 'C'], [10, 20, 15])
+plt.show()
+
+# Scatter plot
+plt.scatter(x, y)
+plt.show()
+
+# Multiple plots
+plt.subplot(1, 2, 1)
+plt.plot(x, y)
+plt.subplot(1, 2, 2)
+plt.bar(x, y)
+plt.show()</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">ספריות נוספות</h3>
+                    
+                    <p class="description">ספריות שימושיות:</p>
+                    <div class="command-wrapper">
+                        <div class="command"># Flask - web framework
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return 'Hello, World!'
+
+# SQLAlchemy - ORM
+from sqlalchemy import create_engine
+engine = create_engine('sqlite:///db.sqlite')
+
+# BeautifulSoup - web scraping
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(html, 'html.parser')
+
+# Pillow - עיבוד תמונות
+from PIL import Image
+img = Image.open('photo.jpg')
+img.resize((100, 100))
+
+# pytest - testing
+def test_add():
+    assert add(2, 3) == 5</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer>
+            <p>מדריך Python מקיף | מיסודות ועד מתקדם | © 2025</p>
+        </footer>
+        </div>
+    </div>
+
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Copy command functionality
+        function copyCommand(button) {
+            const commandDiv = button.previousElementSibling;
+            const command = commandDiv.textContent;
+            
+            navigator.clipboard.writeText(command).then(() => {
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Scroll to top functionality
+        const scrollTopBtn = document.querySelector('.scroll-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                
+                // Update active link
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Highlight active section on scroll
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

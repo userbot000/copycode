@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך פקודות Registry ב-CMD - CopyCode</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: url('images/background.jpg') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .site-logo:hover {
+            color: #667eea;
+        }
+
+        .site-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding-top: 90px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1rem;
+            margin-left: 1.5rem;
+            position: sticky;
+            top: 110px;
+            height: calc(100vh - 130px);
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #DC143C;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: #5a6c7d;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding-right: 1rem;
+        }
+
+        .nav-link.active {
+            background: #DC143C;
+            color: white;
+        }
+
+        .container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: transparent;
+            color: #1a1a1a;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        h1 svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #DC143C;
+            font-weight: 600;
+        }
+
+        .command-group {
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .command-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .command-wrapper {
+            position: relative;
+            margin: 0.8rem 0;
+        }
+
+        .command {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 0.9rem 3rem 0.9rem 1rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid #DC143C;
+            position: relative;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+            padding: 0.4rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+        }
+
+        .copy-btn::before {
+            content: '⧉';
+            font-size: 1rem;
+        }
+
+        .copy-btn:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-color: #95a5a6;
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .copy-btn.copied::before {
+            content: '✓';
+        }
+
+        .description {
+            color: #5a6c7d;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .explanation {
+            background: #fff3e0;
+            border-right: 3px solid #ff9800;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            color: #34495e;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .note {
+            background: #ffebee;
+            border-right: 3px solid #DC143C;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #DC143C;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-right: 3px solid #f39c12;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #d68910;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #DC143C 0%, #A00000 100%);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 3px solid #FF1744;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 2px solid #DC143C;
+            }
+
+            .container {
+                margin: 0 1rem 1rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .command {
+                font-size: 0.82rem;
+                padding-left: 0.8rem;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #DC143C;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #A00000;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="top-header">
+        <a href="index.html" class="site-logo">
+            <img src="images/logo.png" alt="לוגו האתר">
+            CopyCode
+        </a>
+        <a href="search.html" class="search-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>חיפוש</span>
+        </a>
+    </div>
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-title">תוכן עניינים</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#basics" class="nav-link">פקודות בסיסיות</a></li>
+                <li class="nav-item"><a href="#add" class="nav-link">הוספת ערכים</a></li>
+                <li class="nav-item"><a href="#delete" class="nav-link">מחיקת ערכים</a></li>
+                <li class="nav-item"><a href="#query" class="nav-link">שאילתות וחיפוש</a></li>
+                <li class="nav-item"><a href="#backup" class="nav-link">גיבוי ושחזור</a></li>
+                <li class="nav-item"><a href="#privacy" class="nav-link">פרטיות ואבטחה</a></li>
+                <li class="nav-item"><a href="#disable" class="nav-link">השבתת תכונות</a></li>
+                <li class="nav-item"><a href="#performance" class="nav-link">שיפור ביצועים</a></li>
+                <li class="nav-item"><a href="#ui" class="nav-link">התאמת ממשק</a></li>
+                <li class="nav-item"><a href="#explorer" class="nav-link">File Explorer</a></li>
+                <li class="nav-item"><a href="#startup" class="nav-link">הפעלה אוטומטית</a></li>
+                <li class="nav-item"><a href="#network" class="nav-link">רשת ואינטרנט</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+        <header>
+            <h1>
+                <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="256" height="256" rx="28" fill="#DC143C"/>
+                    <path d="M40 60h176v20H40zm0 40h176v20H40zm0 40h176v20H40zm0 40h120v20H40z" fill="#FFF"/>
+                    <circle cx="200" cy="180" r="30" fill="#FFF"/>
+                    <path d="M200 165v30m-15-15h30" stroke="#DC143C" stroke-width="6" stroke-linecap="round"/>
+                </svg>
+                מדריך פקודות Registry ב-CMD
+            </h1>
+            <p class="subtitle">פקודות reg add, reg delete, reg query ועוד - עריכת רישום Windows מהטרמינל</p>
+        </header>
+
+        <div class="content">
+            <div class="warning">
+                <div class="warning-title">⚠️ אזהרה חשובה!</div>
+                עריכת הרישום עלולה לגרום לבעיות חמורות במערכת. מומלץ ליצור נקודת שחזור או גיבוי לפני ביצוע שינויים.
+                רוב הפקודות דורשות הרשאות מנהל (Run as Administrator).
+            </div>
+
+            <!-- פקודות בסיסיות -->
+            <section id="basics" class="section">
+                <h2 class="section-title">פקודות בסיסיות</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">תחביר כללי</h3>
+                    
+                    <div class="note">
+                        <div class="note-title">📝 קיצורי מפתחות ראשיים:</div>
+                        <strong>HKLM</strong> = HKEY_LOCAL_MACHINE (הגדרות כלל המערכת)<br>
+                        <strong>HKCU</strong> = HKEY_CURRENT_USER (הגדרות משתמש נוכחי)<br>
+                        <strong>HKCR</strong> = HKEY_CLASSES_ROOT (סוגי קבצים ו-COM)<br>
+                        <strong>HKU</strong> = HKEY_USERS (כל המשתמשים)<br>
+                        <strong>HKCC</strong> = HKEY_CURRENT_CONFIG (תצורה נוכחית)
+                    </div>
+                    
+                    <p class="description">סוגי נתונים נפוצים:</p>
+                    <div class="explanation">
+                        <strong>REG_SZ</strong> - מחרוזת טקסט רגילה<br>
+                        <strong>REG_DWORD</strong> - מספר שלם 32-bit<br>
+                        <strong>REG_QWORD</strong> - מספר שלם 64-bit<br>
+                        <strong>REG_BINARY</strong> - נתונים בינאריים<br>
+                        <strong>REG_MULTI_SZ</strong> - מחרוזות מרובות<br>
+                        <strong>REG_EXPAND_SZ</strong> - מחרוזת עם משתני סביבה
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">פקודות עזר</h3>
+                    
+                    <p class="description">הצגת עזרה על פקודת reg:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg /?</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">עזרה על פקודה ספציפית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add /?</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פתיחת Registry Editor:</p>
+                    <div class="command-wrapper">
+                        <div class="command">regedit</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- הוספת ערכים -->
+            <section id="add" class="section">
+                <h2 class="section-title">הוספת ערכים (reg add)</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">תחביר בסיסי</h3>
+                    
+                    <p class="description">הוספת ערך מחרוזת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\MyApp" /v "Version" /t REG_SZ /d "1.0" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/v = שם הערך | /t = סוג | /d = נתונים | /f = ללא אישור</div>
+                    
+                    <p class="description">הוספת ערך DWORD:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\MyApp" /v "Enabled" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">יצירת מפתח ריק:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\MyNewApp" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הוספת ערך ברירת מחדל (Default):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\MyApp" /ve /d "Default Value" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/ve = ערך ברירת מחדל (Value Empty)</div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">סוגי נתונים שונים</h3>
+                    
+                    <p class="description">QWORD (64-bit):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\MyApp" /v "LargeNumber" /t REG_QWORD /d 9999999999 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Binary:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\MyApp" /v "BinaryData" /t REG_BINARY /d 01AF23 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Multi-String (מחרוזות מרובות):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\MyApp" /v "List" /t REG_MULTI_SZ /d "Item1\0Item2\0Item3" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">\0 מפריד בין מחרוזות</div>
+                    
+                    <p class="description">Expandable String (עם משתני סביבה):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\MyApp" /v "Path" /t REG_EXPAND_SZ /d "%USERPROFILE%\Documents" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">דוגמאות מתקדמות</h3>
+                    
+                    <p class="description">הוספה למחשב מרוחק:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "\\ComputerName\HKLM\Software\MyApp" /v "Setting" /t REG_SZ /d "Value" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הוספה עם רווחים בנתיב:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\My Application Name" /v "My Value" /t REG_SZ /d "My Data" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הוספה עם תווים מיוחדים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\MyApp" /v "Path" /t REG_SZ /d "C:\Program Files\App" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- מחיקת ערכים -->
+            <section id="delete" class="section">
+                <h2 class="section-title">מחיקת ערכים (reg delete)</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">מחיקה בסיסית</h3>
+                    
+                    <p class="description">מחיקת ערך ספציפי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKCU\Software\MyApp" /v "Version" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מחיקת מפתח שלם (כולל תתי-מפתחות):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKCU\Software\MyApp" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">זהירות! מוחק את המפתח וכל התוכן שלו</div>
+                    
+                    <p class="description">מחיקת ערך ברירת מחדל:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKCU\Software\MyApp" /ve /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מחיקה עם אישור:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKCU\Software\MyApp" /v "Setting"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">ללא /f - יבקש אישור לפני מחיקה</div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מחיקה מתקדמת</h3>
+                    
+                    <p class="description">מחיקת כל הערכים במפתח (אך לא המפתח עצמו):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKCU\Software\MyApp" /va /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/va = Value All - מוחק את כל הערכים</div>
+                    
+                    <p class="description">מחיקה ממחשב מרוחק:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "\\ComputerName\HKCU\Software\MyApp" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- שאילתות וחיפוש -->
+            <section id="query" class="section">
+                <h2 class="section-title">שאילתות וחיפוש (reg query)</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">שאילתות בסיסיות</h3>
+                    
+                    <p class="description">הצגת כל הערכים במפתח:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software\Microsoft\Windows\CurrentVersion"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת ערך ספציפי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software\MyApp" /v "Version"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת ערך ברירת מחדל:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software\MyApp" /ve</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגה רקורסיבית (כולל תתי-מפתחות):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software\Microsoft" /s</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/s = חיפוש בכל תתי-המפתחות</div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">חיפוש מתקדם</h3>
+                    
+                    <p class="description">חיפוש לפי שם ערך:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software" /f "Version" /s</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/f = מה לחפש | /s = חיפוש רקורסיבי</div>
+                    
+                    <p class="description">חיפוש לפי נתונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software" /f "1.0" /d /s</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/d = חיפוש בנתונים (Data)</div>
+                    
+                    <p class="description">חיפוש לפי שם מפתח:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software" /f "MyApp" /k /s</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/k = חיפוש בשמות מפתחות (Key)</div>
+                    
+                    <p class="description">חיפוש מדויק (Case Sensitive):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software" /f "Version" /c /s</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/c = רגיש לאותיות גדולות/קטנות</div>
+                    
+                    <p class="description">חיפוש התאמה מדויקת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software" /f "Version" /e /s</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/e = התאמה מדויקת בלבד (Exact match)</div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">סינון לפי סוג</h3>
+                    
+                    <p class="description">חיפוש ערכי REG_SZ בלבד:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software\MyApp" /f "text" /t REG_SZ /s</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">חיפוש ערכי DWORD בלבד:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software\MyApp" /f 1 /t REG_DWORD /d /s</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">שאילתות שימושיות</h3>
+                    
+                    <p class="description">בדיקת גרסת Windows:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">בדיקת תוכנות מותקנות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" /s</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">בדיקת תוכניות אוטומטיות בהפעלה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- גיבוי ושחזור -->
+            <section id="backup" class="section">
+                <h2 class="section-title">גיבוי ושחזור (reg export / import / save / restore)</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">ייצוא (Export)</h3>
+                    
+                    <p class="description">ייצוא מפתח לקובץ .reg:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg export "HKCU\Software\MyApp" "C:\Backup\MyApp.reg"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">יוצר קובץ טקסט שניתן לערוך</div>
+                    
+                    <p class="description">ייצוא עם תתי-מפתחות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg export "HKCU\Software\Microsoft" "C:\Backup\Microsoft.reg" /y</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/y = דריסת קובץ קיים ללא אישור</div>
+                    
+                    <p class="description">ייצוא כל HKEY_CURRENT_USER:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg export HKCU "C:\Backup\HKCU_Full.reg"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ייצוא כל HKEY_LOCAL_MACHINE:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg export HKLM "C:\Backup\HKLM_Full.reg"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">זהירות! קובץ גדול מאוד</div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">ייבוא (Import)</h3>
+                    
+                    <p class="description">ייבוא קובץ .reg:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg import "C:\Backup\MyApp.reg"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ייבוא שקט (ללא הודעות):</p>
+                    <div class="command-wrapper">
+                        <div class="command">regedit /s "C:\Backup\MyApp.reg"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/s = Silent mode</div>
+                    
+                    <p class="description">ייבוא ממחשב מרוחק:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg import "\\Server\Share\backup.reg"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">שמירה (Save) - פורמט בינארי</h3>
+                    
+                    <p class="description">שמירת מפתח בפורמט בינארי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg save "HKCU\Software\MyApp" "C:\Backup\MyApp.hiv"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">יוצר קובץ בינארי (לא ניתן לעריכה ידנית)</div>
+                    
+                    <p class="description">שמירה עם דריסה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg save "HKCU\Software\MyApp" "C:\Backup\MyApp.hiv" /y</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שמירת HKLM\System (דורש הרשאות מיוחדות):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg save "HKLM\System" "C:\Backup\System.hiv"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">שחזור (Restore)</h3>
+                    
+                    <p class="description">שחזור מקובץ בינארי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg restore "HKCU\Software\MyApp" "C:\Backup\MyApp.hiv"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">מחליף את המפתח הקיים במלואו</div>
+                    
+                    <p class="description">שחזור עם כפייה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg restore "HKCU\Software\MyApp" "C:\Backup\MyApp.hiv" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">גיבוי אוטומטי עם תאריך</h3>
+                    
+                    <p class="description">סקריפט גיבוי עם תאריך ושעה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set mydate=%%c-%%a-%%b)
+for /f "tokens=1-2 delims=/:" %%a in ('time /t') do (set mytime=%%a%%b)
+reg export "HKCU\Software\MyApp" "C:\Backup\MyApp_%mydate%_%mytime%.reg"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">השוואה (Compare)</h3>
+                    
+                    <p class="description">השוואת שני מפתחות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg compare "HKCU\Software\MyApp" "HKLM\Software\MyApp"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השוואה עם פלט מפורט:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg compare "HKCU\Software\MyApp" "HKCU\Software\MyApp_Backup" /s</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השוואה והצגת הבדלים בלבד:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg compare "HKCU\Software\MyApp" "HKCU\Software\MyApp_Backup" /od</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">/od = Output Differences only</div>
+                </div>
+            </section>
+
+            <!-- פרטיות ואבטחה -->
+            <section id="privacy" class="section">
+                <h2 class="section-title">פרטיות ואבטחה</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">השבתת טלמטריה ואיסוף נתונים</h3>
+                    
+                    <p class="description">השבתת טלמטריה של Windows:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Cortana:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Windows Feedback:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Advertising ID:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת מעקב אחר מיקום:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" /v "Value" /t REG_SZ /d "Deny" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">השבתת Windows Defender (זמנית)</h3>
+                    
+                    <p class="description">השבתת Real-Time Protection:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRealtimeMonitoring" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">יידרש הפעלה מחדש</div>
+                    
+                    <p class="description">השבתת Windows Defender לחלוטין:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Cloud Protection:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet" /v "SpynetReporting" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">הגנת פרטיות</h3>
+                    
+                    <p class="description">השבתת גישה למצלמה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam" /v "Value" /t REG_SZ /d "Deny" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת גישה למיקרופון:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone" /v "Value" /t REG_SZ /d "Deny" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת שיתוף אבחון:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack" /v "DiagTrackAuthorization" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Timeline:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "EnableActivityFeed" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אבטחת דפדפן</h3>
+                    
+                    <p class="description">השבתת Password Manager ב-Edge:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "PasswordManagerEnabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת AutoFill:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "AutofillAddressEnabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">חסימת Cookies של צד שלישי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "BlockThirdPartyCookies" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- השבתת תכונות -->
+            <section id="disable" class="section">
+                <h2 class="section-title">השבתת תכונות Windows</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">השבתת עדכונים אוטומטיים</h3>
+                    
+                    <p class="description">השבתת Windows Update:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "NoAutoUpdate" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת עדכוני Driver אוטומטיים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" /v "SearchOrderConfig" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת הפעלה מחדש אוטומטית אחרי עדכון:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "NoAutoRebootWithLoggedOnUsers" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">השבתת תכונות מעצבנות</h3>
+                    
+                    <p class="description">השבתת OneDrive:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSyncNGSC" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Sticky Keys:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת הודעות Notification:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\PushNotifications" /v "ToastEnabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Action Center:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Policies\Microsoft\Windows\Explorer" /v "DisableNotificationCenter" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Lock Screen:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v "NoLockScreen" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Windows Tips:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableSoftLanding" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">השבתת Bloatware</h3>
+                    
+                    <p class="description">השבתת Consumer Features (אפליקציות מותקנות אוטומטית):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת הצעות ב-Start Menu:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת אפליקציות מוצעות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SilentInstalledAppsEnabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">השבתת שירותים</h3>
+                    
+                    <p class="description">השבתת Hibernation:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "HibernateEnabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Fast Startup:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Remote Assistance:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Error Reporting:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- שיפור ביצועים -->
+            <section id="performance" class="section">
+                <h2 class="section-title">שיפור ביצועים</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">אופטימיזציה כללית</h3>
+                    
+                    <p class="description">השבתת אנימציות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Control Panel\Desktop\WindowMetrics" /v "MinAnimate" /t REG_SZ /d "0" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת אפקטים ויזואליים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t REG_DWORD /d 2 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">2 = Best Performance</div>
+                    
+                    <p class="description">השבתת Transparency:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Shadows:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ListviewShadow" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Thumbnail Preview:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "DisableThumbnailCache" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אופטימיזציה של Explorer</h3>
+                    
+                    <p class="description">פתיחה מהירה של Explorer:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">1 = This PC (במקום Quick Access)</div>
+                    
+                    <p class="description">השבתת Recent Files:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "ShowRecent" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Frequent Folders:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "ShowFrequent" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ניקוי אוטומטי של Temp Files:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy" /v "01" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אופטימיזציה של Startup</h3>
+                    
+                    <p class="description">הפחתת זמן Timeout של Boot:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v "WaitToKillServiceTimeout" /t REG_SZ /d "2000" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">ברירת מחדל: 5000ms, מומלץ: 2000ms</div>
+                    
+                    <p class="description">האצת סגירת תוכניות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Control Panel\Desktop" /v "WaitToKillAppTimeout" /t REG_SZ /d "2000" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">האצת תפריט Start:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Control Panel\Desktop" /v "MenuShowDelay" /t REG_SZ /d "0" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">ברירת מחדל: 400ms, מומלץ: 0ms</div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אופטימיזציה של זיכרון</h3>
+                    
+                    <p class="description">ניקוי אוטומטי של Page File בכיבוי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "ClearPageFileAtShutdown" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">עלול להאט את הכיבוי</div>
+                    
+                    <p class="description">השבתת Paging Executive:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "DisablePagingExecutive" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">מומלץ רק למחשבים עם RAM גבוה</div>
+                    
+                    <p class="description">שיפור Large System Cache:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "LargeSystemCache" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אופטימיזציה של רשת</h3>
+                    
+                    <p class="description">השבתת Bandwidth Throttling:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d 4294967295 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שיפור TCP/IP:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "DefaultTTL" /t REG_DWORD /d 64 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הגדלת TCP Window Size:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpWindowSize" /t REG_DWORD /d 65535 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אופטימיזציה למשחקים</h3>
+                    
+                    <p class="description">השבתת Game Bar:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Game DVR:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הפעלת Game Mode:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">עדיפות גבוהה למשחקים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /v "Priority" /t REG_DWORD /d 8 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- התאמת ממשק -->
+            <section id="ui" class="section">
+                <h2 class="section-title">התאמת ממשק המשתמש</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">Taskbar</h3>
+                    
+                    <p class="description">הסתרת Taskbar אוטומטית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects3" /v "Settings" /t REG_BINARY /d 30000000feffffff7af40000030000003e0000001e000000000000000804000080070000b0040000 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסתרת Search Box:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">0 = Hidden, 1 = Icon, 2 = Box</div>
+                    
+                    <p class="description">הסתרת Task View:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowTaskViewButton" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסתרת People:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" /v "PeopleBand" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסתרת News and Interests:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t REG_DWORD /d 2 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שינוי גודל אייקונים ב-Taskbar:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarSmallIcons" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">1 = Small, 0 = Large</div>
+                    
+                    <p class="description">הצגת שניות בשעון:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSecondsInSystemClock" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Start Menu</h3>
+                    
+                    <p class="description">השבתת Bing Search ב-Start:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEnabled" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Web Results ב-Search:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Policies\Microsoft\Windows\Explorer" /v "DisableSearchBoxSuggestions" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת כל האפליקציות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_ShowAllApps" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסתרת Recently Added:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_HideRecentlyAddedApps" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Start Menu במסך מלא:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_FullScreen" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Desktop</h3>
+                    
+                    <p class="description">הסתרת אייקונים מהשולחן:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideIcons" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת This PC על השולחן:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת User Files על השולחן:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{59031a47-3f72-44a7-89c5-5595fe6b30ee}" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת Recycle Bin על השולחן:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{645FF040-5081-101B-9F08-00AA002F954E}" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת Network על השולחן:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">צבעים וערכות נושא</h3>
+                    
+                    <p class="description">הפעלת Dark Mode:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "AppsUseLightTheme" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Dark Mode למערכת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "SystemUsesLightTheme" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שינוי צבע Accent:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\DWM" /v "AccentColor" /t REG_DWORD /d 4292311040 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">הערך הוא בפורמט ABGR</div>
+                    
+                    <p class="description">הצגת צבע ב-Taskbar:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "ColorPrevalence" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Context Menu</h3>
+                    
+                    <p class="description">שחזור Context Menu הישן (Windows 11):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הוספת "Open with Notepad" לכל הקבצים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCR\*\shell\Open with Notepad\command" /ve /d "notepad.exe \"%%1\"" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הוספת "Open CMD here":</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCR\Directory\Background\shell\cmd" /ve /d "Open CMD here" /f
+reg add "HKCR\Directory\Background\shell\cmd\command" /ve /d "cmd.exe /s /k pushd \"%%V\"" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- File Explorer -->
+            <section id="explorer" class="section">
+                <h2 class="section-title">File Explorer</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">הצגת קבצים נסתרים</h3>
+                    
+                    <p class="description">הצגת קבצים נסתרים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת קבצי מערכת מוגנים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSuperHidden" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת סיומות קבצים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת תיקיות ריקות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideEmptyDrives" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">הגדרות תצוגה</h3>
+                    
+                    <p class="description">הצגת Full Path בכותרת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState" /v "FullPath" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פתיחת כל תיקייה בחלון נפרד:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SeparateProcess" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת Checkboxes לבחירת קבצים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "AutoCheckSelect" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת Status Bar:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowStatusBar" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסתרת Ribbon:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Ribbon" /v "MinimizedStateTabletModeOff" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Quick Access</h3>
+                    
+                    <p class="description">הסרת Quick Access מ-Navigation Pane:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Classes\CLSID\{679f85cb-0220-4080-b29b-5540cc05aab6}\ShellFolder" /v "Attributes" /t REG_DWORD /d 2962227200 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסרת OneDrive מ-Navigation Pane:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCR\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסרת 3D Objects:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסרת Music:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3dfdf296-dbec-4fb4-81d1-6a3438bcf4de}" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסרת Videos:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{f86fa3ab-70d2-4fc7-9c99-fcbf05467f3a}" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">התנהגות Explorer</h3>
+                    
+                    <p class="description">פתיחה בלחיצה אחת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "ShellState" /t REG_BINARY /d 240000003ea800000000000000000000 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Thumbnail Cache:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "DisableThumbnailCache" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Thumbnail על Network:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "DisableThumbsDBOnNetworkFolders" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת כל התיקיות ב-Navigation Pane:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NavPaneShowAllFolders" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">שיפור ביצועים</h3>
+                    
+                    <p class="description">השבתת Folder Type Discovery:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" /v "FolderType" /t REG_SZ /d "NotSpecified" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Automatic Folder Type Discovery:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "FolderContentsInfoTip" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- הפעלה אוטומטית -->
+            <section id="startup" class="section">
+                <h2 class="section-title">הפעלה אוטומטית (Startup Programs)</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">הוספת תוכניות להפעלה אוטומטית</h3>
+                    
+                    <p class="description">הוספה ל-Current User:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MyApp" /t REG_SZ /d "C:\Path\To\App.exe" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הוספה לכל המשתמשים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "MyApp" /t REG_SZ /d "C:\Path\To\App.exe" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הוספה עם פרמטרים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MyApp" /t REG_SZ /d "\"C:\Path\To\App.exe\" -parameter" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הפעלה חד-פעמית (RunOnce):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce" /v "MyApp" /t REG_SZ /d "C:\Path\To\App.exe" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">הסרת תוכניות מהפעלה אוטומטית</h3>
+                    
+                    <p class="description">הסרה מ-Current User:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MyApp" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסרה מכל המשתמשים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "MyApp" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת כל תוכניות ההפעלה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת תוכניות הפעלה של כל המשתמשים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKLM\Software\Microsoft\Windows\CurrentVersion\Run"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מיקומי Startup נוספים</h3>
+                    
+                    <p class="description">Startup עם עיכוב (RunServices):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\RunServices" /v "MyService" /t REG_SZ /d "C:\Path\To\Service.exe" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Startup עם עיכוב (RunServicesOnce):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\RunServicesOnce" /v "MyService" /t REG_SZ /d "C:\Path\To\Service.exe" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">בדיקת Startup Folder:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "Startup"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">השבתת תוכניות Startup נפוצות</h3>
+                    
+                    <p class="description">השבתת OneDrive Startup:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Teams Startup:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "com.squirrel.Teams.Teams" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Skype Startup:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Skype for Desktop" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Startup Delay</h3>
+                    
+                    <p class="description">הוספת עיכוב להפעלת תוכנית (10 שניות):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MyApp" /t REG_SZ /d "cmd /c timeout /t 10 /nobreak && start \"\" \"C:\Path\To\App.exe\"" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הפעלה מוסתרת (ללא חלון CMD):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MyApp" /t REG_SZ /d "wscript.exe //B \"C:\Path\To\Script.vbs\"" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- רשת ואינטרנט -->
+            <section id="network" class="section">
+                <h2 class="section-title">רשת ואינטרנט</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">הגדרות רשת</h3>
+                    
+                    <p class="description">השבתת IPv6:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters" /v "DisabledComponents" /t REG_DWORD /d 255 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">דורש הפעלה מחדש</div>
+                    
+                    <p class="description">הפעלת IPv6:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters" /v "DisabledComponents" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שינוי MTU Size:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{GUID}" /v "MTU" /t REG_DWORD /d 1500 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">החלף {GUID} ב-GUID של כרטיס הרשת</div>
+                    
+                    <p class="description">הגדלת TCP Connections:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "TcpNumConnections" /t REG_DWORD /d 16777214 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הפעלת TCP Timestamps:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v "Tcp1323Opts" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">DNS</h3>
+                    
+                    <p class="description">הגדרת DNS Cache Timeout:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxCacheTtl" /t REG_DWORD /d 86400 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">86400 = 24 שעות בשניות</div>
+                    
+                    <p class="description">הגדרת Negative Cache Timeout:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "MaxNegativeCacheTtl" /t REG_DWORD /d 300 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הפעלת DNS over HTTPS:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v "EnableAutoDoh" /t REG_DWORD /d 2 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Internet Explorer / Edge Legacy</h3>
+                    
+                    <p class="description">השבתת First Run Wizard:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Internet Explorer\Main" /v "DisableFirstRunCustomize" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שינוי דף הבית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Internet Explorer\Main" /v "Start Page" /t REG_SZ /d "https://www.google.com" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Suggestions:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Internet Explorer\Main" /v "ShowedSuggestions" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ניקוי History בסגירה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Internet Explorer\Privacy" /v "ClearBrowsingHistoryOnExit" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Windows Update</h3>
+                    
+                    <p class="description">הגדרת Metered Connection:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\DefaultMediaCost" /v "Ethernet" /t REG_DWORD /d 2 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">2 = Metered (מגביל עדכונים)</div>
+                    
+                    <p class="description">הגבלת Bandwidth לעדכונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" /v "DODownloadMode" /t REG_DWORD /d 99 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת P2P Updates:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">שיתוף קבצים ומדפסות</h3>
+                    
+                    <p class="description">הפעלת Network Discovery:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הפעלת File Sharing:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "AutoShareWks" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Administrative Shares:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "AutoShareServer" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסרת $ Shares:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "AutoShareWks" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Remote Desktop</h3>
+                    
+                    <p class="description">הפעלת Remote Desktop:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v "fDenyTSConnections" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Remote Desktop:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v "fDenyTSConnections" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">אפשור NLA (Network Level Authentication):</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v "UserAuthentication" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שינוי פורט RDP:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v "PortNumber" /t REG_DWORD /d 3390 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">ברירת מחדל: 3389</div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Proxy Settings</h3>
+                    
+                    <p class="description">הפעלת Proxy:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v "ProxyEnable" /t REG_DWORD /d 1 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הגדרת Proxy Server:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v "ProxyServer" /t REG_SZ /d "proxy.example.com:8080" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">השבתת Proxy:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v "ProxyEnable" /t REG_DWORD /d 0 /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הגדרת Proxy Bypass:</p>
+                    <div class="command-wrapper">
+                        <div class="command">reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v "ProxyOverride" /t REG_SZ /d "localhost;127.0.0.1;<local>" /f</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer>
+            <p>מדריך פקודות Registry ב-CMD | זהירות: שינויים ברישום עלולים לפגוע במערכת | © 2025</p>
+        </footer>
+        </div>
+    </div>
+
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Copy command functionality
+        function copyCommand(button) {
+            const commandDiv = button.previousElementSibling;
+            const command = commandDiv.textContent;
+            
+            navigator.clipboard.writeText(command).then(() => {
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Scroll to top functionality
+        const scrollTopBtn = document.querySelector('.scroll-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                
+                // Update active link
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Highlight active section on scroll
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

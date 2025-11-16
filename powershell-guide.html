@@ -1,0 +1,2545 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך PowerShell - פקודות שימושיות - CopyCode</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: url('images/background.jpg') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .site-logo:hover {
+            color: #667eea;
+        }
+
+        .site-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding-top: 90px;
+        }
+
+        .home-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: #1a1a1a;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin: 1.5rem;
+            margin-bottom: 0;
+        }
+
+        .home-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1rem;
+            margin-left: 1.5rem;
+            position: sticky;
+            top: 110px;
+            height: calc(100vh - 130px);
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #0078D4;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: #5a6c7d;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding-right: 1rem;
+        }
+
+        .nav-link.active {
+            background: #0078D4;
+            color: white;
+        }
+
+        .container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: transparent;
+            color: #1a1a1a;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        h1 svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #0078D4;
+            font-weight: 600;
+        }
+
+        .command-group {
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .command-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .command-wrapper {
+            position: relative;
+            margin: 0.8rem 0;
+        }
+
+        .command {
+            background: #012456;
+            color: #EEEDF0;
+            padding: 0.9rem 3rem 0.9rem 1rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid #0078D4;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+            padding: 0.4rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+        }
+
+        .copy-btn::before {
+            content: '⧉';
+            font-size: 1rem;
+        }
+
+        .copy-btn:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-color: #95a5a6;
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .copy-btn.copied::before {
+            content: '✓';
+        }
+
+        .description {
+            color: #5a6c7d;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .explanation {
+            background: #e8f4f8;
+            border-right: 3px solid #0078D4;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            color: #34495e;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-right: 3px solid #f39c12;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #d68910;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #0078D4 0%, #005A9E 100%);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 3px solid #00BCF2;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 2px solid #0078D4;
+            }
+
+            .container {
+                margin: 0 1rem 1rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .command {
+                font-size: 0.82rem;
+                padding-left: 0.8rem;
+            }
+
+            .copy-btn {
+                position: relative;
+                display: block;
+                margin-top: 0.5rem;
+                right: 0;
+                transform: none;
+            }
+
+            .copy-btn:active {
+                transform: scale(0.95);
+            }
+
+            .command-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #0078D4;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #005A9E;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-header">
+        <a href="index.html" class="site-logo">
+            <img src="images/logo.png" alt="לוגו האתר">
+            CopyCode
+        </a>
+        <a href="search.html" class="search-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>חיפוש</span>
+        </a>
+    </div>
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-title">תוכן עניינים</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#basics" class="nav-link">פעולות בסיסיות</a></li>
+                <li class="nav-item"><a href="#files" class="nav-link">ניהול קבצים</a></li>
+                <li class="nav-item"><a href="#folders" class="nav-link">ניהול תיקיות</a></li>
+                <li class="nav-item"><a href="#search" class="nav-link">חיפוש ומיון</a></li>
+                <li class="nav-item"><a href="#network" class="nav-link">רשת ואינטרנט</a></li>
+                <li class="nav-item"><a href="#system" class="nav-link">מידע מערכת</a></li>
+                <li class="nav-item"><a href="#processes" class="nav-link">תהליכים ושירותים</a></li>
+                <li class="nav-item"><a href="#text" class="nav-link">עיבוד טקסט</a></li>
+                <li class="nav-item"><a href="#compression" class="nav-link">דחיסה וארכיון</a></li>
+                <li class="nav-item"><a href="#security" class="nav-link">אבטחה והרשאות</a></li>
+                <li class="nav-item"><a href="#registry" class="nav-link">רישום Windows</a></li>
+                <li class="nav-item"><a href="#advanced" class="nav-link">פקודות מתקדמות</a></li>
+                <li class="nav-item"><a href="#custom" class="nav-link">פקודות נוספות</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+            <header>
+                <h1>
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="256" height="256" rx="28" fill="#0078D4"/>
+                        <path d="M40 180l80-100-80-40v140z" fill="#FFF" opacity="0.8"/>
+                        <path d="M120 180l80-100-80-40v140z" fill="#FFF"/>
+                        <rect x="140" y="190" width="76" height="20" rx="4" fill="#FFF"/>
+                    </svg>
+                    מדריך PowerShell מקיף
+                </h1>
+                <p class="subtitle">פקודות שימושיות לעבודה יומיומית ב-Windows</p>
+            </header>
+
+            <div class="content">
+                <!-- פעולות בסיסיות -->
+                <section id="basics" class="section">
+                    <h2 class="section-title">פעולות בסיסיות</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">עזרה ומידע על פקודות</h3>
+
+                        <p class="description">קבלת עזרה על פקודה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Help Get-Process</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">עזרה מפורטת עם דוגמאות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Help Get-Process -Examples</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">רשימת כל הפקודות הזמינות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Command</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש פקודות לפי מילת מפתח:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Command *process*</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">ניווט בתיקיות</h3>
+
+                        <p class="description">הצגת התיקייה הנוכחית:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Location</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">או בקיצור: pwd</div>
+
+                        <p class="description">מעבר לתיקייה אחרת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Set-Location C:\Users</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">או בקיצור: cd C:\Users</div>
+
+                        <p class="description">חזרה לתיקייה הקודמת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Set-Location ..</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מעבר לתיקיית הבית:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Set-Location ~</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">הצגת תוכן</h3>
+
+                        <p class="description">רשימת קבצים ותיקיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">או בקיצור: ls, dir</div>
+
+                        <p class="description">הצגת קבצים נסתרים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Force</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגה רקורסיבית (כולל תתי-תיקיות):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">סינון לפי סוג קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem *.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">ניקוי מסך והיסטוריה</h3>
+
+                        <p class="description">ניקוי המסך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Clear-Host</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">או בקיצור: cls, clear</div>
+
+                        <p class="description">הצגת היסטוריית פקודות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-History</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הרצת פקודה מההיסטוריה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Invoke-History 5</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ניהול קבצים -->
+                <section id="files" class="section">
+                    <h2 class="section-title">ניהול קבצים</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">יצירת קבצים</h3>
+
+                        <p class="description">יצירת קובץ ריק:</p>
+                        <div class="command-wrapper">
+                            <div class="command">New-Item -ItemType File -Name "file.txt"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">יצירת קובץ עם תוכן:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Set-Content -Path "file.txt" -Value "Hello World"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הוספת תוכן לקובץ קיים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Add-Content -Path "file.txt" -Value "New line"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">קריאת קבצים</h3>
+
+                        <p class="description">הצגת תוכן קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Content file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">או בקיצור: cat, type</div>
+
+                        <p class="description">הצגת 10 השורות הראשונות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Content file.txt -Head 10</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת 10 השורות האחרונות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Content file.txt -Tail 10</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מעקב אחר שינויים בקובץ (כמו tail -f):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Content file.txt -Wait</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">העתקה והעברה</h3>
+
+                        <p class="description">העתקת קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Copy-Item source.txt destination.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">או בקיצור: cp, copy</div>
+
+                        <p class="description">העתקה לתיקייה אחרת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Copy-Item file.txt C:\Backup\</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">העברת קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Move-Item source.txt destination.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">או בקיצור: mv, move</div>
+
+                        <p class="description">שינוי שם קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Rename-Item oldname.txt newname.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מחיקת קבצים</h3>
+
+                        <p class="description">מחיקת קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Remove-Item file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">או בקיצור: rm, del</div>
+
+                        <p class="description">מחיקה ללא אישור:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Remove-Item file.txt -Force</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מחיקת כל הקבצים מסוג מסוים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Remove-Item *.tmp</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מידע על קבצים</h3>
+
+                        <p class="description">הצגת מידע מפורט על קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Item file.txt | Format-List *</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בדיקת גודל קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Item file.txt | Select-Object Name, Length</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בדיקה אם קובץ קיים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Test-Path file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חישוב Hash של קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-FileHash file.txt -Algorithm SHA256</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ניהול תיקיות -->
+                <section id="folders" class="section">
+                    <h2 class="section-title">ניהול תיקיות</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">יצירת תיקיות</h3>
+
+                        <p class="description">יצירת תיקייה חדשה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">New-Item -ItemType Directory -Name "MyFolder"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">או בקיצור: mkdir MyFolder</div>
+
+                        <p class="description">יצירת מספר תיקיות בבת אחת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">New-Item -ItemType Directory -Path "Folder1", "Folder2", "Folder3"
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">יצירת תיקיות מקוננות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">New-Item -ItemType Directory -Path "Parent\Child\GrandChild" -Force
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">העתקה והעברה</h3>
+
+                        <p class="description">העתקת תיקייה עם כל התוכן:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Copy-Item -Path "Source" -Destination "Dest" -Recurse</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">העברת תיקייה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Move-Item -Path "OldFolder" -Destination "NewFolder"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שינוי שם תיקייה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Rename-Item -Path "OldName" -NewName "NewName"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מחיקת תיקיות</h3>
+
+                        <p class="description">מחיקת תיקייה ריקה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Remove-Item "FolderName"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מחיקת תיקייה עם כל התוכן:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Remove-Item "FolderName" -Recurse -Force</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">זהירות! פעולה זו מוחקת הכל ללא אפשרות שחזור</div>
+
+                        <p class="description">מחיקת כל התוכן בתיקייה אך לא התיקייה עצמה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Remove-Item "FolderName\*" -Recurse -Force</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מידע על תיקיות</h3>
+
+                        <p class="description">חישוב גודל תיקייה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem "FolderName" -Recurse | Measure-Object -Property Length
+                                -Sum</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">ספירת קבצים בתיקייה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem "FolderName" -File -Recurse | Measure-Object</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת עץ תיקיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse -Directory | Select-Object FullName</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מציאת התיקיות הגדולות ביותר:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Directory | ForEach-Object { [PSCustomObject]@{ Name =
+                                $_.Name; Size = (Get-ChildItem $_.FullName -Recurse | Measure-Object -Property Length
+                                -Sum).Sum } } | Sort-Object Size -Descending</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- חיפוש ומיון -->
+                <section id="search" class="section">
+                    <h2 class="section-title">חיפוש ומיון</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">חיפוש קבצים</h3>
+
+                        <p class="description">חיפוש קובץ לפי שם:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse -Filter "*.txt"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש קבצים שהשתנו ב-7 הימים האחרונים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse | Where-Object { $_.LastWriteTime -gt
+                                (Get-Date).AddDays(-7) }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש קבצים גדולים מ-100MB:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse -File | Where-Object { $_.Length -gt 100MB }
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש קבצים ריקים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse -File | Where-Object { $_.Length -eq 0 }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש קבצים לפי תאריך יצירה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse | Where-Object { $_.CreationTime -gt
+                                "2025-01-01" }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">חיפוש בתוכן קבצים</h3>
+
+                        <p class="description">חיפוש טקסט בקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Select-String -Path "file.txt" -Pattern "search text"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש בכל קבצי הטקסט בתיקייה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse -Filter "*.txt" | Select-String -Pattern "search
+                                text"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש עם Regex:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Select-String -Path "*.log" -Pattern "\d{3}-\d{3}-\d{4}"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש לא רגיש לאותיות גדולות/קטנות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Select-String -Path "file.txt" -Pattern "text" -CaseSensitive:$false
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מיון וסינון</h3>
+
+                        <p class="description">מיון קבצים לפי גודל:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem | Sort-Object Length -Descending</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מיון לפי תאריך שינוי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem | Sort-Object LastWriteTime -Descending</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת 10 הקבצים הגדולים ביותר:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse -File | Sort-Object Length -Descending |
+                                Select-Object -First 10 Name,
+                                @{Name="Size(MB)";Expression={[math]::Round($_.Length/1MB,2)}}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">סינון קבצים לפי סיומת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem | Where-Object { $_.Extension -in ".txt", ".log", ".csv"
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">קבצים ייחודיים לפי שם (ללא כפילויות):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse | Select-Object Name -Unique</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">השוואה</h3>
+
+                        <p class="description">השוואת שני קבצים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Compare-Object (Get-Content file1.txt) (Get-Content file2.txt)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מציאת קבצים כפולים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Recurse -File | Group-Object -Property Length |
+                                Where-Object { $_.Count -gt 1 }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- רשת ואינטרנט -->
+                <section id="network" class="section">
+                    <h2 class="section-title">רשת ואינטרנט</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">בדיקת חיבור</h3>
+
+                        <p class="description">בדיקת חיבור לשרת (Ping):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Test-Connection google.com</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">Ping עם מספר מוגבל של נסיונות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Test-Connection google.com -Count 4</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בדיקת פורט פתוח:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Test-NetConnection google.com -Port 443</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מעקב אחר מסלול (Traceroute):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Test-NetConnection google.com -TraceRoute</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מידע רשת</h3>
+
+                        <p class="description">הצגת כתובת IP:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-NetIPAddress</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת כרטיסי רשת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-NetAdapter</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת הגדרות IP מפורטות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-NetIPConfiguration</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת טבלת ניתוב:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-NetRoute</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת חיבורים פעילים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-NetTCPConnection</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בדיקת פורטים פתוחים במחשב:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-NetTCPConnection -State Listen</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">DNS</h3>
+
+                        <p class="description">בדיקת DNS:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Resolve-DnsName google.com</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בדיקת רשומת MX:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Resolve-DnsName google.com -Type MX</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">ניקוי מטמון DNS:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Clear-DnsClientCache</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת מטמון DNS:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-DnsClientCache</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">הורדת קבצים</h3>
+
+                        <p class="description">הורדת קובץ מהאינטרנט:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Invoke-WebRequest -Uri "https://example.com/file.zip" -OutFile
+                                "file.zip"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הורדה מהירה יותר:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Invoke-RestMethod -Uri "https://api.example.com/data" -OutFile
+                                "data.json"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">קריאת תוכן מ-URL:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Invoke-RestMethod -Uri "https://api.example.com/data"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שליחת בקשת POST:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Invoke-RestMethod -Uri "https://api.example.com" -Method Post -Body
+                                @{key="value"}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Wi-Fi</h3>
+
+                        <p class="description">הצגת רשתות Wi-Fi שמורות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">netsh wlan show profiles</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת סיסמת Wi-Fi:</p>
+                        <div class="command-wrapper">
+                            <div class="command">netsh wlan show profile name="WiFiName" key=clear</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">התנתקות מרשת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">netsh wlan disconnect</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- מידע מערכת -->
+                <section id="system" class="section">
+                    <h2 class="section-title">מידע מערכת</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מידע כללי</h3>
+
+                        <p class="description">מידע על המחשב:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ComputerInfo</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">גרסת Windows:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ComputerInfo | Select-Object WindowsVersion, OsArchitecture</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שם המחשב:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$env:COMPUTERNAME</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שם המשתמש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$env:USERNAME</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">זמן הפעלה של המערכת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">(Get-Date) - (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">חומרה</h3>
+
+                        <p class="description">מידע על המעבד:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-CimInstance Win32_Processor | Select-Object Name, NumberOfCores,
+                                NumberOfLogicalProcessors</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מידע על הזיכרון:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property
+                                Capacity -Sum | Select-Object
+                                @{Name="TotalRAM(GB)";Expression={[math]::Round($_.Sum/1GB,2)}}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מידע על כרטיס המסך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-CimInstance Win32_VideoController | Select-Object Name,
+                                VideoModeDescription, DriverVersion</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מידע על הדיסק הקשיח:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-CimInstance Win32_DiskDrive | Select-Object Model, Size, MediaType
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מידע על הסוללה (למחשבים ניידים):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-CimInstance Win32_Battery | Select-Object Name,
+                                EstimatedChargeRemaining, BatteryStatus</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">דיסקים וכוננים</h3>
+
+                        <p class="description">הצגת כל הכוננים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-PSDrive -PSProvider FileSystem</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מקום פנוי בדיסק:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Volume</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מידע מפורט על דיסק C:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Volume -DriveLetter C | Select-Object DriveLetter, FileSystemLabel,
+                                Size, SizeRemaining</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בדיקת בריאות הדיסק:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-PhysicalDisk | Select-Object FriendlyName, HealthStatus,
+                                OperationalStatus</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">ביצועים</h3>
+
+                        <p class="description">שימוש במעבד:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Counter '\Processor(_Total)\% Processor Time'</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">זיכרון זמין:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-CimInstance Win32_OperatingSystem | Select-Object
+                                @{Name="FreeMemory(GB)";Expression={[math]::Round($_.FreePhysicalMemory/1MB,2)}}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">טמפרטורת המעבד (אם נתמך):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-CimInstance MSAcpi_ThermalZoneTemperature -Namespace "root/wmi" |
+                                Select-Object CurrentTemperature</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">עדכונים</h3>
+
+                        <p class="description">בדיקת עדכוני Windows:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-WindowsUpdate</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">דורש התקנת מודול PSWindowsUpdate</div>
+
+                        <p class="description">היסטוריית עדכונים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-HotFix | Sort-Object InstalledOn -Descending</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- תהליכים ושירותים -->
+                <section id="processes" class="section">
+                    <h2 class="section-title">תהליכים ושירותים</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">ניהול תהליכים</h3>
+
+                        <p class="description">הצגת כל התהליכים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Process</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש תהליך לפי שם:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Process -Name "chrome"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">התהליכים שצורכים הכי הרבה זיכרון:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Process | Sort-Object WorkingSet -Descending | Select-Object -First
+                                10 Name, @{Name="Memory(MB)";Expression={[math]::Round($_.WorkingSet/1MB,2)}}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">התהליכים שצורכים הכי הרבה CPU:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Process | Sort-Object CPU -Descending | Select-Object -First 10
+                                Name, CPU</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">עצירת תהליך לפי שם:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Stop-Process -Name "notepad"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">עצירת תהליך לפי ID:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Stop-Process -Id 1234</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">עצירה כפויה של תהליך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Stop-Process -Name "chrome" -Force</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הפעלת תוכנית:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Start-Process "notepad.exe"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הפעלה כמנהל מערכת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Start-Process "powershell.exe" -Verb RunAs</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">ניהול שירותים</h3>
+
+                        <p class="description">הצגת כל השירותים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Service</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שירותים פעילים בלבד:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Service | Where-Object {$_.Status -eq "Running"}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש שירות לפי שם:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Service -Name "wuauserv"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הפעלת שירות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Start-Service -Name "wuauserv"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">עצירת שירות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Stop-Service -Name "wuauserv"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הפעלה מחדש של שירות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Restart-Service -Name "wuauserv"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שינוי סטטוס אוטומטי של שירות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Set-Service -Name "wuauserv" -StartupType Automatic</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">משימות מתוזמנות</h3>
+
+                        <p class="description">הצגת משימות מתוזמנות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ScheduledTask</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">משימות פעילות בלבד:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ScheduledTask | Where-Object {$_.State -eq "Ready"}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הפעלת משימה מתוזמנת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Start-ScheduledTask -TaskName "TaskName"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">השבתת משימה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Disable-ScheduledTask -TaskName "TaskName"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">אפליקציות מותקנות</h3>
+
+                        <p class="description">רשימת תוכנות מותקנות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ItemProperty
+                                HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName,
+                                DisplayVersion, Publisher</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש תוכנה מסוימת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ItemProperty
+                                HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object
+                                {$_.DisplayName -like "*Chrome*"}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- עיבוד טקסט -->
+                <section id="text" class="section">
+                    <h2 class="section-title">עיבוד טקסט</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">עבודה עם מחרוזות</h3>
+
+                        <p class="description">המרה לאותיות גדולות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">"hello world".ToUpper()</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">המרה לאותיות קטנות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">"HELLO WORLD".ToLower()</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">החלפת טקסט:</p>
+                        <div class="command-wrapper">
+                            <div class="command">"Hello World" -replace "World", "PowerShell"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">פיצול מחרוזת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">"apple,banana,orange" -split ","</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיבור מחרוזות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">@("apple", "banana", "orange") -join ", "</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הסרת רווחים מהתחלה וסוף:</p>
+                        <div class="command-wrapper">
+                            <div class="command">" hello world ".Trim()</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בדיקה אם מחרוזת מכילה טקסט:</p>
+                        <div class="command-wrapper">
+                            <div class="command">"Hello World" -like "*World*"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">עיבוד קבצי טקסט</h3>
+
+                        <p class="description">ספירת שורות בקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">(Get-Content file.txt).Count</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">ספירת מילים בקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">(Get-Content file.txt | Measure-Object -Word).Words</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הסרת שורות כפולות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Content file.txt | Sort-Object -Unique | Set-Content output.txt
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מיון שורות בקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Content file.txt | Sort-Object | Set-Content sorted.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">החלפת טקסט בקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">(Get-Content file.txt) -replace "old", "new" | Set-Content file.txt
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">סינון שורות המכילות טקסט מסוים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Content file.txt | Where-Object {$_ -like "*error*"}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מיזוג מספר קבצים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Content file1.txt, file2.txt, file3.txt | Set-Content merged.txt
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">CSV ו-JSON</h3>
+
+                        <p class="description">קריאת קובץ CSV:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Import-Csv data.csv</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">כתיבה לקובץ CSV:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Process | Export-Csv processes.csv -NoTypeInformation</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">המרה ל-JSON:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Process | Select-Object Name, CPU | ConvertTo-Json</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">קריאת JSON:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Content data.json | ConvertFrom-Json</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">המרה ל-XML:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Process | Export-Clixml processes.xml</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">קריאת XML:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Import-Clixml processes.xml</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Regex</h3>
+
+                        <p class="description">התאמת דפוס:</p>
+                        <div class="command-wrapper">
+                            <div class="command">"test@email.com" -match "\w+@\w+\.\w+"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חילוץ מספרים מטקסט:</p>
+                        <div class="command-wrapper">
+                            <div class="command">"Price is 100 dollars" -match "\d+"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">החלפה עם Regex:</p>
+                        <div class="command-wrapper">
+                            <div class="command">"Phone: 123-456-7890" -replace "\d{3}-\d{3}-\d{4}", "XXX-XXX-XXXX"
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- דחיסה וארכיון -->
+                <section id="compression" class="section">
+                    <h2 class="section-title">דחיסה וארכיון</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">קבצי ZIP</h3>
+
+                        <p class="description">יצירת קובץ ZIP:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Compress-Archive -Path "C:\Files\*" -DestinationPath "archive.zip"
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">דחיסת תיקייה שלמה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Compress-Archive -Path "C:\MyFolder" -DestinationPath "folder.zip"
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הוספת קבצים לארכיון קיים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Compress-Archive -Path "newfile.txt" -Update -DestinationPath
+                                "archive.zip"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חילוץ קובץ ZIP:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Expand-Archive -Path "archive.zip" -DestinationPath "C:\Extracted"
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חילוץ עם דריסת קבצים קיימים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Expand-Archive -Path "archive.zip" -DestinationPath "C:\Extracted"
+                                -Force</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת תוכן ארכיון:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Path "archive.zip" | Select-Object -ExpandProperty
+                                FullName</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">דחיסה מתקדמת</h3>
+
+                        <p class="description">דחיסה עם רמת דחיסה מקסימלית:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Compress-Archive -Path "C:\Files\*" -DestinationPath "archive.zip"
+                                -CompressionLevel Optimal</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">דחיסה מהירה (פחות יעילה):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Compress-Archive -Path "C:\Files\*" -DestinationPath "archive.zip"
+                                -CompressionLevel Fastest</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">דחיסת קבצים מרובים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Compress-Archive -Path "file1.txt", "file2.txt", "file3.txt"
+                                -DestinationPath "files.zip"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">גיבוי</h3>
+
+                        <p class="description">יצירת גיבוי עם תאריך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$date = Get-Date -Format "yyyy-MM-dd"; Compress-Archive -Path "C:\Data"
+                                -DestinationPath "Backup_$date.zip"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">גיבוי אוטומטי של תיקייה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$timestamp = Get-Date -Format "yyyyMMdd_HHmmss"; Compress-Archive -Path
+                                "C:\Important" -DestinationPath "C:\Backups\Backup_$timestamp.zip"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- אבטחה והרשאות -->
+                <section id="security" class="section">
+                    <h2 class="section-title">אבטחה והרשאות</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">הרשאות קבצים</h3>
+
+                        <p class="description">הצגת הרשאות קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Acl "file.txt" | Format-List</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">העתקת הרשאות מקובץ לקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Acl "source.txt" | Set-Acl "destination.txt"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הוספת הרשאת קריאה למשתמש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$acl = Get-Acl "file.txt"; $permission = "DOMAIN\User","Read","Allow";
+                                $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule $permission;
+                                $acl.SetAccessRule($accessRule); Set-Acl "file.txt" $acl</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הסרת כל ההרשאות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$acl = Get-Acl "file.txt"; $acl.SetAccessRuleProtection($true, $false);
+                                Set-Acl "file.txt" $acl</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Execution Policy</h3>
+
+                        <p class="description">בדיקת מדיניות הרצה נוכחית:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ExecutionPolicy</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת כל המדיניות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ExecutionPolicy -List</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שינוי מדיניות להרצה חופשית:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Set-ExecutionPolicy Unrestricted</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">דורש הרשאות מנהל</div>
+
+                        <p class="description">מדיניות מומלצת (חתימה מרחוק):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Set-ExecutionPolicy RemoteSigned</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">עקיפת מדיניות לסקריפט בודד:</p>
+                        <div class="command-wrapper">
+                            <div class="command">PowerShell.exe -ExecutionPolicy Bypass -File script.ps1</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">משתמשים וקבוצות</h3>
+
+                        <p class="description">הצגת משתמשים מקומיים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-LocalUser</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">יצירת משתמש חדש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">New-LocalUser -Name "NewUser" -Password (ConvertTo-SecureString
+                                "P@ssw0rd" -AsPlainText -Force)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת קבוצות מקומיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-LocalGroup</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הוספת משתמש לקבוצה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Add-LocalGroupMember -Group "Administrators" -Member "UserName"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת חברי קבוצה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-LocalGroupMember -Group "Administrators"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">חומת אש (Firewall)</h3>
+
+                        <p class="description">הצגת סטטוס חומת האש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-NetFirewallProfile | Select-Object Name, Enabled</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת כללי חומת אש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-NetFirewallRule | Where-Object {$_.Enabled -eq $true}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">יצירת כלל חדש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">New-NetFirewallRule -DisplayName "Allow Port 8080" -Direction Inbound
+                                -LocalPort 8080 -Protocol TCP -Action Allow</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">השבתת כלל:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Disable-NetFirewallRule -DisplayName "RuleName"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מחיקת כלל:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Remove-NetFirewallRule -DisplayName "RuleName"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">הצפנה</h3>
+
+                        <p class="description">הצפנת מחרוזת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ConvertTo-SecureString "MyPassword" -AsPlainText -Force</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שמירת סיסמה מוצפנת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Read-Host "Enter Password" -AsSecureString | ConvertFrom-SecureString |
+                                Out-File "password.txt"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">קריאת סיסמה מוצפנת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$password = Get-Content "password.txt" | ConvertTo-SecureString</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- רישום Windows -->
+                <section id="registry" class="section">
+                    <h2 class="section-title">רישום Windows (Registry)</h2>
+
+                    <div class="note">
+                        <div class="note-title">⚠️ אזהרה</div>
+                        שינויים ברישום Windows עלולים לגרום לבעיות במערכת. יש לגבות את הרישום לפני ביצוע שינויים.
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">קריאה מהרישום</h3>
+
+                        <p class="description">קריאת ערך מהרישום:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ItemProperty -Path
+                                "HKLM:\Software\Microsoft\Windows\CurrentVersion"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">קריאת ערך ספציפי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ItemPropertyValue -Path
+                                "HKLM:\Software\Microsoft\Windows\CurrentVersion" -Name "ProgramFilesDir"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בדיקה אם מפתח קיים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Test-Path "HKLM:\Software\MyApp"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת כל תתי-המפתחות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Path "HKLM:\Software\Microsoft"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">כתיבה לרישום</h3>
+
+                        <p class="description">יצירת מפתח חדש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">New-Item -Path "HKCU:\Software\MyApp"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הוספת ערך חדש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">New-ItemProperty -Path "HKCU:\Software\MyApp" -Name "Version" -Value
+                                "1.0" -PropertyType String</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שינוי ערך קיים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Set-ItemProperty -Path "HKCU:\Software\MyApp" -Name "Version" -Value
+                                "2.0"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מחיקת ערך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Remove-ItemProperty -Path "HKCU:\Software\MyApp" -Name "Version"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מחיקת מפתח:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Remove-Item -Path "HKCU:\Software\MyApp" -Recurse</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">גיבוי ושחזור</h3>
+
+                        <p class="description">ייצוא מפתח לקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">reg export "HKCU\Software\MyApp" "backup.reg"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">ייבוא מפתח מקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">reg import "backup.reg"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">גיבוי הרישום כולו:</p>
+                        <div class="command-wrapper">
+                            <div class="command">reg export HKLM "HKLM_backup.reg"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">חיפוש ברישום</h3>
+
+                        <p class="description">חיפוש מפתח לפי שם:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Path "HKLM:\Software" -Recurse -ErrorAction
+                                SilentlyContinue | Where-Object {$_.Name -like "*SearchTerm*"}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש ערך ספציפי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Path "HKCU:\Software" -Recurse | Get-ItemProperty |
+                                Where-Object {$_.PSObject.Properties.Name -contains "Version"}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">הגדרות נפוצות</h3>
+
+                        <p class="description">השבתת Windows Defender (זמנית):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows
+                                Defender" -Name "DisableAntiSpyware" -Value 1</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">דורש הרשאות מנהל והפעלה מחדש</div>
+
+                        <p class="description">שינוי טפט שולחן העבודה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper"
+                                -Value "C:\path\to\image.jpg"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- פקודות מתקדמות -->
+                <section id="advanced" class="section">
+                    <h2 class="section-title">פקודות מתקדמות</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">לולאות ותנאים</h3>
+
+                        <p class="description">לולאת ForEach:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem | ForEach-Object { Write-Host $_.Name }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">לולאת For:</p>
+                        <div class="command-wrapper">
+                            <div class="command">for ($i = 1; $i -le 10; $i++) { Write-Host "Number: $i" }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">לולאת While:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$i = 1; while ($i -le 5) { Write-Host $i; $i++ }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">תנאי If-Else:</p>
+                        <div class="command-wrapper">
+                            <div class="command">if (Test-Path "file.txt") { Write-Host "File exists" } else {
+                                Write-Host "File not found" }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">Switch:</p>
+                        <div class="command-wrapper">
+                            <div class="command">switch ($value) { 1 { "One" } 2 { "Two" } default { "Other" } }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">פונקציות</h3>
+
+                        <p class="description">יצירת פונקציה פשוטה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">function Say-Hello { param($Name) Write-Host "Hello, $Name!" }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">פונקציה עם ערך החזרה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">function Get-Square { param($Number) return $Number * $Number }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">פונקציה עם פרמטרים מרובים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">function Add-Numbers { param([int]$a, [int]$b) return $a + $b }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">משתנים ומערכים</h3>
+
+                        <p class="description">הגדרת משתנה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$myVar = "Hello World"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">יצירת מערך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$array = @("apple", "banana", "orange")</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הוספה למערך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$array += "grape"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">יצירת Hash Table:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$hash = @{ Name = "John"; Age = 30; City = "New York" }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">גישה לערכים ב-Hash Table:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$hash["Name"]</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">משתנה סביבה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$env:PATH</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Pipeline ו-Operators</h3>
+
+                        <p class="description">שרשור פקודות עם Pipeline:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Process | Where-Object {$_.CPU -gt 100} | Sort-Object CPU
+                                -Descending</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">סינון עם Where-Object:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem | Where-Object {$_.Length -gt 1MB}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בחירת מאפיינים עם Select-Object:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Process | Select-Object Name, CPU, WorkingSet</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">קיבוץ עם Group-Object:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem | Group-Object Extension</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מדידה עם Measure-Object:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem | Measure-Object -Property Length -Sum -Average</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">טיפול בשגיאות</h3>
+
+                        <p class="description">Try-Catch:</p>
+                        <div class="command-wrapper">
+                            <div class="command">try { Get-Content "nonexistent.txt" } catch { Write-Host "Error: $_" }
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">דיכוי שגיאות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-ChildItem -Path "C:\NoAccess" -ErrorAction SilentlyContinue</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת השגיאה האחרונה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$Error[0]</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">ניקוי רשימת שגיאות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$Error.Clear()</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מודולים</h3>
+
+                        <p class="description">הצגת מודולים מותקנים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Module -ListAvailable</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">ייבוא מודול:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Import-Module ModuleName</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">התקנת מודול מ-PowerShell Gallery:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Install-Module -Name ModuleName</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">עדכון מודול:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Update-Module -Name ModuleName</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הסרת מודול:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Uninstall-Module -Name ModuleName</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">סקריפטים</h3>
+
+                        <p class="description">הרצת סקריפט:</p>
+                        <div class="command-wrapper">
+                            <div class="command">.\script.ps1</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הרצה עם פרמטרים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">.\script.ps1 -Parameter1 "value" -Parameter2 123</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הרצה בחלון חדש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Start-Process powershell -ArgumentList "-File script.ps1"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הרצה מרחוק:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Invoke-Command -ComputerName Server01 -FilePath "C:\Scripts\script.ps1"
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- פקודות נוספות -->
+                <section id="custom" class="section">
+                    <h2 class="section-title">פקודות נוספות</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תאריך ושעה</h3>
+
+                        <p class="description">תאריך ושעה נוכחיים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Date</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">פורמט מותאם אישית:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Date -Format "yyyy-MM-dd HH:mm:ss"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הוספת ימים לתאריך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">(Get-Date).AddDays(7)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חישוב הפרש בין תאריכים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$date1 = Get-Date "2025-01-01"; $date2 = Get-Date; ($date2 -
+                                $date1).Days</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מחשבון</h3>
+
+                        <p class="description">פעולות חשבון בסיסיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">2 + 3 * 4</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חזקה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[Math]::Pow(2, 10)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שורש ריבועי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[Math]::Sqrt(144)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">עיגול:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[Math]::Round(3.14159, 2)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מספר אקראי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Random -Minimum 1 -Maximum 100</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Clipboard</h3>
+
+                        <p class="description">העתקה ל-Clipboard:</p>
+                        <div class="command-wrapper">
+                            <div class="command">"Hello World" | Set-Clipboard</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">קריאה מ-Clipboard:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Clipboard</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">העתקת תוכן קובץ ל-Clipboard:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Get-Content file.txt | Set-Clipboard</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">קלט ופלט</h3>
+
+                        <p class="description">קבלת קלט מהמשתמש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">$name = Read-Host "Enter your name"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת הודעה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Write-Host "Hello World" -ForegroundColor Green</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת אזהרה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Write-Warning "This is a warning"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת שגיאה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Write-Error "This is an error"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חלון הודעה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[System.Windows.MessageBox]::Show("Hello World")</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מערכת</h3>
+
+                        <p class="description">כיבוי המחשב:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Stop-Computer</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הפעלה מחדש:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Restart-Computer</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">כיבוי עם טיימר (בשניות):</p>
+                        <div class="command-wrapper">
+                            <div class="command">shutdown /s /t 3600</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">ביטול כיבוי מתוזמן:</p>
+                        <div class="command-wrapper">
+                            <div class="command">shutdown /a</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">נעילת המחשב:</p>
+                        <div class="command-wrapper">
+                            <div class="command">rundll32.exe user32.dll,LockWorkStation</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מעבר למצב שינה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">rundll32.exe powrprof.dll,SetSuspendState 0,1,0</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">שונות</h3>
+
+                        <p class="description">פתיחת Explorer בתיקייה נוכחית:</p>
+                        <div class="command-wrapper">
+                            <div class="command">explorer .</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">פתיחת URL בדפדפן:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Start-Process "https://www.google.com"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">יצירת GUID:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[guid]::NewGuid()</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">המתנה (בשניות):</p>
+                        <div class="command-wrapper">
+                            <div class="command">Start-Sleep -Seconds 5</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הפעלת צליל:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[console]::beep(500, 300)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">ניקוי סל המחזור:</p>
+                        <div class="command-wrapper">
+                            <div class="command">Clear-RecycleBin -Force</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <footer>
+                <p>מדריך PowerShell מקיף | נוצר עבור משתמשי Windows | © 2025</p>
+            </footer>
+        </div>
+    </div>
+
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Copy command functionality
+        function copyCommand(button) {
+            const commandDiv = button.previousElementSibling;
+            const command = commandDiv.textContent;
+
+            navigator.clipboard.writeText(command).then(() => {
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Scroll to top functionality
+        const scrollTopBtn = document.querySelector('.scroll-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+
+                // Update active link
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Highlight active section on scroll
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

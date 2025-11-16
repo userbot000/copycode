@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך HTML & CSS מקיף - CopyCode</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23E34F26' d='M71 460L30 0h451l-41 460-185 52'/><path fill='%23EF652A' d='M256 472l149-41 35-394H256'/><path fill='%23EBEBEB' d='M256 208h-75l-5-58h80V94H114l15 171h127zm-1 147l-63-17-4-45h-56l7 89 116 32z'/><path fill='%23FFF' d='M255 208v57h70l-7 73-63 17v59l116-32 16-174zm0-114v56h137l5-56z'/></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: url('images/background.jpg') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .site-logo:hover {
+            color: #667eea;
+        }
+
+        .site-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding-top: 90px;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1rem;
+            margin-left: 1.5rem;
+            position: sticky;
+            top: 110px;
+            height: calc(100vh - 130px);
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #E34F26;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: #5a6c7d;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding-right: 1rem;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #E34F26 0%, #1572B6 100%);
+            color: white;
+        }
+
+        .container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: transparent;
+            color: #1a1a1a;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        h1 svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #E34F26;
+            font-weight: 600;
+        }
+
+        .command-group {
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .command-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .command-wrapper {
+            position: relative;
+            margin: 0.8rem 0;
+        }
+
+        .command {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 0.9rem 3rem 0.9rem 1rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid #E34F26;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+            padding: 0.4rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+        }
+
+        .copy-btn::before {
+            content: '⧉';
+            font-size: 1rem;
+        }
+
+        .copy-btn:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-color: #95a5a6;
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .copy-btn.copied::before {
+            content: '✓';
+        }
+
+        .description {
+            color: #5a6c7d;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .explanation {
+            background: #fff5f5;
+            border-right: 3px solid #E34F26;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            color: #34495e;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-right: 3px solid #E34F26;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-box {
+            background: white;
+            border: 2px solid #e1e8ed;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            direction: ltr;
+            text-align: left;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #E34F26 0%, #1572B6 100%);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 3px solid #F06529;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 2px solid #E34F26;
+            }
+
+            .container {
+                margin: 0 1rem 1rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .command {
+                font-size: 0.82rem;
+                padding-left: 0.8rem;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #E34F26;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #F06529;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-header">
+        <a href="index.html" class="site-logo">
+            <img src="images/logo.png" alt="לוגו האתר">
+            CopyCode
+        </a>
+        <a href="search.html" class="search-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>חיפוש</span>
+        </a>
+    </div>
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-title">תוכן עניינים</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#basics" class="nav-link">יסודות HTML</a></li>
+                <li class="nav-item"><a href="#structure" class="nav-link">מבנה דף</a></li>
+                <li class="nav-item"><a href="#text" class="nav-link">טקסט ופסקאות</a></li>
+                <li class="nav-item"><a href="#links" class="nav-link">קישורים ותמונות</a></li>
+                <li class="nav-item"><a href="#lists" class="nav-link">רשימות</a></li>
+                <li class="nav-item"><a href="#tables" class="nav-link">טבלאות</a></li>
+                <li class="nav-item"><a href="#forms" class="nav-link">טפסים</a></li>
+                <li class="nav-item"><a href="#semantic" class="nav-link">HTML5 Semantic</a></li>
+                <li class="nav-item"><a href="#css-basics" class="nav-link">יסודות CSS</a></li>
+                <li class="nav-item"><a href="#selectors" class="nav-link">Selectors</a></li>
+                <li class="nav-item"><a href="#colors" class="nav-link">צבעים ורקעים</a></li>
+                <li class="nav-item"><a href="#text-css" class="nav-link">עיצוב טקסט</a></li>
+                <li class="nav-item"><a href="#box-model" class="nav-link">Box Model</a></li>
+                <li class="nav-item"><a href="#flexbox" class="nav-link">Flexbox</a></li>
+                <li class="nav-item"><a href="#grid" class="nav-link">CSS Grid</a></li>
+                <li class="nav-item"><a href="#responsive" class="nav-link">Responsive Design</a></li>
+                <li class="nav-item"><a href="#animations" class="nav-link">Animations</a></li>
+                <li class="nav-item"><a href="#frameworks" class="nav-link">ספריות CSS</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+            <header>
+                <h1>
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#E34F26" d="M20 0h216l-19.6 220.2L128 256 39.6 220.2z" />
+                        <path fill="#EF652A" d="M128 23.3v209.4l87.4-24.2L232 23.3z" />
+                        <path fill="#FFF"
+                            d="M128 93.8H67.8l-2.5-28.1h63.2V38.2H33.7l.7 7.6 6.7 75.5h87.4V93.8zm0 85.4l-.2.1-32.8-8.9-2.1-23.5H65.4l4.1 46.1 60.3 16.7.2-.1v-30.4z" />
+                        <path fill="#EBEBEB"
+                            d="M128 93.8v27.5h-31.4l-2.4 26.9 33.8 9.1v30.4l-60.2-16.7-.4-5.1-6.9-77.1-.7-7.6h68.2zm0-55.6v27.5H65.7l-.6-6.7-1.3-14.6-.7-7.6h65.9z" />
+                    </svg>
+                    מדריך HTML & CSS מקיף
+                </h1>
+                <p class="subtitle">מיסודות ועד מתקדם - בניית אתרים מודרניים</p>
+            </header>
+
+            <div class="content">
+
+                <!-- יסודות HTML -->
+                <section id="basics" class="section">
+                    <h2 class="section-title">יסודות HTML</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 מה זה HTML?</div>
+                        <strong>HTML</strong> - HyperText Markup Language. שפת הסימון של האינטרנט!<br>
+                        <strong>לא שפת תכנות!</strong> HTML מגדיר את המבנה והתוכן של הדף.<br>
+                        <strong>Tags (תגיות)</strong> - אבני הבניין של HTML. כל תג מתחיל ב-&lt; ונגמר ב-&gt;<br>
+                        <strong>למה ללמוד?</strong> כל אתר באינטרנט בנוי מ-HTML!<br>
+                        <strong>טיפ:</strong> HTML5 הוא הגרסה המודרנית - תמיד השתמשו בה!
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מבנה בסיסי</h3>
+
+                        <p class="description">דף HTML מינימלי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!DOCTYPE html&gt;
+                                &lt;html lang="he" dir="rtl"&gt;
+                                &lt;head&gt;
+                                &lt;meta charset="UTF-8"&gt;
+                                &lt;title&gt;שם הדף&lt;/title&gt;
+                                &lt;/head&gt;
+                                &lt;body&gt;
+                                &lt;h1&gt;שלום עולם!&lt;/h1&gt;
+                                &lt;/body&gt;
+                                &lt;/html&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">
+                            <strong>&lt;!DOCTYPE html&gt;</strong> - אומר לדפדפן שזה HTML5<br>
+                            <strong>&lt;html&gt;</strong> - שורש המסמך<br>
+                            <strong>&lt;head&gt;</strong> - מידע על הדף (לא נראה למשתמש)<br>
+                            <strong>&lt;body&gt;</strong> - התוכן שנראה בדף
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תגיות נפוצות ב-Head</h3>
+
+                        <p class="description">Meta tags חשובים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;head&gt;
+                                &lt;!-- קידוד תווים (חובה לעברית!) --&gt;
+                                &lt;meta charset="UTF-8"&gt;
+
+                                &lt;!-- Responsive design --&gt;
+                                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+
+                                &lt;!-- תיאור לגוגל --&gt;
+                                &lt;meta name="description" content="תיאור האתר"&gt;
+
+                                &lt;!-- כותרת הדף --&gt;
+                                &lt;title&gt;שם האתר&lt;/title&gt;
+
+                                &lt;!-- קישור ל-CSS --&gt;
+                                &lt;link rel="stylesheet" href="style.css"&gt;
+
+                                &lt;!-- Favicon --&gt;
+                                &lt;link rel="icon" href="favicon.ico"&gt;
+                                &lt;/head&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">הערות</h3>
+
+                        <p class="description">הערות ב-HTML:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- זו הערה - לא תוצג בדף --&gt;
+
+                                &lt;!--
+                                הערה
+                                מרובת
+                                שורות
+                                --&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- מבנה דף -->
+                <section id="structure" class="section">
+                    <h2 class="section-title">מבנה דף</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 ארגון הדף</div>
+                        <strong>Semantic HTML</strong> - תגיות שמתארות את התוכן שלהן.<br>
+                        <strong>למה זה חשוב?</strong> עוזר לגוגל להבין את האתר, נגישות, קריאות קוד.<br>
+                        <strong>טיפ:</strong> השתמשו ב-header, nav, main, footer במקום div בלבד!
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Divs ו-Containers</h3>
+
+                        <p class="description">תגיות מכילות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- div - מכל כללי --&gt;
+                                &lt;div class="container"&gt;
+                                תוכן כלשהו
+                                &lt;/div&gt;
+
+                                &lt;!-- span - מכל inline --&gt;
+                                &lt;p&gt;זה &lt;span class="highlight"&gt;טקסט מודגש&lt;/span&gt; בפסקה&lt;/p&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">
+                            <strong>div</strong> - בלוק (תופס שורה שלמה)<br>
+                            <strong>span</strong> - inline (בתוך שורה)
+                        </div>
+                    </div>
+                </section>
+
+                <!-- טקסט ופסקאות -->
+                <section id="text" class="section">
+                    <h2 class="section-title">טקסט ופסקאות</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 עיצוב טקסט</div>
+                        <strong>כותרות</strong> - h1 עד h6 (h1 הכי חשוב)<br>
+                        <strong>פסקאות</strong> - &lt;p&gt; לטקסט רגיל<br>
+                        <strong>חשוב!</strong> רק כותרת h1 אחת בדף (SEO)<br>
+                        <strong>טיפ:</strong> אל תדלגו רמות כותרות (h1 → h3 ❌)
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">כותרות</h3>
+
+                        <p class="description">6 רמות כותרות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;h1&gt;כותרת ראשית&lt;/h1&gt;
+                                &lt;h2&gt;כותרת משנית&lt;/h2&gt;
+                                &lt;h3&gt;כותרת רמה 3&lt;/h3&gt;
+                                &lt;h4&gt;כותרת רמה 4&lt;/h4&gt;
+                                &lt;h5&gt;כותרת רמה 5&lt;/h5&gt;
+                                &lt;h6&gt;כותרת רמה 6&lt;/h6&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">פסקאות ושורות</h3>
+
+                        <p class="description">טקסט רגיל:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;p&gt;זו פסקה רגילה של טקסט.&lt;/p&gt;
+
+                                &lt;p&gt;פסקה נוספת.&lt;/p&gt;
+
+                                &lt;!-- שבירת שורה --&gt;
+                                &lt;p&gt;שורה ראשונה&lt;br&gt;שורה שנייה&lt;/p&gt;
+
+                                &lt;!-- קו אופקי --&gt;
+                                &lt;hr&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">עיצוב טקסט</h3>
+
+                        <p class="description">תגיות עיצוב:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- מודגש (bold) --&gt;
+                                &lt;strong&gt;טקסט חשוב&lt;/strong&gt;
+                                &lt;b&gt;טקסט מודגש&lt;/b&gt;
+
+                                &lt;!-- נטוי (italic) --&gt;
+                                &lt;em&gt;טקסט מודגש&lt;/em&gt;
+                                &lt;i&gt;טקסט נטוי&lt;/i&gt;
+
+                                &lt;!-- קו תחתון --&gt;
+                                &lt;u&gt;טקסט עם קו תחתון&lt;/u&gt;
+
+                                &lt;!-- קו חוצה --&gt;
+                                &lt;s&gt;טקסט מחוק&lt;/s&gt;
+
+                                &lt;!-- קטן --&gt;
+                                &lt;small&gt;טקסט קטן&lt;/small&gt;
+
+                                &lt;!-- מסומן --&gt;
+                                &lt;mark&gt;טקסט מסומן&lt;/mark&gt;
+
+                                &lt;!-- קוד --&gt;
+                                &lt;code&gt;console.log("Hello")&lt;/code&gt;
+
+                                &lt;!-- כתב עליון/תחתון --&gt;
+                                H&lt;sub&gt;2&lt;/sub&gt;O
+                                x&lt;sup&gt;2&lt;/sup&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">
+                            <strong>strong/em</strong> - משמעות סמנטית (מומלץ)<br>
+                            <strong>b/i</strong> - רק עיצוב ויזואלי
+                        </div>
+                    </div>
+                </section>
+
+                <!-- קישורים ותמונות -->
+                <section id="links" class="section">
+                    <h2 class="section-title">קישורים ותמונות</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 קישורים ומדיה</div>
+                        <strong>קישור</strong> - &lt;a&gt; (anchor) מקשר בין דפים.<br>
+                        <strong>תמונה</strong> - &lt;img&gt; מציגה תמונות.<br>
+                        <strong>חשוב!</strong> תמיד הוסיפו alt לתמונות (נגישות + SEO)<br>
+                        <strong>טיפ:</strong> השתמשו ב-target="_blank" לפתיחה בטאב חדש
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">קישורים</h3>
+
+                        <p class="description">סוגי קישורים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- קישור חיצוני --&gt;
+                                &lt;a href="https://www.google.com"&gt;גוגל&lt;/a&gt;
+
+                                &lt;!-- קישור פנימי --&gt;
+                                &lt;a href="about.html"&gt;אודות&lt;/a&gt;
+
+                                &lt;!-- פתיחה בטאב חדש --&gt;
+                                &lt;a href="https://example.com" target="_blank"&gt;קישור&lt;/a&gt;
+
+                                &lt;!-- קישור למייל --&gt;
+                                &lt;a href="mailto:email@example.com"&gt;שלח מייל&lt;/a&gt;
+
+                                &lt;!-- קישור לטלפון --&gt;
+                                &lt;a href="tel:+972501234567"&gt;התקשר&lt;/a&gt;
+
+                                &lt;!-- עוגן (anchor) --&gt;
+                                &lt;a href="#section1"&gt;קפוץ לסעיף&lt;/a&gt;
+                                &lt;div id="section1"&gt;תוכן הסעיף&lt;/div&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תמונות</h3>
+
+                        <p class="description">הוספת תמונות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- תמונה בסיסית --&gt;
+                                &lt;img src="image.jpg" alt="תיאור התמונה"&gt;
+
+                                &lt;!-- עם גודל --&gt;
+                                &lt;img src="image.jpg" alt="תיאור" width="300" height="200"&gt;
+
+                                &lt;!-- תמונה קליקבילית --&gt;
+                                &lt;a href="page.html"&gt;
+                                &lt;img src="image.jpg" alt="תיאור"&gt;
+                                &lt;/a&gt;
+
+                                &lt;!-- תמונה responsive --&gt;
+                                &lt;img src="image.jpg" alt="תיאור" style="max-width: 100%; height: auto;"&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">
+                            <strong>src</strong> - נתיב לתמונה<br>
+                            <strong>alt</strong> - תיאור (חובה!)<br>
+                            <strong>width/height</strong> - גודל בפיקסלים
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">וידאו ואודיו</h3>
+
+                        <p class="description">מדיה מתקדמת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- וידאו --&gt;
+                                &lt;video width="640" height="360" controls&gt;
+                                &lt;source src="video.mp4" type="video/mp4"&gt;
+                                הדפדפן לא תומך בוידאו
+                                &lt;/video&gt;
+
+                                &lt;!-- אודיו --&gt;
+                                &lt;audio controls&gt;
+                                &lt;source src="audio.mp3" type="audio/mpeg"&gt;
+                                הדפדפן לא תומך באודיו
+                                &lt;/audio&gt;
+
+                                &lt;!-- YouTube embed --&gt;
+                                &lt;iframe width="560" height="315"
+                                src="https://www.youtube.com/embed/VIDEO_ID"
+                                frameborder="0" allowfullscreen&gt;
+                                &lt;/iframe&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- רשימות -->
+                <section id="lists" class="section">
+                    <h2 class="section-title">רשימות</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 סוגי רשימות</div>
+                        <strong>רשימה ממוספרת</strong> - &lt;ol&gt; (Ordered List)<br>
+                        <strong>רשימה עם תבליטים</strong> - &lt;ul&gt; (Unordered List)<br>
+                        <strong>רשימת הגדרות</strong> - &lt;dl&gt; (Description List)<br>
+                        <strong>טיפ:</strong> אפשר לקנן רשימות אחת בתוך השנייה!
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">רשימה ממוספרת</h3>
+
+                        <p class="description">Ordered List:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;ol&gt;
+                                &lt;li&gt;פריט ראשון&lt;/li&gt;
+                                &lt;li&gt;פריט שני&lt;/li&gt;
+                                &lt;li&gt;פריט שלישי&lt;/li&gt;
+                                &lt;/ol&gt;
+
+                                &lt;!-- התחלה ממספר אחר --&gt;
+                                &lt;ol start="5"&gt;
+                                &lt;li&gt;פריט חמישי&lt;/li&gt;
+                                &lt;li&gt;פריט שישי&lt;/li&gt;
+                                &lt;/ol&gt;
+
+                                &lt;!-- סוגי מספור --&gt;
+                                &lt;ol type="A"&gt; &lt;!-- A, B, C --&gt;
+                                &lt;ol type="a"&gt; &lt;!-- a, b, c --&gt;
+                                &lt;ol type="I"&gt; &lt;!-- I, II, III --&gt;
+                                &lt;ol type="i"&gt; &lt;!-- i, ii, iii --&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">רשימה עם תבליטים</h3>
+
+                        <p class="description">Unordered List:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;ul&gt;
+                                &lt;li&gt;פריט ראשון&lt;/li&gt;
+                                &lt;li&gt;פריט שני&lt;/li&gt;
+                                &lt;li&gt;פריט שלישי&lt;/li&gt;
+                                &lt;/ul&gt;
+
+                                &lt;!-- רשימה מקוננת --&gt;
+                                &lt;ul&gt;
+                                &lt;li&gt;פריט ראשי
+                                &lt;ul&gt;
+                                &lt;li&gt;תת-פריט 1&lt;/li&gt;
+                                &lt;li&gt;תת-פריט 2&lt;/li&gt;
+                                &lt;/ul&gt;
+                                &lt;/li&gt;
+                                &lt;li&gt;פריט שני&lt;/li&gt;
+                                &lt;/ul&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">רשימת הגדרות</h3>
+
+                        <p class="description">Description List:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;dl&gt;
+                                &lt;dt&gt;HTML&lt;/dt&gt;
+                                &lt;dd&gt;שפת סימון לבניית דפי אינטרנט&lt;/dd&gt;
+
+                                &lt;dt&gt;CSS&lt;/dt&gt;
+                                &lt;dd&gt;שפת עיצוב לדפי אינטרנט&lt;/dd&gt;
+
+                                &lt;dt&gt;JavaScript&lt;/dt&gt;
+                                &lt;dd&gt;שפת תכנות לאינטראקטיביות&lt;/dd&gt;
+                                &lt;/dl&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- טבלאות -->
+                <section id="tables" class="section">
+                    <h2 class="section-title">טבלאות</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 טבלאות ב-HTML</div>
+                        <strong>טבלה</strong> - מבנה של שורות ועמודות.<br>
+                        <strong>מתי להשתמש?</strong> רק לנתונים טבלאיים! לא לעיצוב דף.<br>
+                        <strong>מבנה:</strong> table → tr (שורה) → td (תא)<br>
+                        <strong>טיפ:</strong> השתמשו ב-thead, tbody, tfoot למבנה נכון!
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">טבלה בסיסית</h3>
+
+                        <p class="description">מבנה טבלה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;table&gt;
+                                &lt;thead&gt;
+                                &lt;tr&gt;
+                                &lt;th&gt;שם&lt;/th&gt;
+                                &lt;th&gt;גיל&lt;/th&gt;
+                                &lt;th&gt;עיר&lt;/th&gt;
+                                &lt;/tr&gt;
+                                &lt;/thead&gt;
+                                &lt;tbody&gt;
+                                &lt;tr&gt;
+                                &lt;td&gt;אליס&lt;/td&gt;
+                                &lt;td&gt;25&lt;/td&gt;
+                                &lt;td&gt;תל אביב&lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;tr&gt;
+                                &lt;td&gt;בוב&lt;/td&gt;
+                                &lt;td&gt;30&lt;/td&gt;
+                                &lt;td&gt;ירושלים&lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;/tbody&gt;
+                                &lt;/table&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">
+                            <strong>th</strong> - תא כותרת (מודגש)<br>
+                            <strong>td</strong> - תא רגיל<br>
+                            <strong>tr</strong> - שורה
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מיזוג תאים</h3>
+
+                        <p class="description">colspan ו-rowspan:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;table&gt;
+                                &lt;tr&gt;
+                                &lt;th colspan="2"&gt;שם מלא&lt;/th&gt;
+                                &lt;th&gt;גיל&lt;/th&gt;
+                                &lt;/tr&gt;
+                                &lt;tr&gt;
+                                &lt;td&gt;אליס&lt;/td&gt;
+                                &lt;td&gt;כהן&lt;/td&gt;
+                                &lt;td rowspan="2"&gt;25&lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;tr&gt;
+                                &lt;td&gt;בוב&lt;/td&gt;
+                                &lt;td&gt;לוי&lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;/table&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- טפסים -->
+                <section id="forms" class="section">
+                    <h2 class="section-title">טפסים (Forms)</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 טפסים ב-HTML</div>
+                        <strong>טופס</strong> - אוסף שדות קלט לקבלת מידע מהמשתמש.<br>
+                        <strong>למה זה חשוב?</strong> כל אתר עם התחברות, הרשמה, חיפוש משתמש בטפסים!<br>
+                        <strong>input types</strong> - יש המון סוגים: text, email, password, number...<br>
+                        <strong>טיפ:</strong> תמיד הוסיפו label לכל input (נגישות!)
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">טופס בסיסי</h3>
+
+                        <p class="description">מבנה טופס:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;form action="/submit" method="POST"&gt;
+                                &lt;!-- שדה טקסט --&gt;
+                                &lt;label for="name"&gt;שם:&lt;/label&gt;
+                                &lt;input type="text" id="name" name="name" required&gt;
+
+                                &lt;!-- אימייל --&gt;
+                                &lt;label for="email"&gt;אימייל:&lt;/label&gt;
+                                &lt;input type="email" id="email" name="email" required&gt;
+
+                                &lt;!-- סיסמה --&gt;
+                                &lt;label for="password"&gt;סיסמה:&lt;/label&gt;
+                                &lt;input type="password" id="password" name="password" required&gt;
+
+                                &lt;!-- כפתור שליחה --&gt;
+                                &lt;button type="submit"&gt;שלח&lt;/button&gt;
+                                &lt;/form&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">סוגי Input</h3>
+
+                        <p class="description">כל סוגי ה-input:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- טקסט --&gt;
+                                &lt;input type="text" placeholder="הכנס טקסט"&gt;
+
+                                &lt;!-- מספר --&gt;
+                                &lt;input type="number" min="0" max="100" step="5"&gt;
+
+                                &lt;!-- אימייל --&gt;
+                                &lt;input type="email" placeholder="email@example.com"&gt;
+
+                                &lt;!-- טלפון --&gt;
+                                &lt;input type="tel" placeholder="050-1234567"&gt;
+
+                                &lt;!-- URL --&gt;
+                                &lt;input type="url" placeholder="https://example.com"&gt;
+
+                                &lt;!-- תאריך --&gt;
+                                &lt;input type="date"&gt;
+
+                                &lt;!-- זמן --&gt;
+                                &lt;input type="time"&gt;
+
+                                &lt;!-- צבע --&gt;
+                                &lt;input type="color"&gt;
+
+                                &lt;!-- קובץ --&gt;
+                                &lt;input type="file" accept="image/*"&gt;
+
+                                &lt;!-- טווח (slider) --&gt;
+                                &lt;input type="range" min="0" max="100" value="50"&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Checkbox ו-Radio</h3>
+
+                        <p class="description">בחירה מרובה ויחידה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- Checkbox - בחירה מרובה --&gt;
+                                &lt;label&gt;
+                                &lt;input type="checkbox" name="hobbies" value="reading"&gt;
+                                קריאה
+                                &lt;/label&gt;
+                                &lt;label&gt;
+                                &lt;input type="checkbox" name="hobbies" value="sports"&gt;
+                                ספורט
+                                &lt;/label&gt;
+
+                                &lt;!-- Radio - בחירה יחידה --&gt;
+                                &lt;label&gt;
+                                &lt;input type="radio" name="gender" value="male"&gt;
+                                זכר
+                                &lt;/label&gt;
+                                &lt;label&gt;
+                                &lt;input type="radio" name="gender" value="female"&gt;
+                                נקבה
+                                &lt;/label&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Select ו-Textarea</h3>
+
+                        <p class="description">רשימה נפתחת וטקסט מרובה שורות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- רשימה נפתחת --&gt;
+                                &lt;label for="city"&gt;עיר:&lt;/label&gt;
+                                &lt;select id="city" name="city"&gt;
+                                &lt;option value=""&gt;בחר עיר&lt;/option&gt;
+                                &lt;option value="tlv"&gt;תל אביב&lt;/option&gt;
+                                &lt;option value="jlm"&gt;ירושלים&lt;/option&gt;
+                                &lt;option value="hfa"&gt;חיפה&lt;/option&gt;
+                                &lt;/select&gt;
+
+                                &lt;!-- טקסט מרובה שורות --&gt;
+                                &lt;label for="message"&gt;הודעה:&lt;/label&gt;
+                                &lt;textarea id="message" name="message" rows="5" cols="30"&gt;
+                                &lt;/textarea&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תכונות שימושיות</h3>
+
+                        <p class="description">Attributes חשובים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- חובה --&gt;
+                                &lt;input type="text" required&gt;
+
+                                &lt;!-- לא ניתן לעריכה --&gt;
+                                &lt;input type="text" readonly value="לא ניתן לשינוי"&gt;
+
+                                &lt;!-- מושבת --&gt;
+                                &lt;input type="text" disabled&gt;
+
+                                &lt;!-- ערך ברירת מחדל --&gt;
+                                &lt;input type="text" value="ברירת מחדל"&gt;
+
+                                &lt;!-- Placeholder --&gt;
+                                &lt;input type="text" placeholder="הכנס טקסט כאן"&gt;
+
+                                &lt;!-- אורך מינימלי/מקסימלי --&gt;
+                                &lt;input type="text" minlength="3" maxlength="20"&gt;
+
+                                &lt;!-- Pattern (Regex) --&gt;
+                                &lt;input type="text" pattern="[0-9]{3}-[0-9]{7}"&gt;
+
+                                &lt;!-- Autofocus --&gt;
+                                &lt;input type="text" autofocus&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HTML5 Semantic -->
+                <section id="semantic" class="section">
+                    <h2 class="section-title">HTML5 Semantic Elements</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 Semantic HTML</div>
+                        <strong>Semantic</strong> - תגיות שמתארות את המשמעות שלהן.<br>
+                        <strong>למה זה חשוב?</strong> SEO, נגישות, קריאות קוד.<br>
+                        <strong>במקום div</strong> - השתמשו ב-header, nav, main, article, section, footer<br>
+                        <strong>טיפ:</strong> גוגל אוהב Semantic HTML!
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מבנה דף סמנטי</h3>
+
+                        <p class="description">דף מלא עם תגיות סמנטיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;body&gt;
+                                &lt;!-- כותרת עליונה --&gt;
+                                &lt;header&gt;
+                                &lt;h1&gt;שם האתר&lt;/h1&gt;
+                                &lt;nav&gt;
+                                &lt;ul&gt;
+                                &lt;li&gt;&lt;a href="#"&gt;בית&lt;/a&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;a href="#"&gt;אודות&lt;/a&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;a href="#"&gt;צור קשר&lt;/a&gt;&lt;/li&gt;
+                                &lt;/ul&gt;
+                                &lt;/nav&gt;
+                                &lt;/header&gt;
+
+                                &lt;!-- תוכן ראשי --&gt;
+                                &lt;main&gt;
+                                &lt;article&gt;
+                                &lt;h2&gt;כותרת מאמר&lt;/h2&gt;
+                                &lt;p&gt;תוכן המאמר...&lt;/p&gt;
+                                &lt;/article&gt;
+
+                                &lt;section&gt;
+                                &lt;h2&gt;סעיף&lt;/h2&gt;
+                                &lt;p&gt;תוכן הסעיף...&lt;/p&gt;
+                                &lt;/section&gt;
+                                &lt;/main&gt;
+
+                                &lt;!-- סרגל צד --&gt;
+                                &lt;aside&gt;
+                                &lt;h3&gt;מידע נוסף&lt;/h3&gt;
+                                &lt;p&gt;תוכן צדדי...&lt;/p&gt;
+                                &lt;/aside&gt;
+
+                                &lt;!-- כותרת תחתונה --&gt;
+                                &lt;footer&gt;
+                                &lt;p&gt;&copy; 2025 כל הזכויות שמורות&lt;/p&gt;
+                                &lt;/footer&gt;
+                                &lt;/body&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">
+                            <strong>header</strong> - כותרת עליונה<br>
+                            <strong>nav</strong> - תפריט ניווט<br>
+                            <strong>main</strong> - תוכן ראשי (רק אחד בדף!)<br>
+                            <strong>article</strong> - תוכן עצמאי<br>
+                            <strong>section</strong> - קטע בדף<br>
+                            <strong>aside</strong> - תוכן צדדי<br>
+                            <strong>footer</strong> - כותרת תחתונה
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תגיות נוספות</h3>
+
+                        <p class="description">תגיות שימושיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- פרטים נפתחים --&gt;
+                                &lt;details&gt;
+                                &lt;summary&gt;לחץ לפתיחה&lt;/summary&gt;
+                                &lt;p&gt;תוכן נסתר שנפתח בלחיצה&lt;/p&gt;
+                                &lt;/details&gt;
+
+                                &lt;!-- סימון זמן --&gt;
+                                &lt;time datetime="2025-01-01"&gt;1 בינואר 2025&lt;/time&gt;
+
+                                &lt;!-- ציטוט --&gt;
+                                &lt;blockquote cite="https://example.com"&gt;
+                                &lt;p&gt;זהו ציטוט ארוך&lt;/p&gt;
+                                &lt;/blockquote&gt;
+
+                                &lt;!-- קוד --&gt;
+                                &lt;pre&gt;&lt;code&gt;
+                                function hello() {
+                                console.log("Hello!");
+                                }
+                                &lt;/code&gt;&lt;/pre&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- יסודות CSS -->
+                <section id="css-basics" class="section">
+                    <h2 class="section-title">יסודות CSS</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 מה זה CSS?</div>
+                        <strong>CSS</strong> - Cascading Style Sheets. שפת העיצוב של האינטרנט!<br>
+                        <strong>למה זה חשוב?</strong> HTML = מבנה, CSS = עיצוב. ביחד הם יוצרים אתר יפה!<br>
+                        <strong>3 דרכים להוסיף CSS:</strong> Inline, Internal, External<br>
+                        <strong>טיפ:</strong> תמיד השתמשו ב-External CSS (קובץ נפרד)!
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">דרכים להוסיף CSS</h3>
+
+                        <p class="description">1. Inline CSS (לא מומלץ):</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;p style="color: red; font-size: 20px;"&gt;טקסט אדום&lt;/p&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">2. Internal CSS:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;head&gt;
+                                &lt;style&gt;
+                                p {
+                                color: red;
+                                font-size: 20px;
+                                }
+                                &lt;/style&gt;
+                                &lt;/head&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">3. External CSS (מומלץ!):</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- ב-HTML --&gt;
+                                &lt;head&gt;
+                                &lt;link rel="stylesheet" href="style.css"&gt;
+                                &lt;/head&gt;
+
+                                /* בקובץ style.css */
+                                p {
+                                color: red;
+                                font-size: 20px;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תחביר CSS</h3>
+
+                        <p class="description">מבנה כלל CSS:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* Selector */
+                                selector {
+                                property: value;
+                                another-property: value;
+                                }
+
+                                /* דוגמה */
+                                h1 {
+                                color: blue;
+                                font-size: 32px;
+                                text-align: center;
+                                }
+
+                                /* הערה ב-CSS */
+                                /* זו הערה */</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">
+                            <strong>Selector</strong> - מה לעצב<br>
+                            <strong>Property</strong> - איזה מאפיין<br>
+                            <strong>Value</strong> - איזה ערך
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Selectors -->
+                <section id="selectors" class="section">
+                    <h2 class="section-title">CSS Selectors</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 מה זה Selector?</div>
+                        <strong>Selector</strong> - איך בוחרים איזה אלמנט לעצב.<br>
+                        <strong>סוגים עיקריים:</strong> Element, Class, ID<br>
+                        <strong>כלל חשוב:</strong> Class לשימוש חוזר, ID לאלמנט יחיד!<br>
+                        <strong>טיפ:</strong> השתמשו ב-class יותר מ-ID!
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Selectors בסיסיים</h3>
+
+                        <p class="description">סוגי Selectors:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* Element Selector - כל ה-p */
+                                p {
+                                color: blue;
+                                }
+
+                                /* Class Selector - כל מי שיש לו class="highlight" */
+                                .highlight {
+                                background-color: yellow;
+                                }
+
+                                /* ID Selector - האלמנט עם id="header" */
+                                #header {
+                                font-size: 24px;
+                                }
+
+                                /* Universal Selector - הכל */
+                                * {
+                                margin: 0;
+                                padding: 0;
+                                }
+
+                                /* Multiple Selectors */
+                                h1, h2, h3 {
+                                color: navy;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Combinators</h3>
+
+                        <p class="description">שילוב Selectors:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* Descendant - כל p בתוך div */
+                                div p {
+                                color: red;
+                                }
+
+                                /* Child - רק p ישיר של div */
+                                div > p {
+                                color: blue;
+                                }
+
+                                /* Adjacent Sibling - p מיד אחרי h2 */
+                                h2 + p {
+                                font-weight: bold;
+                                }
+
+                                /* General Sibling - כל p אחרי h2 */
+                                h2 ~ p {
+                                color: gray;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Pseudo-classes</h3>
+
+                        <p class="description">מצבים מיוחדים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* Hover - כשעוברים עם העכבר */
+                                a:hover {
+                                color: red;
+                                }
+
+                                /* Active - בזמן לחיצה */
+                                button:active {
+                                background-color: darkblue;
+                                }
+
+                                /* Focus - כשהאלמנט בפוקוס */
+                                input:focus {
+                                border-color: blue;
+                                }
+
+                                /* First/Last child */
+                                li:first-child {
+                                font-weight: bold;
+                                }
+
+                                li:last-child {
+                                color: red;
+                                }
+
+                                /* Nth child */
+                                li:nth-child(2) {
+                                color: blue;
+                                }
+
+                                li:nth-child(odd) {
+                                background-color: #f0f0f0;
+                                }
+
+                                li:nth-child(even) {
+                                background-color: white;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Pseudo-elements</h3>
+
+                        <p class="description">חלקים מיוחדים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* Before - הוספת תוכן לפני */
+                                p::before {
+                                content: "→ ";
+                                color: blue;
+                                }
+
+                                /* After - הוספת תוכן אחרי */
+                                p::after {
+                                content: " ←";
+                                color: red;
+                                }
+
+                                /* First letter */
+                                p::first-letter {
+                                font-size: 2em;
+                                font-weight: bold;
+                                }
+
+                                /* First line */
+                                p::first-line {
+                                color: blue;
+                                }
+
+                                /* Selection - טקסט מסומן */
+                                ::selection {
+                                background-color: yellow;
+                                color: black;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Attribute Selectors</h3>
+
+                        <p class="description">בחירה לפי תכונות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* יש תכונה */
+                                [disabled] {
+                                opacity: 0.5;
+                                }
+
+                                /* ערך מדויק */
+                                [type="text"] {
+                                border: 1px solid gray;
+                                }
+
+                                /* מתחיל ב */
+                                [href^="https"] {
+                                color: green;
+                                }
+
+                                /* מסתיים ב */
+                                [href$=".pdf"] {
+                                color: red;
+                                }
+
+                                /* מכיל */
+                                [class*="btn"] {
+                                padding: 10px;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- צבעים ורקעים -->
+                <section id="colors" class="section">
+                    <h2 class="section-title">צבעים ורקעים</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 צבעים ב-CSS</div>
+                        <strong>4 דרכים להגדיר צבע:</strong> שם, HEX, RGB, HSL<br>
+                        <strong>HEX</strong> - הנפוץ ביותר (#FF0000)<br>
+                        <strong>RGBA/HSLA</strong> - עם שקיפות (Alpha)<br>
+                        <strong>טיפ:</strong> השתמשו במשתני CSS לצבעים חוזרים!
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">דרכים להגדיר צבע</h3>
+
+                        <p class="description">פורמטים שונים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* שם צבע */
+                                color: red;
+                                color: blue;
+                                color: transparent;
+
+                                /* HEX */
+                                color: #FF0000; /* אדום */
+                                color: #00FF00; /* ירוק */
+                                color: #0000FF; /* כחול */
+                                color: #F00; /* קיצור ל-#FF0000 */
+
+                                /* RGB */
+                                color: rgb(255, 0, 0); /* אדום */
+                                color: rgb(0, 255, 0); /* ירוק */
+
+                                /* RGBA - עם שקיפות */
+                                color: rgba(255, 0, 0, 0.5); /* אדום 50% שקוף */
+
+                                /* HSL */
+                                color: hsl(0, 100%, 50%); /* אדום */
+
+                                /* HSLA - עם שקיפות */
+                                color: hsla(0, 100%, 50%, 0.5);</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">רקעים</h3>
+
+                        <p class="description">Background properties:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* צבע רקע */
+                                background-color: #f0f0f0;
+
+                                /* תמונת רקע */
+                                background-image: url('image.jpg');
+
+                                /* חזרה */
+                                background-repeat: no-repeat; /* ללא חזרה */
+                                background-repeat: repeat-x; /* חזרה אופקית */
+                                background-repeat: repeat-y; /* חזרה אנכית */
+
+                                /* מיקום */
+                                background-position: center;
+                                background-position: top right;
+                                background-position: 50% 50%;
+
+                                /* גודל */
+                                background-size: cover; /* מכסה את כל השטח */
+                                background-size: contain; /* מתאים לגודל */
+                                background-size: 100% auto;
+
+                                /* קיבוע */
+                                background-attachment: fixed; /* קבוע בגלילה */
+
+                                /* קיצור דרך */
+                                background: #f0f0f0 url('image.jpg') no-repeat center/cover;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Gradients</h3>
+
+                        <p class="description">מעברי צבע:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* Linear Gradient */
+                                background: linear-gradient(to right, red, blue);
+                                background: linear-gradient(45deg, red, yellow, green);
+                                background: linear-gradient(to bottom, #ff0000, #00ff00);
+
+                                /* Radial Gradient */
+                                background: radial-gradient(circle, red, blue);
+                                background: radial-gradient(ellipse at center, red, blue);
+
+                                /* Multiple stops */
+                                background: linear-gradient(
+                                to right,
+                                red 0%,
+                                yellow 50%,
+                                green 100%
+                                );</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- עיצוב טקסט -->
+                <section id="text-css" class="section">
+                    <h2 class="section-title">עיצוב טקסט</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 Typography ב-CSS</div>
+                        <strong>Typography</strong> - עיצוב הטקסט באתר.<br>
+                        <strong>חשוב!</strong> טקסט קריא = חוויית משתמש טובה.<br>
+                        <strong>Google Fonts</strong> - פונטים בחינם!<br>
+                        <strong>טיפ:</strong> גודל פונט מינימלי: 16px למובייל
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">פונטים</h3>
+
+                        <p class="description">Font properties:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* משפחת פונט */
+                                font-family: Arial, Helvetica, sans-serif;
+                                font-family: 'Times New Roman', serif;
+                                font-family: 'Courier New', monospace;
+
+                                /* גודל */
+                                font-size: 16px;
+                                font-size: 1.5em;
+                                font-size: 1.2rem;
+
+                                /* משקל (עובי) */
+                                font-weight: normal; /* 400 */
+                                font-weight: bold; /* 700 */
+                                font-weight: 300; /* דק */
+                                font-weight: 900; /* עבה מאוד */
+
+                                /* סגנון */
+                                font-style: normal;
+                                font-style: italic;
+                                font-style: oblique;
+
+                                /* קיצור דרך */
+                                font: italic bold 16px/1.5 Arial, sans-serif;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">עיצוב טקסט</h3>
+
+                        <p class="description">Text properties:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* יישור */
+                                text-align: left;
+                                text-align: right;
+                                text-align: center;
+                                text-align: justify;
+
+                                /* קישוט */
+                                text-decoration: none;
+                                text-decoration: underline;
+                                text-decoration: line-through;
+                                text-decoration: overline;
+
+                                /* טרנספורמציה */
+                                text-transform: uppercase; /* אותיות גדולות */
+                                text-transform: lowercase; /* אותיות קטנות */
+                                text-transform: capitalize; /* אות ראשונה גדולה */
+
+                                /* צל */
+                                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+
+                                /* רווח בין אותיות */
+                                letter-spacing: 2px;
+                                letter-spacing: 0.1em;
+
+                                /* רווח בין מילים */
+                                word-spacing: 5px;
+
+                                /* גובה שורה */
+                                line-height: 1.5;
+                                line-height: 24px;
+
+                                /* הזחה */
+                                text-indent: 20px;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Google Fonts</h3>
+
+                        <p class="description">שימוש בפונטים מגוגל:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- ב-HTML head --&gt;
+                                &lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+                                &lt;link
+                                href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+                                rel="stylesheet"&gt;
+
+                                /* ב-CSS */
+                                body {
+                                font-family: 'Roboto', sans-serif;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Box Model -->
+                <section id="box-model" class="section">
+                    <h2 class="section-title">Box Model</h2>
+
+                    <div class="note">
+                        <div class="note-title"> מה זה Box Model?</div>
+                        <strong>Box Model</strong> - כל אלמנט הוא קופסה עם: Content, Padding, Border, Margin<br>
+                        <strong>חשוב להבין!</strong> זה הבסיס לעיצוב ב-CSS.<br>
+                        <strong>box-sizing: border-box</strong> - מקל על החישובים (מומלץ!)<br>
+                        <strong>טיפ:</strong> השתמשו ב-DevTools כדי לראות את ה-Box Model
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Margin, Padding, Border</h3>
+
+                        <p class="description">המרווחים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* Margin - מרווח חיצוני */
+                                margin: 20px;
+                                margin: 10px 20px; /* אנכי אופקי */
+                                margin: 10px 20px 30px 40px; /* למעלה ימין למטה שמאל */
+                                margin-top: 10px;
+                                margin-right: 20px;
+                                margin-bottom: 30px;
+                                margin-left: 40px;
+                                margin: 0 auto; /* מרכוז */
+
+                                /* Padding - מרווח פנימי */
+                                padding: 20px;
+                                padding: 10px 20px;
+                                padding: 10px 20px 30px 40px;
+
+                                /* Border - מסגרת */
+                                border: 1px solid black;
+                                border-width: 2px;
+                                border-style: solid; /* solid, dashed, dotted */
+                                border-color: red;
+                                border-radius: 10px; /* פינות מעוגלות */
+
+                                /* Box sizing */
+                                box-sizing: border-box; /* מומלץ! */</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Flexbox -->
+                <section id="flexbox" class="section">
+                    <h2 class="section-title">Flexbox</h2>
+
+                    <div class="note">
+                        <div class="note-title"> מה זה Flexbox?</div>
+                        <strong>Flexbox</strong> - מערכת לסידור אלמנטים בשורה או בעמודה.<br>
+                        <strong>למה זה מהפכני?</strong> מקל מאוד על יישור ומרכוז!<br>
+                        <strong>Container + Items</strong> - יש תכונות למכל ותכונות לפריטים.<br>
+                        <strong>טיפ:</strong> Flexbox מושלם לניווט, כפתורים, כרטיסים
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Container Properties</h3>
+
+                        <p class="description">תכונות למכל:</p>
+                        <div class="command-wrapper">
+                            <div class="command">.container {
+                                display: flex;
+
+                                /* כיוון */
+                                flex-direction: row; /* שורה (ברירת מחדל) */
+                                flex-direction: column; /* עמודה */
+
+                                /* יישור אופקי */
+                                justify-content: flex-start;
+                                justify-content: center;
+                                justify-content: space-between;
+                                justify-content: space-around;
+
+                                /* יישור אנכי */
+                                align-items: flex-start;
+                                align-items: center;
+                                align-items: stretch;
+
+                                /* מעבר שורה */
+                                flex-wrap: wrap;
+                                flex-wrap: nowrap;
+
+                                /* רווח בין פריטים */
+                                gap: 20px;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CSS Grid -->
+                <section id="grid" class="section">
+                    <h2 class="section-title">CSS Grid</h2>
+
+                    <div class="note">
+                        <div class="note-title"> מה זה Grid?</div>
+                        <strong>Grid</strong> - מערכת דו-ממדית (שורות ועמודות).<br>
+                        <strong>למה זה חזק?</strong> מושלם ללייאאוטים מורכבים!<br>
+                        <strong>Grid vs Flexbox:</strong> Grid = 2D, Flexbox = 1D<br>
+                        <strong>טיפ:</strong> Grid מושלם ללייאאוט כללי של הדף
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Grid Container</h3>
+
+                        <p class="description">יצירת Grid:</p>
+                        <div class="command-wrapper">
+                            <div class="command">.container {
+                                display: grid;
+
+                                /* עמודות */
+                                grid-template-columns: 200px 200px 200px;
+                                grid-template-columns: 1fr 1fr 1fr; /* שווה */
+                                grid-template-columns: repeat(3, 1fr);
+                                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+                                /* שורות */
+                                grid-template-rows: 100px 200px;
+
+                                /* רווחים */
+                                gap: 20px;
+                                row-gap: 10px;
+                                column-gap: 20px;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Responsive Design -->
+                <section id="responsive" class="section">
+                    <h2 class="section-title">Responsive Design</h2>
+
+                    <div class="note">
+                        <div class="note-title"> מה זה Responsive?</div>
+                        <strong>Responsive</strong> - אתר שמתאים לכל גודל מסך.<br>
+                        <strong>Mobile First!</strong> תכננו קודם למובייל, אחר כך למחשב.<br>
+                        <strong>Media Queries</strong> - CSS שונה לגדלים שונים.<br>
+                        <strong>טיפ:</strong> נקודות שבירה נפוצות: 768px, 1024px, 1440px
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Media Queries</h3>
+
+                        <p class="description">CSS לגדלים שונים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* Mobile First */
+                                .container {
+                                width: 100%;
+                                padding: 10px;
+                                }
+
+                                /* Tablet */
+                                @media (min-width: 768px) {
+                                .container {
+                                width: 750px;
+                                padding: 20px;
+                                }
+                                }
+
+                                /* Desktop */
+                                @media (min-width: 1024px) {
+                                .container {
+                                width: 1000px;
+                                }
+                                }
+
+                                /* Large Desktop */
+                                @media (min-width: 1440px) {
+                                .container {
+                                width: 1200px;
+                                }
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Animations -->
+                <section id="animations" class="section">
+                    <h2 class="section-title">Animations & Transitions</h2>
+
+                    <div class="note">
+                        <div class="note-title"> אנימציות ב-CSS</div>
+                        <strong>Transition</strong> - מעבר חלק בין מצבים.<br>
+                        <strong>Animation</strong> - אנימציה מורכבת עם keyframes.<br>
+                        <strong>למה זה מגניב?</strong> הופך את האתר לחי ואינטראקטיבי!<br>
+                        <strong>טיפ:</strong> אל תגזימו - אנימציות עדינות הן הטובות ביותר
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Transitions</h3>
+
+                        <p class="description">מעברים חלקים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">.button {
+                                background-color: blue;
+                                transition: all 0.3s ease;
+                                }
+
+                                .button:hover {
+                                background-color: red;
+                                transform: scale(1.1);
+                                }
+
+                                /* מפורט יותר */
+                                .box {
+                                transition-property: background-color, transform;
+                                transition-duration: 0.3s, 0.5s;
+                                transition-timing-function: ease, ease-in-out;
+                                transition-delay: 0s, 0.1s;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Animations</h3>
+
+                        <p class="description">אנימציות מורכבות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* הגדרת אנימציה */
+                                @keyframes fadeIn {
+                                from {
+                                opacity: 0;
+                                }
+                                to {
+                                opacity: 1;
+                                }
+                                }
+
+                                /* שימוש */
+                                .element {
+                                animation: fadeIn 1s ease-in;
+                                }
+
+                                /* אנימציה מורכבת */
+                                @keyframes bounce {
+                                0%, 100% {
+                                transform: translateY(0);
+                                }
+                                50% {
+                                transform: translateY(-20px);
+                                }
+                                }
+
+                                .bouncing {
+                                animation: bounce 1s infinite;
+                                }</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ספריות CSS -->
+                <section id="frameworks" class="section">
+                    <h2 class="section-title">ספריות CSS פופולריות</h2>
+
+                    <div class="note">
+                        <div class="note-title"> למה להשתמש בספריות?</div>
+                        <strong>ספריות CSS</strong> - קוד מוכן שחוסך זמן!<br>
+                        <strong>למתחילים:</strong> מקל על יצירת אתרים יפים מהר.<br>
+                        <strong>למתקדמים:</strong> בסיס טוב להתאמה אישית.<br>
+                        <strong>טיפ:</strong> למדו CSS טהור לפני שעוברים לספריות!
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Bootstrap</h3>
+
+                        <p class="description">הספרייה הפופולרית ביותר:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- CDN --&gt;
+                                &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+                                rel="stylesheet"&gt;
+
+                                &lt;!-- דוגמה --&gt;
+                                &lt;div class="container"&gt;
+                                &lt;div class="row"&gt;
+                                &lt;div class="col-md-6"&gt;עמודה 1&lt;/div&gt;
+                                &lt;div class="col-md-6"&gt;עמודה 2&lt;/div&gt;
+                                &lt;/div&gt;
+                                &lt;/div&gt;
+
+                                &lt;button class="btn btn-primary"&gt;כפתור&lt;/button&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Tailwind CSS</h3>
+
+                        <p class="description">Utility-first framework:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;!-- CDN --&gt;
+                                &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
+
+                                &lt;!-- דוגמה --&gt;
+                                &lt;div class="flex items-center justify-center h-screen bg-gray-100"&gt;
+                                &lt;div class="bg-white p-8 rounded-lg shadow-lg"&gt;
+                                &lt;h1 class="text-2xl font-bold text-blue-600"&gt;כותרת&lt;/h1&gt;
+                                &lt;p class="text-gray-600 mt-4"&gt;תוכן&lt;/p&gt;
+                                &lt;/div&gt;
+                                &lt;/div&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">ספריות נוספות</h3>
+
+                        <p class="description">אפשרויות פופולריות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/* Bulma - פשוט ומודרני */
+                                https://bulma.io
+
+                                /* Foundation - גמיש ומתקדם */
+                                https://get.foundation
+
+                                /* Materialize - Material Design */
+                                https://materializecss.com
+
+                                /* Semantic UI - קריא וסמנטי */
+                                https://semantic-ui.com
+
+                                /* Pure CSS - קל משקל */
+                                https://purecss.io</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <footer>
+                <p>מדריך HTML & CSS מקיף | מיסודות ועד מתקדם | 2025</p>
+            </footer>
+        </div>
+    </div>
+
+    <button class="scroll-top" onclick="scrollToTop()"></button>
+
+    <script>
+        function copyCommand(button) {
+            const commandDiv = button.previousElementSibling;
+            const command = commandDiv.textContent;
+
+            navigator.clipboard.writeText(command).then(() => {
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        const scrollTopBtn = document.querySelector('.scroll-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === #) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,2454 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך JavaScript מקיף - CopyCode</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: url('images/background.jpg') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .site-logo:hover {
+            color: #667eea;
+        }
+
+        .site-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding-top: 90px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1rem;
+            margin-left: 1.5rem;
+            position: sticky;
+            top: 110px;
+            height: calc(100vh - 130px);
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #F7DF1E;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: #5a6c7d;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding-right: 1rem;
+        }
+
+        .nav-link.active {
+            background: #F7DF1E;
+            color: #000;
+        }
+
+        .container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: transparent;
+            color: #1a1a1a;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        h1 svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.85;
+            font-weight: 500;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #F7DF1E;
+            font-weight: 600;
+        }
+
+        .command-group {
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .command-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .command-wrapper {
+            position: relative;
+            margin: 0.8rem 0;
+        }
+
+        .command {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 0.9rem 3rem 0.9rem 1rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid #F7DF1E;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+            padding: 0.4rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+        }
+
+        .copy-btn::before {
+            content: '⧉';
+            font-size: 1rem;
+        }
+
+        .copy-btn:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-color: #95a5a6;
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .copy-btn.copied::before {
+            content: '✓';
+        }
+
+        .description {
+            color: #5a6c7d;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .explanation {
+            background: #fff9e6;
+            border-right: 3px solid #F7DF1E;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            color: #34495e;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-right: 3px solid #F7DF1E;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #F7DF1E 0%, #F0DB4F 100%);
+            color: #000;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 3px solid #323330;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 2px solid #F7DF1E;
+            }
+
+            .container {
+                margin: 0 1rem 1rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .command {
+                font-size: 0.82rem;
+                padding-left: 0.8rem;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #F7DF1E;
+            color: #000;
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #F0DB4F;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="top-header">
+        <a href="index.html" class="site-logo">
+            <img src="images/logo.png" alt="לוגו האתר">
+            CopyCode
+        </a>
+        <a href="search.html" class="search-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>חיפוש</span>
+        </a>
+    </div>
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-title">תוכן עניינים</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#basics" class="nav-link">יסודות JavaScript</a></li>
+                <li class="nav-item"><a href="#variables" class="nav-link">משתנים</a></li>
+                <li class="nav-item"><a href="#datatypes" class="nav-link">טיפוסי נתונים</a></li>
+                <li class="nav-item"><a href="#operators" class="nav-link">אופרטורים</a></li>
+                <li class="nav-item"><a href="#strings" class="nav-link">מחרוזות</a></li>
+                <li class="nav-item"><a href="#arrays" class="nav-link">מערכים</a></li>
+                <li class="nav-item"><a href="#objects" class="nav-link">אובייקטים</a></li>
+                <li class="nav-item"><a href="#functions" class="nav-link">פונקציות</a></li>
+                <li class="nav-item"><a href="#control" class="nav-link">בקרת זרימה</a></li>
+                <li class="nav-item"><a href="#loops" class="nav-link">לולאות</a></li>
+                <li class="nav-item"><a href="#dom" class="nav-link">DOM Manipulation</a></li>
+                <li class="nav-item"><a href="#events" class="nav-link">Events</a></li>
+                <li class="nav-item"><a href="#async" class="nav-link">Async/Await</a></li>
+                <li class="nav-item"><a href="#es6" class="nav-link">ES6+ Features</a></li>
+                <li class="nav-item"><a href="#modules" class="nav-link">Modules</a></li>
+                <li class="nav-item"><a href="#json" class="nav-link">JSON ו-APIs</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+        <header>
+            <h1>
+                <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#F7DF1E" d="M0 0h256v256H0V0z"/>
+                    <path d="M67.312 213.932l19.59-11.856c3.78 6.701 7.218 12.371 15.465 12.371 7.905 0 12.89-3.092 12.89-15.12v-81.798h24.057v82.138c0 24.917-14.606 36.259-35.916 36.259-19.245 0-30.416-9.967-36.087-21.996M152.381 211.354l19.588-11.341c5.157 8.421 11.859 14.607 23.715 14.607 9.969 0 16.325-4.984 16.325-11.858 0-8.248-6.53-11.17-17.528-15.98l-6.013-2.58c-17.357-7.387-28.87-16.667-28.87-36.257 0-18.044 13.747-31.792 35.228-31.792 15.294 0 26.292 5.328 34.196 19.247l-18.732 12.03c-4.125-7.389-8.591-10.31-15.465-10.31-7.046 0-11.514 4.468-11.514 10.31 0 7.217 4.468 10.14 14.778 14.608l6.014 2.577c20.45 8.765 31.963 17.7 31.963 37.804 0 21.654-17.012 33.51-39.867 33.51-22.339 0-36.774-10.654-43.819-24.574"/>
+                </svg>
+                מדריך JavaScript מקיף
+            </h1>
+            <p class="subtitle">מיסודות ועד מתקדם - השפה של האינטרנט</p>
+        </header>
+
+        <div class="content">
+
+            <!-- יסודות JavaScript -->
+            <section id="basics" class="section">
+                <h2 class="section-title">יסודות JavaScript</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה JavaScript?</div>
+                    <strong>JavaScript</strong> היא שפת התכנות של האינטרנט! כל אתר אינטראקטיבי משתמש בה.<br>
+                    <strong>לא להתבלבל:</strong> JavaScript ≠ Java (שפות שונות לחלוטין!)<br>
+                    <strong>איפה רץ?</strong> בדפדפן (Chrome, Firefox) ובשרת (Node.js)<br>
+                    <strong>למה ללמוד?</strong> חיונית לפיתוח web, אפליקציות מובייל (React Native), ואפילו שרתים!<br>
+                    <strong>טיפ:</strong> אפשר לפתוח את ה-Console בדפדפן (F12) ולהתנסות בקוד מיד!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">הדפסה ל-Console</h3>
+                    
+                    <p class="description">הדפסה בסיסית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">console.log("Hello, World!");
+console.log("JavaScript", "is", "awesome!");</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">סוגי הדפסה שונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">console.log("רגיל");      // הדפסה רגילה
+console.warn("אזהרה");    // אזהרה (צהוב)
+console.error("שגיאה");   // שגיאה (אדום)
+console.info("מידע");     // מידע
+console.table([1, 2, 3]); // טבלה</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">הערות</h3>
+                    
+                    <p class="description">הערות בקוד:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// הערה בשורה אחת
+
+/* הערה
+   מרובת
+   שורות */
+
+/**
+ * הערת תיעוד (JSDoc)
+ * @param {string} name - שם המשתמש
+ */</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">הוספת JavaScript לדף HTML</h3>
+                    
+                    <p class="description">בתוך ה-HTML:</p>
+                    <div class="command-wrapper">
+                        <div class="command">&lt;script&gt;
+  console.log("Hello!");
+&lt;/script&gt;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">קובץ חיצוני:</p>
+                    <div class="command-wrapper">
+                        <div class="command">&lt;script src="script.js"&gt;&lt;/script&gt;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">מומלץ לשים את ה-script בסוף ה-body או להשתמש ב-defer</div>
+                </div>
+            </section>
+
+            <!-- משתנים -->
+            <section id="variables" class="section">
+                <h2 class="section-title">משתנים (Variables)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה משתנה?</div>
+                    <strong>משתנה</strong> - קופסה שמחזיקה מידע. אפשר לשנות את התוכן שלה.<br>
+                    <strong>3 דרכים להגדיר:</strong><br>
+                    • <code>let</code> - המודרני והמומלץ (ניתן לשינוי)<br>
+                    • <code>const</code> - קבוע (לא ניתן לשינוי)<br>
+                    • <code>var</code> - הישן (לא מומלץ להשתמש)<br>
+                    <strong>כלל אצבע:</strong> תמיד השתמשו ב-const, אלא אם צריך לשנות את הערך - אז let
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">הגדרת משתנים</h3>
+                    
+                    <p class="description">let - משתנה שניתן לשינוי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let name = "Alice";
+let age = 25;
+let isStudent = true;
+
+// שינוי ערך
+age = 26;
+name = "Bob";</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">const - קבוע:</p>
+                    <div class="command-wrapper">
+                        <div class="command">const PI = 3.14159;
+const MAX_USERS = 100;
+const API_KEY = "abc123";
+
+// PI = 3.14; // ❌ שגיאה! לא ניתן לשינוי</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הגדרה מרובה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let x = 5, y = 10, z = 15;
+const a = 1, b = 2;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">כללי שמות משתנים</h3>
+                    
+                    <div class="explanation">
+                        <strong>✅ חוקי:</strong><br>
+                        • מתחיל באות, $ או _<br>
+                        • יכול להכיל אותיות, מספרים, $ ו-_<br>
+                        • רגיש לאותיות גדולות/קטנות (name ≠ Name)<br>
+                        <br>
+                        <strong>❌ לא חוקי:</strong><br>
+                        • מתחיל במספר (1name)<br>
+                        • מכיל רווחים (my name)<br>
+                        • מילות שמורות (let, const, if)
+                    </div>
+                    
+                    <p class="description">דוגמאות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// ✅ טוב
+let userName = "Alice";
+let user_age = 25;
+let $price = 100;
+let _temp = 0;
+
+// ❌ רע
+// let 1user = "Bob";
+// let user-name = "Alice";
+// let let = 5;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- טיפוסי נתונים -->
+            <section id="datatypes" class="section">
+                <h2 class="section-title">טיפוסי נתונים (Data Types)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 טיפוסי נתונים ב-JavaScript</div>
+                    <strong>JavaScript היא "dynamically typed"</strong> - לא צריך להגדיר טיפוס, הוא משתנה אוטומטית!<br>
+                    <strong>7 טיפוסים פרימיטיביים:</strong><br>
+                    1. <code>Number</code> - מספרים (5, 3.14, -10)<br>
+                    2. <code>String</code> - טקסט ("Hello")<br>
+                    3. <code>Boolean</code> - true/false<br>
+                    4. <code>Undefined</code> - לא הוגדר<br>
+                    5. <code>Null</code> - ריק במכוון<br>
+                    6. <code>Symbol</code> - ייחודי<br>
+                    7. <code>BigInt</code> - מספרים ענקיים<br>
+                    <strong>+ Object</strong> - מבנה נתונים מורכב
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">Number - מספרים</h3>
+                    
+                    <p class="description">מספרים שלמים ועשרוניים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let integer = 42;
+let float = 3.14;
+let negative = -10;
+let scientific = 2.5e6;  // 2,500,000
+
+// מספרים מיוחדים
+let infinity = Infinity;
+let notANumber = NaN;  // Not a Number</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פעולות מתמטיות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let sum = 5 + 3;        // 8
+let diff = 10 - 4;      // 6
+let product = 4 * 5;    // 20
+let quotient = 20 / 4;  // 5
+let remainder = 10 % 3; // 1 (שארית)
+let power = 2 ** 3;     // 8 (חזקה)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">String - מחרוזות</h3>
+                    
+                    <p class="description">יצירת מחרוזות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let single = 'Hello';
+let double = "World";
+let backtick = `Hello World`;  // Template literal
+
+// חיבור מחרוזות
+let greeting = "Hello" + " " + "World";
+let name = "Alice";
+let message = `Hello, ${name}!`;  // Template literal</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Boolean - ערכי אמת</h3>
+                    
+                    <p class="description">true ו-false:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let isActive = true;
+let isLoggedIn = false;
+
+// השוואות מחזירות Boolean
+let isEqual = 5 === 5;      // true
+let isGreater = 10 > 5;     // true
+let isLess = 3 < 2;         // false</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Undefined ו-Null</h3>
+                    
+                    <p class="description">הבדל בין undefined ל-null:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let x;              // undefined (לא הוגדר)
+let y = undefined;  // undefined (במפורש)
+let z = null;       // null (ריק במכוון)
+
+console.log(x);  // undefined
+console.log(z);  // null</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">
+                        <strong>undefined</strong> - המשתנה קיים אבל אין לו ערך<br>
+                        <strong>null</strong> - אנחנו מגדירים במפורש שהערך ריק
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">בדיקת טיפוס</h3>
+                    
+                    <p class="description">typeof operator:</p>
+                    <div class="command-wrapper">
+                        <div class="command">console.log(typeof 42);          // "number"
+console.log(typeof "Hello");     // "string"
+console.log(typeof true);        // "boolean"
+console.log(typeof undefined);   // "undefined"
+console.log(typeof null);        // "object" (באג ידוע!)
+console.log(typeof {});          // "object"
+console.log(typeof []);          // "object"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">המרות טיפוסים</h3>
+                    
+                    <p class="description">המרה למספר:</p>
+                    <div class="command-wrapper">
+                        <div class="command">Number("123");      // 123
+parseInt("123");    // 123
+parseFloat("3.14"); // 3.14
++"123";             // 123 (קיצור דרך)
+
+Number("abc");      // NaN (לא מספר)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">המרה למחרוזת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">String(123);        // "123"
+(123).toString();   // "123"
+123 + "";           // "123" (קיצור דרך)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">המרה ל-Boolean:</p>
+                    <div class="command-wrapper">
+                        <div class="command">Boolean(1);         // true
+Boolean(0);         // false
+Boolean("text");    // true
+Boolean("");        // false
+!!value;            // המרה ל-Boolean (קיצור דרך)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- אופרטורים -->
+            <section id="operators" class="section">
+                <h2 class="section-title">אופרטורים (Operators)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה אופרטור?</div>
+                    <strong>אופרטור</strong> - סימן שמבצע פעולה על ערכים.<br>
+                    <strong>חשוב!</strong> JavaScript יש == ו-===. תמיד השתמשו ב-=== (השוואה מדויקת)!<br>
+                    <strong>== vs ===:</strong><br>
+                    • <code>==</code> משווה ערכים (עם המרה אוטומטית)<br>
+                    • <code>===</code> משווה ערכים וטיפוסים (מומלץ!)
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">אופרטורי השוואה</h3>
+                    
+                    <p class="description">השוואות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// שווה (עם המרה)
+5 == "5"        // true
+
+// שווה מדויק (ללא המרה) - מומלץ!
+5 === "5"       // false
+5 === 5         // true
+
+// לא שווה
+5 != "5"        // false
+5 !== "5"       // true
+
+// גדול/קטן
+10 > 5          // true
+10 < 5          // false
+10 >= 10        // true
+5 <= 3          // false</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אופרטורים לוגיים</h3>
+                    
+                    <p class="description">AND, OR, NOT:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// AND (&&) - שניהם צריכים להיות true
+true && true    // true
+true && false   // false
+
+// OR (||) - לפחות אחד צריך להיות true
+true || false   // true
+false || false  // false
+
+// NOT (!) - הפוך
+!true           // false
+!false          // true
+
+// דוגמה מעשית
+let age = 25;
+let hasLicense = true;
+let canDrive = age >= 18 && hasLicense;  // true</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אופרטורי השמה</h3>
+                    
+                    <p class="description">קיצורי דרך:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let x = 10;
+
+x += 5;   // x = x + 5  → 15
+x -= 3;   // x = x - 3  → 12
+x *= 2;   // x = x * 2  → 24
+x /= 4;   // x = x / 4  → 6
+x %= 4;   // x = x % 4  → 2
+x **= 3;  // x = x ** 3 → 8
+
+// הגדלה והקטנה
+x++;      // x = x + 1
+x--;      // x = x - 1
+++x;      // הגדלה לפני
+--x;      // הקטנה לפני</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אופרטורים מיוחדים</h3>
+                    
+                    <p class="description">Ternary operator (תנאי בשורה אחת):</p>
+                    <div class="command-wrapper">
+                        <div class="command">let age = 20;
+let status = age >= 18 ? "מבוגר" : "קטין";
+// אם age >= 18 אז "מבוגר", אחרת "קטין"
+
+// דוגמה נוספת
+let score = 85;
+let grade = score >= 90 ? "A" : score >= 80 ? "B" : "C";</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Nullish coalescing (??):</p>
+                    <div class="command-wrapper">
+                        <div class="command">let name = null;
+let displayName = name ?? "אורח";  // "אורח"
+
+let count = 0;
+let value = count ?? 10;  // 0 (לא 10!)
+// ?? בודק רק null/undefined, לא 0 או false</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Optional chaining (?.):</p>
+                    <div class="command-wrapper">
+                        <div class="command">let user = { name: "Alice" };
+console.log(user?.address?.city);  // undefined (לא שגיאה!)
+
+// ללא optional chaining
+// console.log(user.address.city);  // ❌ שגיאה!</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- מחרוזות -->
+            <section id="strings" class="section">
+                <h2 class="section-title">מחרוזות (Strings)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 עבודה עם טקסט</div>
+                    <strong>מחרוזת</strong> - רצף של תווים (טקסט).<br>
+                    <strong>3 דרכים ליצור:</strong> 'single', "double", `backtick`<br>
+                    <strong>Template Literals</strong> (backticks) - המודרני והנוח ביותר!<br>
+                    <strong>Immutable</strong> - לא ניתן לשנות מחרוזת, רק ליצור חדשה.<br>
+                    <strong>טיפ:</strong> מחרוזות ב-JS הן אובייקטים עם מתודות רבות!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">יצירת מחרוזות</h3>
+                    
+                    <p class="description">Template Literals - המומלץ:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let name = "Alice";
+let age = 25;
+
+// Template literal עם ${} לשילוב משתנים
+let message = `שלום, ${name}! אתה בן ${age}.`;
+
+// מחרוזת מרובת שורות
+let multiline = `שורה ראשונה
+שורה שנייה
+שורה שלישית`;
+
+// ביטויים בתוך ${}
+let result = `2 + 2 = ${2 + 2}`;  // "2 + 2 = 4"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מתודות מחרוזת</h3>
+                    
+                    <p class="description">אורך וגישה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let str = "JavaScript";
+
+str.length;          // 10 (אורך)
+str[0];              // "J" (תו ראשון)
+str[str.length - 1]; // "t" (תו אחרון)
+str.charAt(4);       // "S"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שינוי רישיות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let text = "Hello World";
+
+text.toUpperCase();  // "HELLO WORLD"
+text.toLowerCase();  // "hello world"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">חיפוש:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let str = "Hello World";
+
+str.includes("World");    // true
+str.startsWith("Hello");  // true
+str.endsWith("World");    // true
+str.indexOf("o");         // 4 (מיקום ראשון)
+str.lastIndexOf("o");     // 7 (מיקום אחרון)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">חיתוך והחלפה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let str = "JavaScript";
+
+str.slice(0, 4);         // "Java"
+str.slice(4);            // "Script"
+str.slice(-6);           // "Script" (מהסוף)
+str.substring(0, 4);     // "Java"
+
+str.replace("Java", "Type");  // "TypeScript"
+str.replaceAll("a", "A");     // "JAvaScript" → "JAvAScript"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פיצול וחיבור:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let csv = "apple,banana,orange";
+let fruits = csv.split(",");  // ["apple", "banana", "orange"]
+
+let words = ["Hello", "World"];
+let sentence = words.join(" ");  // "Hello World"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסרת רווחים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let str = "  Hello World  ";
+
+str.trim();       // "Hello World"
+str.trimStart();  // "Hello World  "
+str.trimEnd();    // "  Hello World"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- מערכים -->
+            <section id="arrays" class="section">
+                <h2 class="section-title">מערכים (Arrays)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה מערך?</div>
+                    <strong>מערך</strong> - רשימה מסודרת של ערכים. כמו מחברת עם דפים ממוספרים.<br>
+                    <strong>אינדקס</strong> - מיקום האיבר במערך (מתחיל מ-0!)<br>
+                    <strong>Dynamic</strong> - אפשר להוסיף ולהסיר איברים בקלות.<br>
+                    <strong>Mixed Types</strong> - מערך יכול להכיל טיפוסים שונים (מספרים, מחרוזות, אובייקטים).<br>
+                    <strong>טיפ:</strong> למערכים יש המון מתודות שימושיות - map, filter, reduce ועוד!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">יצירת מערכים</h3>
+                    
+                    <p class="description">דרכים ליצור מערך:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// מערך ריק
+let empty = [];
+
+// מערך עם ערכים
+let numbers = [1, 2, 3, 4, 5];
+let fruits = ["apple", "banana", "orange"];
+let mixed = [1, "hello", true, null];
+
+// מערך מקונן
+let matrix = [[1, 2], [3, 4], [5, 6]];
+
+// Array constructor
+let arr = new Array(5);  // מערך עם 5 מקומות ריקים</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">גישה ושינוי</h3>
+                    
+                    <p class="description">גישה לאיברים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let fruits = ["apple", "banana", "orange"];
+
+fruits[0];              // "apple" (ראשון)
+fruits[1];              // "banana"
+fruits[fruits.length - 1];  // "orange" (אחרון)
+fruits.at(-1);          // "orange" (דרך מודרנית)
+
+// שינוי ערך
+fruits[1] = "mango";    // ["apple", "mango", "orange"]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">הוספה והסרה</h3>
+                    
+                    <p class="description">הוספה בסוף ובהתחלה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let arr = [1, 2, 3];
+
+arr.push(4);        // [1, 2, 3, 4] - הוספה בסוף
+arr.push(5, 6);     // [1, 2, 3, 4, 5, 6]
+
+arr.unshift(0);     // [0, 1, 2, 3, 4, 5, 6] - הוספה בהתחלה</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הסרה מהסוף ומההתחלה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let arr = [1, 2, 3, 4, 5];
+
+arr.pop();          // מסיר 5, מחזיר 5
+arr.shift();        // מסיר 1, מחזיר 1
+// arr הוא עכשיו [2, 3, 4]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">splice - הוספה/הסרה במיקום ספציפי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let arr = [1, 2, 3, 4, 5];
+
+// הסרה
+arr.splice(2, 1);      // מסיר 1 איבר ממיקום 2 → [1, 2, 4, 5]
+
+// הוספה
+arr.splice(2, 0, 3);   // מוסיף 3 במיקום 2 → [1, 2, 3, 4, 5]
+
+// החלפה
+arr.splice(1, 2, 10, 20);  // מחליף 2 איברים → [1, 10, 20, 4, 5]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מתודות חיפוש</h3>
+                    
+                    <p class="description">חיפוש איברים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let arr = [1, 2, 3, 4, 5, 3];
+
+arr.includes(3);        // true
+arr.indexOf(3);         // 2 (מיקום ראשון)
+arr.lastIndexOf(3);     // 5 (מיקום אחרון)
+arr.find(x => x > 3);   // 4 (איבר ראשון שעונה לתנאי)
+arr.findIndex(x => x > 3);  // 3 (אינדקס של האיבר)</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מתודות מערך חשובות</h3>
+                    
+                    <p class="description">map - יצירת מערך חדש:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let numbers = [1, 2, 3, 4, 5];
+
+// כפל כל מספר ב-2
+let doubled = numbers.map(x => x * 2);
+// [2, 4, 6, 8, 10]
+
+// המרה למחרוזות
+let strings = numbers.map(x => `Number: ${x}`);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">filter - סינון:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let numbers = [1, 2, 3, 4, 5, 6];
+
+// רק מספרים זוגיים
+let evens = numbers.filter(x => x % 2 === 0);
+// [2, 4, 6]
+
+// רק מספרים גדולים מ-3
+let large = numbers.filter(x => x > 3);
+// [4, 5, 6]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">reduce - צמצום לערך אחד:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let numbers = [1, 2, 3, 4, 5];
+
+// סכום
+let sum = numbers.reduce((acc, curr) => acc + curr, 0);
+// 15
+
+// מכפלה
+let product = numbers.reduce((acc, curr) => acc * curr, 1);
+// 120</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">forEach - לולאה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let fruits = ["apple", "banana", "orange"];
+
+fruits.forEach((fruit, index) => {
+    console.log(`${index}: ${fruit}`);
+});
+// 0: apple
+// 1: banana
+// 2: orange</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">sort - מיון:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let numbers = [3, 1, 4, 1, 5, 9, 2];
+
+// מיון מספרים
+numbers.sort((a, b) => a - b);  // [1, 1, 2, 3, 4, 5, 9]
+
+// מיון הפוך
+numbers.sort((a, b) => b - a);  // [9, 5, 4, 3, 2, 1, 1]
+
+// מיון מחרוזות
+let fruits = ["banana", "apple", "orange"];
+fruits.sort();  // ["apple", "banana", "orange"]</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מתודות נוספות</h3>
+                    
+                    <p class="description">שילוב וחיתוך:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+
+// שילוב
+let combined = arr1.concat(arr2);  // [1, 2, 3, 4, 5, 6]
+let spread = [...arr1, ...arr2];   // [1, 2, 3, 4, 5, 6]
+
+// חיתוך
+let arr = [1, 2, 3, 4, 5];
+let sliced = arr.slice(1, 4);  // [2, 3, 4]
+
+// הפיכה
+arr.reverse();  // [5, 4, 3, 2, 1]
+
+// חיבור לmחרוזת
+arr.join(", ");  // "5, 4, 3, 2, 1"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- אובייקטים -->
+            <section id="objects" class="section">
+                <h2 class="section-title">אובייקטים (Objects)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה אובייקט?</div>
+                    <strong>אובייקט</strong> - אוסף של זוגות key-value (מפתח-ערך). כמו מילון.<br>
+                    <strong>למה זה שימושי?</strong> מאפשר לארגן מידע קשור יחד (שם, גיל, כתובת של אדם).<br>
+                    <strong>הכל אובייקט!</strong> ב-JS כמעט הכל הוא אובייקט - מערכים, פונקציות, תאריכים...<br>
+                    <strong>טיפ:</strong> אובייקטים הם mutable - אפשר לשנות אותם גם אם הוגדרו עם const!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">יצירת אובייקטים</h3>
+                    
+                    <p class="description">Object literal - הדרך הנפוצה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let person = {
+    name: "Alice",
+    age: 25,
+    city: "Tel Aviv",
+    isStudent: true
+};
+
+// אובייקט ריק
+let empty = {};
+
+// אובייקט מקונן
+let user = {
+    name: "Bob",
+    address: {
+        city: "Jerusalem",
+        street: "Main St",
+        number: 10
+    }
+};</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">גישה למאפיינים</h3>
+                    
+                    <p class="description">שתי דרכים לגשת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let person = { name: "Alice", age: 25 };
+
+// Dot notation (מומלץ)
+person.name;        // "Alice"
+person.age;         // 25
+
+// Bracket notation (שימושי למפתחות דינמיים)
+person["name"];     // "Alice"
+let key = "age";
+person[key];        // 25
+
+// גישה למקונן
+user.address.city;  // "Jerusalem"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">הוספה, שינוי ומחיקה</h3>
+                    
+                    <p class="description">עדכון אובייקט:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let person = { name: "Alice" };
+
+// הוספה
+person.age = 25;
+person["city"] = "Tel Aviv";
+
+// שינוי
+person.name = "Bob";
+
+// מחיקה
+delete person.city;
+
+console.log(person);  // { name: "Bob", age: 25 }</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">מתודות אובייקט</h3>
+                    
+                    <p class="description">פונקציות בתוך אובייקט:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let person = {
+    name: "Alice",
+    age: 25,
+    greet: function() {
+        console.log(`Hello, I'm ${this.name}`);
+    },
+    // קיצור דרך (ES6)
+    sayAge() {
+        console.log(`I'm ${this.age} years old`);
+    }
+};
+
+person.greet();   // "Hello, I'm Alice"
+person.sayAge();  // "I'm 25 years old"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Object methods</h3>
+                    
+                    <p class="description">מתודות שימושיות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let person = { name: "Alice", age: 25, city: "Tel Aviv" };
+
+// מפתחות
+Object.keys(person);    // ["name", "age", "city"]
+
+// ערכים
+Object.values(person);  // ["Alice", 25, "Tel Aviv"]
+
+// זוגות key-value
+Object.entries(person); // [["name", "Alice"], ["age", 25], ...]
+
+// העתקה
+let copy = Object.assign({}, person);
+let spread = { ...person };  // דרך מודרנית
+
+// מיזוג
+let merged = Object.assign({}, person, { job: "Developer" });</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Destructuring</h3>
+                    
+                    <p class="description">חילוץ ערכים מאובייקט:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let person = { name: "Alice", age: 25, city: "Tel Aviv" };
+
+// Destructuring
+let { name, age } = person;
+console.log(name);  // "Alice"
+console.log(age);   // 25
+
+// עם שם אחר
+let { name: userName, age: userAge } = person;
+
+// עם ברירת מחדל
+let { name, country = "Israel" } = person;
+
+// מקונן
+let user = { name: "Bob", address: { city: "Jerusalem" } };
+let { address: { city } } = user;
+console.log(city);  // "Jerusalem"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- פונקציות -->
+            <section id="functions" class="section">
+                <h2 class="section-title">פונקציות (Functions)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זו פונקציה?</div>
+                    <strong>פונקציה</strong> - בלוק קוד שאפשר להפעיל שוב ושוב. כמו מתכון.<br>
+                    <strong>למה זה חשוב?</strong> מונע כפילות קוד, הופך את הקוד לקריא ומאורגן.<br>
+                    <strong>3 דרכים להגדיר:</strong> function declaration, function expression, arrow function<br>
+                    <strong>Arrow Functions</strong> - הדרך המודרנית והקצרה ביותר!<br>
+                    <strong>טיפ:</strong> פונקציות ב-JS הן "first-class citizens" - אפשר להעביר אותן כפרמטרים!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">הגדרת פונקציות</h3>
+                    
+                    <p class="description">Function Declaration:</p>
+                    <div class="command-wrapper">
+                        <div class="command">function greet(name) {
+    return `Hello, ${name}!`;
+}
+
+greet("Alice");  // "Hello, Alice!"
+
+// ללא return
+function sayHi() {
+    console.log("Hi!");
+}  // מחזיר undefined</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Function Expression:</p>
+                    <div class="command-wrapper">
+                        <div class="command">const greet = function(name) {
+    return `Hello, ${name}!`;
+};
+
+greet("Bob");  // "Hello, Bob!"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Arrow Function - המודרני:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// תחביר מלא
+const greet = (name) => {
+    return `Hello, ${name}!`;
+};
+
+// קיצור - return אוטומטי
+const greet = name => `Hello, ${name}!`;
+
+// ללא פרמטרים
+const sayHi = () => "Hi!";
+
+// פרמטר אחד - ללא סוגריים
+const double = x => x * 2;
+
+// מספר פרמטרים
+const add = (a, b) => a + b;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">פרמטרים</h3>
+                    
+                    <p class="description">פרמטרים עם ברירת מחדל:</p>
+                    <div class="command-wrapper">
+                        <div class="command">function greet(name = "Guest") {
+    return `Hello, ${name}!`;
+}
+
+greet();         // "Hello, Guest!"
+greet("Alice");  // "Hello, Alice!"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">Rest parameters (...):</p>
+                    <div class="command-wrapper">
+                        <div class="command">function sum(...numbers) {
+    return numbers.reduce((acc, curr) => acc + curr, 0);
+}
+
+sum(1, 2, 3);        // 6
+sum(1, 2, 3, 4, 5);  // 15</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Callback Functions</h3>
+                    
+                    <p class="description">פונקציה כפרמטר:</p>
+                    <div class="command-wrapper">
+                        <div class="command">function processArray(arr, callback) {
+    return arr.map(callback);
+}
+
+let numbers = [1, 2, 3, 4, 5];
+let doubled = processArray(numbers, x => x * 2);
+// [2, 4, 6, 8, 10]
+
+// דוגמה נפוצה
+setTimeout(() => {
+    console.log("After 2 seconds");
+}, 2000);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Higher-Order Functions</h3>
+                    
+                    <p class="description">פונקציה שמחזירה פונקציה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">function multiplier(factor) {
+    return x => x * factor;
+}
+
+const double = multiplier(2);
+const triple = multiplier(3);
+
+double(5);  // 10
+triple(5);  // 15</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- בקרת זרימה -->
+            <section id="control" class="section">
+                <h2 class="section-title">בקרת זרימה (Control Flow)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 קבלת החלטות בקוד</div>
+                    <strong>בקרת זרימה</strong> - איך התוכנית מחליטה מה לעשות.<br>
+                    <strong>if/else</strong> - "אם... אז... אחרת..."<br>
+                    <strong>switch</strong> - בחירה מתוך אפשרויות רבות<br>
+                    <strong>טיפ:</strong> השתמשו ב-=== ולא ב-== בתנאים!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">if/else</h3>
+                    
+                    <p class="description">תנאים בסיסיים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let age = 20;
+
+if (age >= 18) {
+    console.log("מבוגר");
+} else {
+    console.log("קטין");
+}
+
+// if-else if-else
+let score = 85;
+if (score >= 90) {
+    console.log("A");
+} else if (score >= 80) {
+    console.log("B");
+} else if (score >= 70) {
+    console.log("C");
+} else {
+    console.log("F");
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">תנאים מורכבים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let age = 25;
+let hasLicense = true;
+
+if (age >= 18 && hasLicense) {
+    console.log("יכול לנהוג");
+}
+
+if (age < 18 || !hasLicense) {
+    console.log("לא יכול לנהוג");
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">switch</h3>
+                    
+                    <p class="description">בחירה מרובה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let day = "Monday";
+
+switch (day) {
+    case "Monday":
+        console.log("תחילת שבוע");
+        break;
+    case "Friday":
+        console.log("סוף שבוע");
+        break;
+    case "Saturday":
+    case "Sunday":
+        console.log("סופש");
+        break;
+    default:
+        console.log("יום רגיל");
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Truthy ו-Falsy</h3>
+                    
+                    <p class="description">ערכים שנחשבים false:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// Falsy values (נחשבים false)
+false
+0
+"" (מחרוזת ריקה)
+null
+undefined
+NaN
+
+// כל השאר הם Truthy!
+if ("hello") {  // true
+    console.log("Truthy!");
+}
+
+if (0) {  // false
+    console.log("לא יודפס");
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- לולאות -->
+            <section id="loops" class="section">
+                <h2 class="section-title">לולאות (Loops)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 חזרה על פעולות</div>
+                    <strong>לולאה</strong> - חזרה על קוד מספר פעמים.<br>
+                    <strong>for</strong> - כשיודעים כמה פעמים<br>
+                    <strong>while</strong> - כשלא יודעים כמה פעמים<br>
+                    <strong>for...of</strong> - לולאה על מערכים (מומלץ!)<br>
+                    <strong>for...in</strong> - לולאה על מפתחות אובייקט<br>
+                    <strong>טיפ:</strong> זהירות מלולאות אינסופיות!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">for loop</h3>
+                    
+                    <p class="description">לולאה קלאסית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// הדפסת 0 עד 4
+for (let i = 0; i < 5; i++) {
+    console.log(i);
+}
+
+// לולאה על מערך
+let fruits = ["apple", "banana", "orange"];
+for (let i = 0; i < fruits.length; i++) {
+    console.log(fruits[i]);
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">for...of - המודרני</h3>
+                    
+                    <p class="description">לולאה על מערכים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let fruits = ["apple", "banana", "orange"];
+
+// פשוט וקריא!
+for (let fruit of fruits) {
+    console.log(fruit);
+}
+
+// עם אינדקס
+for (let [index, fruit] of fruits.entries()) {
+    console.log(`${index}: ${fruit}`);
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">for...in</h3>
+                    
+                    <p class="description">לולאה על מפתחות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let person = { name: "Alice", age: 25, city: "Tel Aviv" };
+
+for (let key in person) {
+    console.log(`${key}: ${person[key]}`);
+}
+// name: Alice
+// age: 25
+// city: Tel Aviv</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">while ו-do...while</h3>
+                    
+                    <p class="description">while loop:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let i = 0;
+while (i < 5) {
+    console.log(i);
+    i++;
+}
+
+// do...while - רץ לפחות פעם אחת
+let j = 0;
+do {
+    console.log(j);
+    j++;
+} while (j < 5);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">break ו-continue</h3>
+                    
+                    <p class="description">שליטה בלולאה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// break - יציאה מהלולאה
+for (let i = 0; i < 10; i++) {
+    if (i === 5) break;
+    console.log(i);  // 0, 1, 2, 3, 4
+}
+
+// continue - דילוג על איטרציה
+for (let i = 0; i < 5; i++) {
+    if (i === 2) continue;
+    console.log(i);  // 0, 1, 3, 4
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DOM Manipulation -->
+            <section id="dom" class="section">
+                <h2 class="section-title">DOM Manipulation</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה DOM?</div>
+                    <strong>DOM</strong> - Document Object Model. עץ של כל האלמנטים בדף HTML.<br>
+                    <strong>למה זה חשוב?</strong> זה מה שהופך את JavaScript לאינטראקטיבי! שינוי תוכן, סגנון, הוספת אלמנטים.<br>
+                    <strong>טיפ:</strong> תמיד בדקו שהאלמנט קיים לפני שמשנים אותו!<br>
+                    <strong>מודרני:</strong> השתמשו ב-querySelector במקום getElementById
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">בחירת אלמנטים</h3>
+                    
+                    <p class="description">דרכים לבחור אלמנטים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// לפי ID
+let element = document.getElementById("myId");
+
+// לפי Class (ראשון)
+let element = document.querySelector(".myClass");
+
+// לפי Class (כולם)
+let elements = document.querySelectorAll(".myClass");
+
+// לפי Tag
+let paragraphs = document.querySelectorAll("p");
+
+// CSS Selector מורכב
+let element = document.querySelector("div.container > p.text");</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">שינוי תוכן</h3>
+                    
+                    <p class="description">עדכון טקסט ו-HTML:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let element = document.querySelector("#myDiv");
+
+// שינוי טקסט
+element.textContent = "טקסט חדש";
+
+// שינוי HTML
+element.innerHTML = "<strong>טקסט מודגש</strong>";
+
+// קריאת ערך מ-input
+let input = document.querySelector("#myInput");
+let value = input.value;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">שינוי סגנון</h3>
+                    
+                    <p class="description">CSS דרך JavaScript:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let element = document.querySelector("#myDiv");
+
+// שינוי סגנון ישיר
+element.style.color = "red";
+element.style.backgroundColor = "yellow";
+element.style.fontSize = "20px";
+
+// הוספת/הסרת class
+element.classList.add("active");
+element.classList.remove("hidden");
+element.classList.toggle("visible");
+
+// בדיקה אם יש class
+if (element.classList.contains("active")) {
+    console.log("האלמנט פעיל");
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">יצירה והוספת אלמנטים</h3>
+                    
+                    <p class="description">יצירת אלמנטים חדשים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// יצירת אלמנט
+let newDiv = document.createElement("div");
+newDiv.textContent = "אלמנט חדש";
+newDiv.classList.add("my-class");
+
+// הוספה לסוף
+document.body.appendChild(newDiv);
+
+// הוספה לפני אלמנט
+let parent = document.querySelector("#parent");
+let child = document.querySelector("#child");
+parent.insertBefore(newDiv, child);
+
+// הסרת אלמנט
+newDiv.remove();</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Attributes</h3>
+                    
+                    <p class="description">עבודה עם תכונות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let img = document.querySelector("img");
+
+// קריאה
+let src = img.getAttribute("src");
+let alt = img.alt;  // קיצור דרך
+
+// שינוי
+img.setAttribute("src", "new-image.jpg");
+img.alt = "תמונה חדשה";
+
+// הסרה
+img.removeAttribute("title");
+
+// בדיקה
+if (img.hasAttribute("alt")) {
+    console.log("יש alt");
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Events -->
+            <section id="events" class="section">
+                <h2 class="section-title">Events (אירועים)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה Event?</div>
+                    <strong>Event</strong> - משהו שקורה בדף: לחיצה, הקלדה, גלילה...<br>
+                    <strong>Event Listener</strong> - "מאזין" שמחכה לאירוע ומגיב אליו.<br>
+                    <strong>למה זה חשוב?</strong> זה מה שהופך את האתר לאינטראקטיבי!<br>
+                    <strong>טיפ:</strong> תמיד השתמשו ב-addEventListener, לא ב-onclick!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">Event Listeners</h3>
+                    
+                    <p class="description">הוספת מאזין לאירוע:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let button = document.querySelector("#myButton");
+
+// לחיצה על כפתור
+button.addEventListener("click", function() {
+    console.log("נלחץ!");
+});
+
+// עם Arrow Function
+button.addEventListener("click", () => {
+    console.log("נלחץ!");
+});
+
+// עם פונקציה נפרדת
+function handleClick() {
+    console.log("נלחץ!");
+}
+button.addEventListener("click", handleClick);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">אירועים נפוצים</h3>
+                    
+                    <p class="description">סוגי אירועים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// עכבר
+element.addEventListener("click", handler);
+element.addEventListener("dblclick", handler);
+element.addEventListener("mouseenter", handler);
+element.addEventListener("mouseleave", handler);
+
+// מקלדת
+input.addEventListener("keydown", handler);
+input.addEventListener("keyup", handler);
+input.addEventListener("keypress", handler);
+
+// טופס
+form.addEventListener("submit", handler);
+input.addEventListener("input", handler);
+input.addEventListener("change", handler);
+input.addEventListener("focus", handler);
+input.addEventListener("blur", handler);
+
+// חלון
+window.addEventListener("load", handler);
+window.addEventListener("resize", handler);
+window.addEventListener("scroll", handler);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Event Object</h3>
+                    
+                    <p class="description">מידע על האירוע:</p>
+                    <div class="command-wrapper">
+                        <div class="command">button.addEventListener("click", (event) => {
+    console.log(event.type);        // "click"
+    console.log(event.target);      // האלמנט שנלחץ
+    console.log(event.clientX);     // מיקום X של העכבר
+    console.log(event.clientY);     // מיקום Y של העכבר
+});
+
+// מניעת התנהגות ברירת מחדל
+form.addEventListener("submit", (e) => {
+    e.preventDefault();  // מונע שליחת טופס
+    console.log("טופס נשלח!");
+});
+
+// עצירת התפשטות
+element.addEventListener("click", (e) => {
+    e.stopPropagation();  // עוצר את האירוע מלהתפשט
+});</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">הסרת Event Listener</h3>
+                    
+                    <p class="description">הסרת מאזין:</p>
+                    <div class="command-wrapper">
+                        <div class="command">function handleClick() {
+    console.log("נלחץ!");
+}
+
+// הוספה
+button.addEventListener("click", handleClick);
+
+// הסרה
+button.removeEventListener("click", handleClick);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Async/Await -->
+            <section id="async" class="section">
+                <h2 class="section-title">Async/Await ו-Promises</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה Asynchronous?</div>
+                    <strong>Asynchronous</strong> - קוד שלא רץ מיד, אלא מחכה (לשרת, לקובץ, לטיימר).<br>
+                    <strong>Promise</strong> - הבטחה שמשהו יקרה בעתיד (הצלחה או כישלון).<br>
+                    <strong>async/await</strong> - דרך נוחה לכתוב קוד אסינכרוני שנראה סינכרוני.<br>
+                    <strong>למה זה חשוב?</strong> רוב הפעולות באינטרנט הן אסינכרוניות!<br>
+                    <strong>טיפ:</strong> תמיד השתמשו ב-try/catch עם async/await!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">Promises</h3>
+                    
+                    <p class="description">יצירת Promise:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        let success = true;
+        if (success) {
+            resolve("הצלחה!");
+        } else {
+            reject("כישלון!");
+        }
+    }, 1000);
+});
+
+// שימוש ב-Promise
+promise
+    .then(result => console.log(result))
+    .catch(error => console.error(error))
+    .finally(() => console.log("סיום"));</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">async/await - המודרני</h3>
+                    
+                    <p class="description">פונקציה אסינכרונית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">async function fetchData() {
+    try {
+        let response = await fetch("https://api.example.com/data");
+        let data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("שגיאה:", error);
+    }
+}
+
+// קריאה לפונקציה
+fetchData();
+
+// Arrow function
+const getData = async () => {
+    let data = await fetch("url");
+    return data.json();
+};</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Fetch API</h3>
+                    
+                    <p class="description">בקשות HTTP:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// GET request
+async function getData() {
+    let response = await fetch("https://api.example.com/users");
+    let data = await response.json();
+    return data;
+}
+
+// POST request
+async function postData() {
+    let response = await fetch("https://api.example.com/users", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name: "Alice", age: 25 })
+    });
+    let data = await response.json();
+    return data;
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Promise.all</h3>
+                    
+                    <p class="description">ריצה מקבילה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">async function fetchMultiple() {
+    try {
+        let [users, posts, comments] = await Promise.all([
+            fetch("api/users").then(r => r.json()),
+            fetch("api/posts").then(r => r.json()),
+            fetch("api/comments").then(r => r.json())
+        ]);
+        
+        console.log(users, posts, comments);
+    } catch (error) {
+        console.error(error);
+    }
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ES6+ Features -->
+            <section id="es6" class="section">
+                <h2 class="section-title">ES6+ Features</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה ES6?</div>
+                    <strong>ES6</strong> (ECMAScript 2015) - גרסה מודרנית של JavaScript עם תכונות חדשות.<br>
+                    <strong>למה זה חשוב?</strong> הופך את הקוד לקצר, קריא ויעיל יותר.<br>
+                    <strong>תכונות עיקריות:</strong> let/const, arrow functions, template literals, destructuring, spread/rest<br>
+                    <strong>טיפ:</strong> כל הדפדפנים המודרניים תומכים ב-ES6!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">Spread Operator (...)</h3>
+                    
+                    <p class="description">פיזור מערכים ואובייקטים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// מערכים
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combined = [...arr1, ...arr2];  // [1, 2, 3, 4, 5, 6]
+
+// העתקה
+let copy = [...arr1];
+
+// אובייקטים
+let person = { name: "Alice", age: 25 };
+let updated = { ...person, city: "Tel Aviv" };
+// { name: "Alice", age: 25, city: "Tel Aviv" }
+
+// העברה לפונקציה
+let numbers = [1, 2, 3, 4, 5];
+Math.max(...numbers);  // 5</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Destructuring</h3>
+                    
+                    <p class="description">חילוץ ערכים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// מערכים
+let [a, b, c] = [1, 2, 3];
+let [first, ...rest] = [1, 2, 3, 4, 5];
+// first = 1, rest = [2, 3, 4, 5]
+
+// אובייקטים
+let { name, age } = { name: "Alice", age: 25 };
+
+// בפרמטרים של פונקציה
+function greet({ name, age }) {
+    console.log(`${name} is ${age} years old`);
+}
+greet({ name: "Bob", age: 30 });</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Default Parameters</h3>
+                    
+                    <p class="description">ערכי ברירת מחדל:</p>
+                    <div class="command-wrapper">
+                        <div class="command">function greet(name = "Guest", greeting = "Hello") {
+    return `${greeting}, ${name}!`;
+}
+
+greet();                    // "Hello, Guest!"
+greet("Alice");             // "Hello, Alice!"
+greet("Bob", "Hi");         // "Hi, Bob!"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Optional Chaining (?.)</h3>
+                    
+                    <p class="description">גישה בטוחה למאפיינים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let user = {
+    name: "Alice",
+    address: {
+        city: "Tel Aviv"
+    }
+};
+
+// ללא optional chaining
+// let zip = user.address.zip.code;  // ❌ שגיאה!
+
+// עם optional chaining
+let zip = user.address?.zip?.code;  // undefined (לא שגיאה!)
+
+// עם מתודות
+user.greet?.();  // לא יקרה כלום אם greet לא קיים</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Nullish Coalescing (??)</h3>
+                    
+                    <p class="description">ערך ברירת מחדל:</p>
+                    <div class="command-wrapper">
+                        <div class="command">let name = null;
+let displayName = name ?? "Guest";  // "Guest"
+
+let count = 0;
+let value = count ?? 10;  // 0 (לא 10!)
+
+// הבדל מ-||
+let value1 = 0 || 10;   // 10
+let value2 = 0 ?? 10;   // 0</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modules -->
+            <section id="modules" class="section">
+                <h2 class="section-title">Modules (מודולים)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה Module?</div>
+                    <strong>Module</strong> - קובץ JavaScript שמייצא ומייבא קוד.<br>
+                    <strong>למה זה חשוב?</strong> מאפשר לארגן קוד גדול לקבצים קטנים ומנוהלים.<br>
+                    <strong>export/import</strong> - הדרך המודרנית לשתף קוד בין קבצים.<br>
+                    <strong>טיפ:</strong> צריך להוסיף type="module" ל-script tag!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">Export ו-Import</h3>
+                    
+                    <p class="description">ייצוא מקובץ:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// utils.js
+export function add(a, b) {
+    return a + b;
+}
+
+export const PI = 3.14159;
+
+export class Calculator {
+    multiply(a, b) {
+        return a * b;
+    }
+}
+
+// ייצוא ברירת מחדל
+export default function greet(name) {
+    return `Hello, ${name}!`;
+}</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ייבוא לקובץ:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// main.js
+import greet from "./utils.js";  // ברירת מחדל
+import { add, PI, Calculator } from "./utils.js";  // named imports
+
+// ייבוא הכל
+import * as utils from "./utils.js";
+utils.add(2, 3);
+
+// שינוי שם
+import { add as sum } from "./utils.js";</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שימוש ב-HTML:</p>
+                    <div class="command-wrapper">
+                        <div class="command">&lt;script type="module" src="main.js"&gt;&lt;/script&gt;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- JSON ו-APIs -->
+            <section id="json" class="section">
+                <h2 class="section-title">JSON ו-APIs</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה JSON?</div>
+                    <strong>JSON</strong> - JavaScript Object Notation. פורמט להעברת נתונים.<br>
+                    <strong>למה זה חשוב?</strong> כמעט כל API באינטרנט משתמש ב-JSON!<br>
+                    <strong>דומה לאובייקט JS</strong> - אבל המפתחות בגרשיים כפולים.<br>
+                    <strong>טיפ:</strong> JSON.parse() ו-JSON.stringify() הם החברים הכי טובים שלכם!
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">JSON Methods</h3>
+                    
+                    <p class="description">המרה בין JSON למחרוזת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// אובייקט JS
+let person = {
+    name: "Alice",
+    age: 25,
+    hobbies: ["reading", "coding"]
+};
+
+// המרה למחרוזת JSON
+let jsonString = JSON.stringify(person);
+// '{"name":"Alice","age":25,"hobbies":["reading","coding"]}'
+
+// המרה חזרה לאובייקט
+let parsed = JSON.parse(jsonString);
+console.log(parsed.name);  // "Alice"</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">עבודה עם APIs</h3>
+                    
+                    <p class="description">דוגמה מלאה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// קבלת נתונים מ-API
+async function getUsers() {
+    try {
+        let response = await fetch("https://jsonplaceholder.typicode.com/users");
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        let users = await response.json();
+        console.log(users);
+        return users;
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+// שליחת נתונים ל-API
+async function createUser(userData) {
+    try {
+        let response = await fetch("https://jsonplaceholder.typicode.com/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userData)
+        });
+        
+        let newUser = await response.json();
+        return newUser;
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+// שימוש
+getUsers();
+createUser({ name: "Alice", email: "alice@example.com" });</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3 class="command-title">Local Storage</h3>
+                    
+                    <p class="description">שמירת נתונים בדפדפן:</p>
+                    <div class="command-wrapper">
+                        <div class="command">// שמירה
+localStorage.setItem("username", "Alice");
+
+// שמירת אובייקט
+let user = { name: "Alice", age: 25 };
+localStorage.setItem("user", JSON.stringify(user));
+
+// קריאה
+let username = localStorage.getItem("username");
+
+// קריאת אובייקט
+let savedUser = JSON.parse(localStorage.getItem("user"));
+
+// מחיקה
+localStorage.removeItem("username");
+
+// מחיקת הכל
+localStorage.clear();</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer>
+            <p>מדריך JavaScript מקיף | מיסודות ועד מתקדם | © 2025</p>
+        </footer>
+        </div>
+    </div>
+
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Copy command functionality
+        function copyCommand(button) {
+            const commandDiv = button.previousElementSibling;
+            const command = commandDiv.textContent;
+            
+            navigator.clipboard.writeText(command).then(() => {
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Scroll to top functionality
+        const scrollTopBtn = document.querySelector('.scroll-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                
+                // Update active link
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Highlight active section on scroll
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
