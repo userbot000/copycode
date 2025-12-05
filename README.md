@@ -10,6 +10,9 @@
 - **PowerShell** - אוטומציה ב-Windows
 - **Git** - ניהול קוד וגרסאות
 - **Registry CMD** - עריכת רישום Windows
+- **SQLite** - מסד נתונים קל ועוצמתי
+- **Linux/Bash** - פקודות טרמינל שימושיות
+- **Regex** - ביטויים רגולריים לחיפוש תבניות
 
 ## 🔍 חיפוש
 

@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך Regex מקיף - CopyCode</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: url('images/background.jpg') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .site-logo:hover {
+            color: #667eea;
+        }
+
+        .site-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding-top: 90px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1rem;
+            margin-left: 1.5rem;
+            position: sticky;
+            top: 110px;
+            height: calc(100vh - 130px);
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #E74C3C;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: #5a6c7d;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding-right: 1rem;
+        }
+
+        .nav-link.active {
+            background: #E74C3C;
+            color: white;
+        }
+
+        .container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: transparent;
+            color: #1a1a1a;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        h1 svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #E74C3C;
+            font-weight: 600;
+        }
+
+        .command-group {
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .command-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .command-wrapper {
+            position: relative;
+            margin: 0.8rem 0;
+        }
+
+        .command {
+            background: #2C001E;
+            color: #FF6B9D;
+            padding: 0.9rem 3rem 0.9rem 1rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid #E74C3C;
+            position: relative;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+            padding: 0.4rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+        }
+
+        .copy-btn::before {
+            content: '⧉';
+            font-size: 1rem;
+        }
+
+        .copy-btn:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-color: #95a5a6;
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .copy-btn.copied::before {
+            content: '✓';
+        }
+
+        .description {
+            color: #5a6c7d;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .explanation {
+            background: #ffe8e8;
+            border-right: 3px solid #E74C3C;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            color: #34495e;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-right: 3px solid #ffd43b;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        .example-box {
+            background: #f0f8ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #0066cc;
+            margin-bottom: 0.5rem;
+        }
+
+        .match {
+            background: #90EE90;
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 3px solid #E74C3C;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 2px solid #E74C3C;
+            }
+
+            .container {
+                margin: 0 1rem 1rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .command {
+                font-size: 0.82rem;
+                padding-left: 0.8rem;
+            }
+
+            .copy-btn {
+                position: relative;
+                display: block;
+                margin-top: 0.5rem;
+                right: 0;
+                transform: none;
+            }
+
+            .copy-btn:active {
+                transform: scale(0.95);
+            }
+
+            .command-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #E74C3C;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #C0392B;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-header">
+        <a href="index.html" class="site-logo">
+            <img src="images/logo.png" alt="לוגו האתר">
+            CopyCode
+        </a>
+        <a href="search.html" class="search-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>חיפוש</span>
+        </a>
+    </div>
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-title">תוכן עניינים</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#basics" class="nav-link">יסודות Regex</a></li>
+                <li class="nav-item"><a href="#characters" class="nav-link">תווים מיוחדים</a></li>
+                <li class="nav-item"><a href="#quantifiers" class="nav-link">כמתים</a></li>
+                <li class="nav-item"><a href="#groups" class="nav-link">קבוצות</a></li>
+                <li class="nav-item"><a href="#anchors" class="nav-link">עוגנים</a></li>
+                <li class="nav-item"><a href="#lookahead" class="nav-link">Lookahead/Lookbehind</a></li>
+                <li class="nav-item"><a href="#flags" class="nav-link">Flags</a></li>
+                <li class="nav-item"><a href="#common" class="nav-link">דוגמאות נפוצות</a></li>
+                <li class="nav-item"><a href="#examples" class="nav-link">תרגילים</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+            <header>
+                <h1>
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="256" height="256" rx="28" fill="#E74C3C" />
+                        <!-- זכוכית מגדלת -->
+                        <circle cx="100" cy="100" r="50" fill="none" stroke="#FFF" stroke-width="12" />
+                        <line x1="138" y1="138" x2="180" y2="180" stroke="#FFF" stroke-width="12"
+                            stroke-linecap="round" />
+                        <!-- תבנית Regex בתוך -->
+                        <text x="100" y="110" font-family="monospace" font-size="32" fill="#FFF"
+                            text-anchor="middle">.*</text>
+                    </svg>
+                    מדריך Regex מקיף
+                </h1>
+                <p class="subtitle">ביטויים רגולריים - חיפוש והתאמת תבניות</p>
+            </header>
+
+            <div class="content">
+
+                <!-- יסודות -->
+                <section id="basics" class="section">
+                    <h2 class="section-title">יסודות Regex</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 מה זה Regex?</div>
+                        Regex (Regular Expressions) הם ביטויים רגולריים - שפה לחיפוש והתאמת תבניות בטקסט.
+                        זה כמו "חיפוש מתקדם על סטרואידים"! משמש בכל שפות התכנות, עורכי טקסט, וכלי שורת פקודה.
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תווים בסיסיים</h3>
+
+                        <p class="description">התאמה מדויקת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">hello</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מתאים בדיוק למילה "hello"</div>
+                        <div class="example-box">
+                            <div class="example-title">דוגמה:</div>
+                            <span class="match">hello</span> world, hello there
+                        </div>
+
+                        <p class="description">נקודה (.) - כל תו:</p>
+                        <div class="command-wrapper">
+                            <div class="command">h.llo</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">. = כל תו בודד (חוץ מ-newline)</div>
+                        <div class="example-box">
+                            <div class="example-title">מתאים ל:</div>
+                            <span class="match">hello</span>, <span class="match">hallo</span>, <span
+                                class="match">hxllo</span>
+                        </div>
+
+                        <p class="description">תווים מיוחדים שצריך escape:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\. \* \+ \? \[ \] \( \) \{ \} \^ \$ \| \\</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">להתאים לתו מיוחד, הוסף \ לפניו</div>
+                    </div>
+                </section>
+
+                <!-- תווים מיוחדים -->
+                <section id="characters" class="section">
+                    <h2 class="section-title">תווים מיוחדים וקבוצות</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Character Classes</h3>
+
+                        <p class="description">\d - ספרה (0-9):</p>
+                        <div class="command-wrapper">
+                            <div class="command">\d</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">0</span>, <span class="match">1</span>, <span
+                                class="match">2</span>...<span class="match">9</span>
+                        </div>
+
+                        <p class="description">\D - לא ספרה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\D</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">\w - תו מילה (אות, ספרה, _):</p>
+                        <div class="command-wrapper">
+                            <div class="command">\w</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">שווה ל-[a-zA-Z0-9_]</div>
+
+                        <p class="description">\W - לא תו מילה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\W</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">\s - רווח לבן (space, tab, newline):</p>
+                        <div class="command-wrapper">
+                            <div class="command">\s</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">\S - לא רווח לבן:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\S</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">טווחים ב-[]</h3>
+
+                        <p class="description">טווח אותיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[a-z]</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">כל אות קטנה מ-a עד z</div>
+
+                        <p class="description">טווח ספרות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[0-9]</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מספר אפשרויות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[aeiou]</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">תנועות בלבד</div>
+
+                        <p class="description">שלילה (NOT):</p>
+                        <div class="command-wrapper">
+                            <div class="command">[^0-9]</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">כל דבר חוץ מספרות</div>
+
+                        <p class="description">שילוב טווחים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[a-zA-Z0-9]</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">אותיות (גדולות וקטנות) וספרות</div>
+                    </div>
+                </section>
+
+                <!-- כמתים -->
+                <section id="quantifiers" class="section">
+                    <h2 class="section-title">כמתים (Quantifiers)</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">כמויות</h3>
+
+                        <p class="description">* - אפס או יותר:</p>
+                        <div class="command-wrapper">
+                            <div class="command">a*</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: "", <span class="match">a</span>, <span class="match">aa</span>, <span
+                                class="match">aaa</span>...
+                        </div>
+
+                        <p class="description">+ - אחד או יותר:</p>
+                        <div class="command-wrapper">
+                            <div class="command">a+</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">a</span>, <span class="match">aa</span>, <span
+                                class="match">aaa</span>... (לא "")
+                        </div>
+
+                        <p class="description">? - אפס או אחד (אופציונלי):</p>
+                        <div class="command-wrapper">
+                            <div class="command">colou?r</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">color</span>, <span class="match">colour</span>
+                        </div>
+
+                        <p class="description">{n} - בדיוק n פעמים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\d{3}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">123</span>, <span class="match">456</span> (בדיוק 3 ספרות)
+                        </div>
+
+                        <p class="description">{n,} - n או יותר:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\d{2,}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">לפחות 2 ספרות</div>
+
+                        <p class="description">{n,m} - בין n ל-m:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\d{2,4}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">12</span>, <span class="match">123</span>, <span
+                                class="match">1234</span>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Greedy vs Lazy</h3>
+
+                        <p class="description">Greedy (ברירת מחדל) - מתאים כמה שיותר:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;.+&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            בטקסט: &lt;div&gt;text&lt;/div&gt;<br>
+                            מתאים: <span class="match">&lt;div&gt;text&lt;/div&gt;</span> (הכל!)
+                        </div>
+
+                        <p class="description">Lazy (?) - מתאים כמה שפחות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;.+?&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            בטקסט: &lt;div&gt;text&lt;/div&gt;<br>
+                            מתאים: <span class="match">&lt;div&gt;</span> ו-<span class="match">&lt;/div&gt;</span>
+                            (בנפרד)
+                        </div>
+                    </div>
+                </section>
+
+                <!-- קבוצות -->
+                <section id="groups" class="section">
+                    <h2 class="section-title">קבוצות (Groups)</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Capturing Groups</h3>
+
+                        <p class="description">קבוצה בסיסית ():</p>
+                        <div class="command-wrapper">
+                            <div class="command">(abc)+</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">abc</span>, <span class="match">abcabc</span>, <span
+                                class="match">abcabcabc</span>
+                        </div>
+
+                        <p class="description">OR (|) בתוך קבוצה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">(cat|dog)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">cat</span> או <span class="match">dog</span>
+                        </div>
+
+                        <p class="description">התייחסות חוזרת (Backreference):</p>
+                        <div class="command-wrapper">
+                            <div class="command">(\w+)\s\1</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">\1 = התאמה למה שנתפס בקבוצה הראשונה</div>
+                        <div class="example-box">
+                            מתאים: <span class="match">hello hello</span>, <span class="match">test test</span>
+                        </div>
+
+                        <p class="description">Non-capturing group (?:):</p>
+                        <div class="command-wrapper">
+                            <div class="command">(?:abc)+</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מקבץ אבל לא שומר לזיכרון</div>
+                    </div>
+                </section>
+
+                <!-- עוגנים -->
+                <section id="anchors" class="section">
+                    <h2 class="section-title">עוגנים (Anchors)</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">התחלה וסוף</h3>
+
+                        <p class="description">^ - התחלת שורה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">^hello</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מתאים רק אם "hello" בהתחלת השורה</div>
+
+                        <p class="description">$ - סוף שורה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">world$</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מתאים רק אם "world" בסוף השורה</div>
+
+                        <p class="description">שורה שלמה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">^hello world$</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">השורה חייבת להכיל רק "hello world"</div>
+
+                        <p class="description">\b - גבול מילה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\bcat\b</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: "the <span class="match">cat</span> sat"<br>
+                            לא מתאים: "category" (cat בתוך מילה)
+                        </div>
+
+                        <p class="description">\B - לא גבול מילה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\Bcat\B</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: "edu<span class="match">cat</span>ion"<br>
+                            לא מתאים: "cat" (מילה שלמה)
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lookahead/Lookbehind -->
+                <section id="lookahead" class="section">
+                    <h2 class="section-title">Lookahead ו-Lookbehind</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Lookahead</h3>
+
+                        <p class="description">Positive Lookahead (?=):</p>
+                        <div class="command-wrapper">
+                            <div class="command">\d+(?= dollars)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מספר שאחריו " dollars"</div>
+                        <div class="example-box">
+                            בטקסט: "I have <span class="match">100</span> dollars and 50 euros"<br>
+                            מתאים רק ל-100
+                        </div>
+
+                        <p class="description">Negative Lookahead (?!):</p>
+                        <div class="command-wrapper">
+                            <div class="command">\d+(?! dollars)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מספר שאחריו לא " dollars"</div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Lookbehind</h3>
+
+                        <p class="description">Positive Lookbehind (?&lt;=):</p>
+                        <div class="command-wrapper">
+                            <div class="command">(?&lt;=\$)\d+</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מספר שלפניו $</div>
+                        <div class="example-box">
+                            בטקסט: "$<span class="match">100</span> and €50"<br>
+                            מתאים רק ל-100
+                        </div>
+
+                        <p class="description">Negative Lookbehind (?&lt;!):</p>
+                        <div class="command-wrapper">
+                            <div class="command">(?&lt;!\$)\d+</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מספר שלפניו לא $</div>
+                    </div>
+                </section>
+
+                <!-- Flags -->
+                <section id="flags" class="section">
+                    <h2 class="section-title">Flags (דגלים)</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">דגלים נפוצים</h3>
+
+                        <p class="description">i - Case insensitive:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/hello/i</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">hello</span>, <span class="match">Hello</span>, <span
+                                class="match">HELLO</span>
+                        </div>
+
+                        <p class="description">g - Global (כל ההתאמות):</p>
+                        <div class="command-wrapper">
+                            <div class="command">/cat/g</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מוצא את כל המופעים, לא רק הראשון</div>
+
+                        <p class="description">m - Multiline:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/^hello/m</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">^ ו-$ עובדים על כל שורה בנפרד</div>
+
+                        <p class="description">s - Dotall:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/./s</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">. מתאים גם ל-newline</div>
+
+                        <p class="description">שילוב דגלים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">/hello/gi</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">Global + Case insensitive</div>
+                    </div>
+                </section>
+
+                <!-- דוגמאות נפוצות -->
+                <section id="common" class="section">
+                    <h2 class="section-title">דוגמאות נפוצות</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">אימייל</h3>
+
+                        <p class="description">אימייל בסיסי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\w+@\w+\.\w+</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">אימייל מתקדם יותר:</p>
+                        <div class="command-wrapper">
+                            <div class="command">[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">user@example.com</span>, <span
+                                class="match">test.user+tag@domain.co.il</span>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">טלפון</h3>
+
+                        <p class="description">טלפון ישראלי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">0\d{1,2}-?\d{7}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">050-1234567</span>, <span class="match">0501234567</span>, <span
+                                class="match">02-1234567</span>
+                        </div>
+
+                        <p class="description">טלפון בינלאומי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\+?\d{1,3}[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">URL</h3>
+
+                        <p class="description">URL בסיסי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">https?://[\w.-]+\.\w+</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">URL מלא:</p>
+                        <div class="command-wrapper">
+                            <div class="command">
+                                https?://(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&/=]*)
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תאריך ושעה</h3>
+
+                        <p class="description">תאריך (DD/MM/YYYY):</p>
+                        <div class="command-wrapper">
+                            <div class="command">\d{2}/\d{2}/\d{4}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">25/12/2024</span>
+                        </div>
+
+                        <p class="description">תאריך (YYYY-MM-DD):</p>
+                        <div class="command-wrapper">
+                            <div class="command">\d{4}-\d{2}-\d{2}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שעה (24 שעות):</p>
+                        <div class="command-wrapper">
+                            <div class="command">([01]\d|2[0-3]):[0-5]\d</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">09:30</span>, <span class="match">23:59</span>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מספרים</h3>
+
+                        <p class="description">מספר שלם:</p>
+                        <div class="command-wrapper">
+                            <div class="command">-?\d+</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מספר עשרוני:</p>
+                        <div class="command-wrapper">
+                            <div class="command">-?\d+\.?\d*</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">42</span>, <span class="match">3.14</span>, <span
+                                class="match">-17.5</span>
+                        </div>
+
+                        <p class="description">מספר עם פסיקים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\d{1,3}(,\d{3})*</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">1,000</span>, <span class="match">1,234,567</span>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">סיסמה</h3>
+
+                        <p class="description">סיסמה חזקה (8+ תווים, אות גדולה, קטנה, ספרה):</p>
+                        <div class="command-wrapper">
+                            <div class="command">^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">משתמש ב-lookahead לבדיקת תנאים</div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">HTML/XML</h3>
+
+                        <p class="description">תג HTML:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;([a-z]+)([^&lt;]+)*(?:&gt;(.*)&lt;\/\1&gt;|\s+\/&gt;)</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הסרת תגי HTML:</p>
+                        <div class="command-wrapper">
+                            <div class="command">&lt;[^&gt;]+&gt;</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">כתובת IP</h3>
+
+                        <p class="description">IPv4:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\b(?:\d{1,3}\.){3}\d{1,3}\b</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">192.168.1.1</span>, <span class="match">8.8.8.8</span>
+                        </div>
+
+                        <p class="description">IPv4 מדויק (0-255):</p>
+                        <div class="command-wrapper">
+                            <div class="command">
+                                \b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b
+                            </div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- תרגילים -->
+                <section id="examples" class="section">
+                    <h2 class="section-title">תרגילים מעשיים</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תרגיל 1: חילוץ שמות</h3>
+                        <p class="description">חלץ שמות פרטיים ומשפחה מטקסט:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\b[A-Z][a-z]+\s[A-Z][a-z]+\b</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            טקסט: "Hello, I'm <span class="match">John Smith</span> and this is <span class="match">Jane
+                                Doe</span>."
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תרגיל 2: ניקוי רווחים</h3>
+                        <p class="description">מצא רווחים מרובים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">\s{2,}</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">להחלפה ברווח בודד</div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תרגיל 3: מספרי כרטיס אשראי</h3>
+                        <p class="description">זיהוי מספר כרטיס (16 ספרות):</p>
+                        <div class="command-wrapper">
+                            <div class="command">\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">1234 5678 9012 3456</span>, <span
+                                class="match">1234-5678-9012-3456</span>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תרגיל 4: Hashtags</h3>
+                        <p class="description">חילוץ hashtags:</p>
+                        <div class="command-wrapper">
+                            <div class="command">#\w+</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            טקסט: "Love <span class="match">#coding</span> and <span class="match">#programming</span>!"
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">תרגיל 5: קוד צבע Hex</h3>
+                        <p class="description">קוד צבע HEX:</p>
+                        <div class="command-wrapper">
+                            <div class="command">#[0-9A-Fa-f]{6}\b</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="example-box">
+                            מתאים: <span class="match">#FF5733</span>, <span class="match">#00ff00</span>
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        <div class="note-title">💡 טיפים לתרגול</div>
+                        • השתמש באתרים כמו regex101.com לתרגול<br>
+                        • התחל פשוט והוסף מורכבות בהדרגה<br>
+                        • בדוק את ה-regex על מקרי קצה<br>
+                        • זכור: Regex לא תמיד הפתרון הטוב ביותר!
+                    </div>
+                </section>
+            </div>
+
+            <footer>
+                <p>מדריך Regex מקיף - ביטויים רגולריים לחיפוש והתאמת תבניות</p>
+                <p style="margin-top: 0.5rem; opacity: 0.7;">© 2025 CopyCode</p>
+            </footer>
+        </div>
+    </div>
+
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // פונקציה להעתקת פקודה
+        function copyCommand(button) {
+            const commandDiv = button.previousElementSibling;
+            const command = commandDiv.textContent;
+
+            navigator.clipboard.writeText(command).then(() => {
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('שגיאה בהעתקה:', err);
+                alert('לא ניתן להעתיק. נסה שוב.');
+            });
+        }
+
+        // סימון קישור פעיל בניווט
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            // הצגת כפתור גלילה למעלה
+            const scrollTopBtn = document.querySelector('.scroll-top');
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        // גלילה חלקה לסעיפים
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // גלילה למעלה
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+
+</html>

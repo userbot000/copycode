@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך Linux/Bash מקיף - CopyCode</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: url('images/background.jpg') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .site-logo:hover {
+            color: #667eea;
+        }
+
+        .site-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding-top: 90px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1rem;
+            margin-left: 1.5rem;
+            position: sticky;
+            top: 110px;
+            height: calc(100vh - 130px);
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #FCC624;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: #5a6c7d;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding-right: 1rem;
+        }
+
+        .nav-link.active {
+            background: #333;
+            color: #FCC624;
+        }
+
+        .container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: transparent;
+            color: #1a1a1a;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        h1 svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #FCC624;
+            font-weight: 600;
+        }
+
+        .command-group {
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .command-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .command-wrapper {
+            position: relative;
+            margin: 0.8rem 0;
+        }
+
+        .command {
+            background: #2C2C2C;
+            color: #4AF626;
+            padding: 0.9rem 3rem 0.9rem 1rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid #FCC624;
+            position: relative;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+            padding: 0.4rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+        }
+
+        .copy-btn::before {
+            content: '⧉';
+            font-size: 1rem;
+        }
+
+        .copy-btn:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-color: #95a5a6;
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .copy-btn.copied::before {
+            content: '✓';
+        }
+
+        .description {
+            color: #5a6c7d;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .explanation {
+            background: #e8f4f8;
+            border-right: 3px solid #FCC624;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            color: #34495e;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-right: 3px solid #ffd43b;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #333 0%, #000 100%);
+            color: #FCC624;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 3px solid #FCC624;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 2px solid #FCC624;
+            }
+
+            .container {
+                margin: 0 1rem 1rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .command {
+                font-size: 0.82rem;
+                padding-left: 0.8rem;
+            }
+
+            .copy-btn {
+                position: relative;
+                display: block;
+                margin-top: 0.5rem;
+                right: 0;
+                transform: none;
+            }
+
+            .copy-btn:active {
+                transform: scale(0.95);
+            }
+
+            .command-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #333;
+            color: #FCC624;
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-header">
+        <a href="index.html" class="site-logo">
+            <img src="images/logo.png" alt="לוגו האתר">
+            CopyCode
+        </a>
+        <a href="search.html" class="search-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>חיפוש</span>
+        </a>
+    </div>
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-title">תוכן עניינים</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#basics" class="nav-link">פקודות בסיסיות</a></li>
+                <li class="nav-item"><a href="#files" class="nav-link">ניהול קבצים</a></li>
+                <li class="nav-item"><a href="#directories" class="nav-link">ניהול תיקיות</a></li>
+                <li class="nav-item"><a href="#permissions" class="nav-link">הרשאות</a></li>
+                <li class="nav-item"><a href="#search" class="nav-link">חיפוש</a></li>
+                <li class="nav-item"><a href="#text" class="nav-link">עיבוד טקסט</a></li>
+                <li class="nav-item"><a href="#processes" class="nav-link">תהליכים</a></li>
+                <li class="nav-item"><a href="#network" class="nav-link">רשת</a></li>
+                <li class="nav-item"><a href="#system" class="nav-link">מידע מערכת</a></li>
+                <li class="nav-item"><a href="#pipes" class="nav-link">Pipes ו-Redirects</a></li>
+                <li class="nav-item"><a href="#advanced" class="nav-link">מתקדם</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+            <header>
+                <h1>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAzFBMVEVHcEwuLSwSEQ4FBggAAAAAAAAoEwAAAAAAAAAKBwAAAAAJCQkAAAChcAzKkwDYqw76xR28hQBuPQARDguCTwAAAACOVgBHKgAzMzP8yyDeqAD+ziXaqAAAAAD+zBSVXAAnLTX///8AAAH/0jP+yQP/0iXr6+z8/PzfqQLyvQP9zRxeYGPNzs/NlQE7Ozu9vLr6+vdLS03k4+L19fX/0gvMr3Ovr68hISG9igCNcjyvl2uNjY1PNADdsyrayqW4hhn/4pT8z0iLVwB4eHjMpPr/AAAAIXRSTlMA/f3MUiVDBg0bdqv6/VN8jc5nmIfSmKbW1s5gudSso8I6Jf3bAAABfklEQVQ4jZWT6XaCMBSEDQUUl1rtZvdmCBB2FMRdu7z/OzUVxUpNz+n9wQnMl8zckNRq/ytDbar1P/RLABOiS3VV6CARGjKghaJaMuA6IiCfQygyYBAESIMYbVnOgb/uxLBJWxbidcw9dzUGNAlwy7LM4hxQJcDlhochn8OXtXEWb8LxiPoT5bSHuqBB4FA6Aq5P6Uab7moINE8ZRAm1U5oGQY5TjejIHZo41BnleTTB0+8F/L0DtRdQqq3WNQQlIGJGOKss0IpE/iQpgJQogHG8Ar4dbHvfh1LdzqZyDEyqQJfNDkCyJgohRxbnnsnmZYa3bAmsLn7I965lmu7Q2RmMWWc5tZ4PABOyaVpTjPYA+57xUAKuua1stss4Y9Z2ykUF8N63Hqnf8YoPd6WFV3iweRznPhBuX71uuUmPnLsCytwP8RvbAmCW5/a08ujWG0b/qhdyPr1VdV1Xm52QT68M43C2BaFpev9FbzSK4c2NbhjHl6MuNPHcD0XthC9tVD0wzd4fqwAAAABJRU5ErkJggg=="
+                        alt="Tux" style="width: 48px; height: 48px;">
+                    מדריך Linux/Bash מקיף
+                </h1>
+                <p class="subtitle">פקודות טרמינל שימושיות לעבודה יומיומית</p>
+            </header>
+
+            <div class="content">
+
+                <!-- פקודות בסיסיות -->
+                <section id="basics" class="section">
+                    <h2 class="section-title">פקודות בסיסיות</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 מה זה Linux?</div>
+                        Linux היא מערכת הפעלה חופשית וקוד פתוח שמריצה את רוב השרתים בעולם!
+                        הטרמינל (Terminal) הוא הכלי העוצמתי ביותר שלך - כל דבר אפשר לעשות דרכו.
+                        Bash הוא ה-shell הפופולרי ביותר ב-Linux.
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">ניווט בסיסי</h3>
+
+                        <p class="description">הצגת התיקייה הנוכחית:</p>
+                        <div class="command-wrapper">
+                            <div class="command">pwd</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">Print Working Directory - מציג את הנתיב המלא של התיקייה שאתה נמצא בה
+                        </div>
+
+                        <p class="description">רשימת קבצים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ls</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">רשימה מפורטת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ls -la</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">-l = פורמט ארוך, -a = כולל קבצים מוסתרים</div>
+
+                        <p class="description">מעבר לתיקייה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cd /path/to/directory</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חזרה לתיקיית הבית:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cd ~</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">תיקייה אחת למעלה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cd ..</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חזרה לתיקייה הקודמת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cd -</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">עזרה ומידע</h3>
+
+                        <p class="description">מדריך לפקודה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">man ls</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">Manual - מדריך מפורט לכל פקודה</div>
+
+                        <p class="description">עזרה מהירה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ls --help</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מידע על פקודה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">which python3</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מציג את הנתיב המלא של הפקודה</div>
+
+                        <p class="description">ניקוי מסך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">clear</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">או Ctrl+L</div>
+                    </div>
+                </section>
+
+                <!-- ניהול קבצים -->
+                <section id="files" class="section">
+                    <h2 class="section-title">ניהול קבצים</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">יצירה וצפייה</h3>
+
+                        <p class="description">יצירת קובץ ריק:</p>
+                        <div class="command-wrapper">
+                            <div class="command">touch file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת תוכן קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cat file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגה עם מספרי שורות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cat -n file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת תחילת קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">head file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מציג 10 שורות ראשונות</div>
+
+                        <p class="description">הצגת סוף קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">tail file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מעקב אחרי קובץ בזמן אמת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">tail -f /var/log/syslog</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">שימושי לצפייה בלוגים</div>
+
+                        <p class="description">הצגה עם גלילה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">less file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">Space = עמוד הבא, q = יציאה</div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">העתקה והעברה</h3>
+
+                        <p class="description">העתקת קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cp source.txt destination.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">העתקה לתיקייה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cp file.txt /path/to/directory/</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">העתקה רקורסיבית (תיקייה):</p>
+                        <div class="command-wrapper">
+                            <div class="command">cp -r folder/ /destination/</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">העברה/שינוי שם:</p>
+                        <div class="command-wrapper">
+                            <div class="command">mv old_name.txt new_name.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מחיקת קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">rm file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מחיקה בכוח (ללא אישור):</p>
+                        <div class="command-wrapper">
+                            <div class="command">rm -f file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <div class="note">
+                            <div class="note-title">⚠️ זהירות!</div>
+                            אין "פח מחזור" ב-Linux - קבצים שנמחקו אבודים לצמיתות!
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ניהול תיקיות -->
+                <section id="directories" class="section">
+                    <h2 class="section-title">ניהול תיקיות</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">יצירה ומחיקה</h3>
+
+                        <p class="description">יצירת תיקייה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">mkdir my_folder</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">יצירת תיקיות מקוננות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">mkdir -p parent/child/grandchild</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מחיקת תיקייה ריקה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">rmdir folder</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מחיקת תיקייה ותוכן:</p>
+                        <div class="command-wrapper">
+                            <div class="command">rm -r folder/</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מחיקה כפויה של הכל:</p>
+                        <div class="command-wrapper">
+                            <div class="command">rm -rf folder/</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">-r = רקורסיבי, -f = כוח (ללא אישור)</div>
+
+                        <p class="description">עץ תיקיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">tree</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">אם לא מותקן: sudo apt install tree</div>
+                    </div>
+                </section>
+
+                <!-- הרשאות -->
+                <section id="permissions" class="section">
+                    <h2 class="section-title">הרשאות (Permissions)</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 הרשאות ב-Linux</div>
+                        כל קובץ יש לו 3 סוגי הרשאות: קריאה (r), כתיבה (w), הרצה (x)<br>
+                        ו-3 קבוצות: בעלים (owner), קבוצה (group), אחרים (others)<br>
+                        דוגמה: rwxr-xr-- = בעלים: הכל, קבוצה: קריאה+הרצה, אחרים: קריאה בלבד
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">שינוי הרשאות</h3>
+
+                        <p class="description">הוספת הרשאת הרצה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">chmod +x script.sh</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הרשאות מספריות (755):</p>
+                        <div class="command-wrapper">
+                            <div class="command">chmod 755 file.sh</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">7=rwx, 5=r-x, 4=r--</div>
+
+                        <p class="description">הרשאות נפוצות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">chmod 644 file.txt # קריאה לכולם, כתיבה לבעלים
+                                chmod 755 script.sh # הרצה לכולם
+                                chmod 600 secret.key # רק בעלים יכול לקרוא/לכתוב</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שינוי רקורסיבי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">chmod -R 755 folder/</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שינוי בעלים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sudo chown user:group file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- חיפוש -->
+                <section id="search" class="section">
+                    <h2 class="section-title">חיפוש</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">חיפוש קבצים</h3>
+
+                        <p class="description">חיפוש קובץ לפי שם:</p>
+                        <div class="command-wrapper">
+                            <div class="command">find . -name "*.txt"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">. = תיקייה נוכחית</div>
+
+                        <p class="description">חיפוש לא רגיש לאותיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">find . -iname "readme*"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש קבצים שהשתנו ב-7 ימים אחרונים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">find . -mtime -7</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש קבצים גדולים מ-100MB:</p>
+                        <div class="command-wrapper">
+                            <div class="command">find . -size +100M</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש ומחיקה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">find . -name "*.tmp" -delete</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש מהיר (locate):</p>
+                        <div class="command-wrapper">
+                            <div class="command">locate filename</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מהיר יותר אבל דורש עדכון: sudo updatedb</div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">חיפוש בתוכן (grep)</h3>
+
+                        <p class="description">חיפוש טקסט בקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">grep "search_term" file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש לא רגיש לאותיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">grep -i "error" log.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש רקורסיבי בכל הקבצים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">grep -r "TODO" .</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת מספר שורה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">grep -n "error" file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">ספירת התאמות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">grep -c "error" log.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש עם הקשר (שורות לפני ואחרי):</p>
+                        <div class="command-wrapper">
+                            <div class="command">grep -C 3 "error" log.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">-C 3 = 3 שורות לפני ואחרי</div>
+                    </div>
+                </section>
+
+                <!-- עיבוד טקסט -->
+                <section id="text" class="section">
+                    <h2 class="section-title">עיבוד טקסט</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">פקודות שימושיות</h3>
+
+                        <p class="description">ספירת שורות/מילים/תווים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">wc file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">wc -l = רק שורות, wc -w = רק מילים</div>
+
+                        <p class="description">מיון:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sort file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הסרת כפילויות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sort file.txt | uniq</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">החלפת טקסט:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sed 's/old/new/g' file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">s = substitute, g = global (כל המופעים)</div>
+
+                        <p class="description">החלפה בקובץ עצמו:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sed -i 's/old/new/g' file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת עמודות ספציפיות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cut -d',' -f1,3 data.csv</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">-d = delimiter, -f = fields</div>
+
+                        <p class="description">הבדלים בין קבצים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">diff file1.txt file2.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- תהליכים -->
+                <section id="processes" class="section">
+                    <h2 class="section-title">ניהול תהליכים</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">צפייה וניהול</h3>
+
+                        <p class="description">רשימת תהליכים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ps aux</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">תהליכים בזמן אמת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">top</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">q = יציאה, k = kill process</div>
+
+                        <p class="description">top משופר:</p>
+                        <div class="command-wrapper">
+                            <div class="command">htop</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">אם לא מותקן: sudo apt install htop</div>
+
+                        <p class="description">חיפוש תהליך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ps aux | grep python</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הרג תהליך:</p>
+                        <div class="command-wrapper">
+                            <div class="command">kill 1234</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">1234 = PID (Process ID)</div>
+
+                        <p class="description">הרג כפוי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">kill -9 1234</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הרג לפי שם:</p>
+                        <div class="command-wrapper">
+                            <div class="command">pkill firefox</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הרצה ברקע:</p>
+                        <div class="command-wrapper">
+                            <div class="command">command &</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת תהליכים ברקע:</p>
+                        <div class="command-wrapper">
+                            <div class="command">jobs</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- רשת -->
+                <section id="network" class="section">
+                    <h2 class="section-title">פקודות רשת</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">בדיקות רשת</h3>
+
+                        <p class="description">בדיקת חיבור:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ping google.com</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">Ctrl+C להפסקה</div>
+
+                        <p class="description">הצגת כתובת IP:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ip addr</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">או בגרסאות ישנות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ifconfig</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הורדת קובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">wget https://example.com/file.zip</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">או עם curl:</p>
+                        <div class="command-wrapper">
+                            <div class="command">curl -O https://example.com/file.zip</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בדיקת פורטים פתוחים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">netstat -tuln</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">או בגרסה חדשה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ss -tuln</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">בדיקת DNS:</p>
+                        <div class="command-wrapper">
+                            <div class="command">nslookup google.com</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- מידע מערכת -->
+                <section id="system" class="section">
+                    <h2 class="section-title">מידע על המערכת</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">מידע כללי</h3>
+
+                        <p class="description">מידע על המערכת:</p>
+                        <div class="command-wrapper">
+                            <div class="command">uname -a</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">גרסת הפצה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cat /etc/os-release</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שימוש בדיסק:</p>
+                        <div class="command-wrapper">
+                            <div class="command">df -h</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">-h = human readable (GB, MB)</div>
+
+                        <p class="description">גודל תיקייה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">du -sh folder/</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">זיכרון RAM:</p>
+                        <div class="command-wrapper">
+                            <div class="command">free -h</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מידע על CPU:</p>
+                        <div class="command-wrapper">
+                            <div class="command">lscpu</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">זמן הפעלה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">uptime</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">משתמש נוכחי:</p>
+                        <div class="command-wrapper">
+                            <div class="command">whoami</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">משתמשים מחוברים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">who</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">היסטוריית פקודות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">history</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">!123 = הרץ פקודה מספר 123</div>
+                    </div>
+                </section>
+
+                <!-- Pipes ו-Redirects -->
+                <section id="pipes" class="section">
+                    <h2 class="section-title">Pipes ו-Redirects</h2>
+
+                    <div class="note">
+                        <div class="note-title">💡 מה זה Pipes?</div>
+                        Pipe (|) מעביר את הפלט של פקודה אחת כקלט לפקודה הבאה.<br>
+                        זה מאפשר לשלב פקודות ולבנות workflows עוצמתיים!
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Pipes</h3>
+
+                        <p class="description">חיבור פקודות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ls -la | grep ".txt"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">מציג רק קבצי txt</div>
+
+                        <p class="description">ספירת קבצים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ls | wc -l</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">מיון ותצוגה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">cat file.txt | sort | uniq | less</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">10 התהליכים הכבדים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">ps aux | sort -nrk 3,3 | head -10</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">Redirects</h3>
+
+                        <p class="description">שמירה לקובץ (דריסה):</p>
+                        <div class="command-wrapper">
+                            <div class="command">echo "Hello" > file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הוספה לקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">echo "World" >> file.txt</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">קלט מקובץ:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sort < unsorted.txt</div>
+                                    <button class="copy-btn" onclick="copyCommand(this)"></button>
+                            </div>
+
+                            <p class="description">הפניית שגיאות:</p>
+                            <div class="command-wrapper">
+                                <div class="command">command 2> errors.log</div>
+                                <button class="copy-btn" onclick="copyCommand(this)"></button>
+                            </div>
+
+                            <p class="description">הפניית הכל (פלט + שגיאות):</p>
+                            <div class="command-wrapper">
+                                <div class="command">command &> output.log</div>
+                                <button class="copy-btn" onclick="copyCommand(this)"></button>
+                            </div>
+
+                            <p class="description">השלכה לפח:</p>
+                            <div class="command-wrapper">
+                                <div class="command">command > /dev/null 2>&1</div>
+                                <button class="copy-btn" onclick="copyCommand(this)"></button>
+                            </div>
+                            <div class="explanation">מתעלם מכל הפלט</div>
+                        </div>
+                </section>
+
+                <!-- מתקדם -->
+                <section id="advanced" class="section">
+                    <h2 class="section-title">נושאים מתקדמים</h2>
+
+                    <div class="command-group">
+                        <h3 class="command-title">ארכיבים ודחיסה</h3>
+
+                        <p class="description">יצירת tar.gz:</p>
+                        <div class="command-wrapper">
+                            <div class="command">tar -czf archive.tar.gz folder/</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">-c = create, -z = gzip, -f = file</div>
+
+                        <p class="description">חילוץ tar.gz:</p>
+                        <div class="command-wrapper">
+                            <div class="command">tar -xzf archive.tar.gz</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                        <div class="explanation">-x = extract</div>
+
+                        <p class="description">רשימת תוכן:</p>
+                        <div class="command-wrapper">
+                            <div class="command">tar -tzf archive.tar.gz</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">דחיסת zip:</p>
+                        <div class="command-wrapper">
+                            <div class="command">zip -r archive.zip folder/</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חילוץ zip:</p>
+                        <div class="command-wrapper">
+                            <div class="command">unzip archive.zip</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">ניהול חבילות (Ubuntu/Debian)</h3>
+
+                        <p class="description">עדכון רשימת חבילות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sudo apt update</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">שדרוג חבילות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sudo apt upgrade</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">התקנת חבילה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sudo apt install package-name</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הסרת חבילה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sudo apt remove package-name</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">חיפוש חבילה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">apt search keyword</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">ניקוי חבילות ישנות:</p>
+                        <div class="command-wrapper">
+                            <div class="command">sudo apt autoremove</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">קיצורי דרך שימושיים</h3>
+
+                        <p class="description">Ctrl+C - עצירת פקודה</p>
+                        <p class="description">Ctrl+Z - השהיית פקודה</p>
+                        <p class="description">Ctrl+D - יציאה / EOF</p>
+                        <p class="description">Ctrl+L - ניקוי מסך</p>
+                        <p class="description">Ctrl+R - חיפוש בהיסטוריה</p>
+                        <p class="description">Tab - השלמה אוטומטית</p>
+                        <p class="description">!! - הפקודה האחרונה</p>
+                        <p class="description">!$ - הארגומנט האחרון</p>
+
+                        <div class="command-wrapper">
+                            <div class="command">mkdir /long/path/to/folder
+                                cd !$ # מעבר לתיקייה שיצרת</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+
+                    <div class="command-group">
+                        <h3 class="command-title">משתני סביבה</h3>
+
+                        <p class="description">הצגת משתנה:</p>
+                        <div class="command-wrapper">
+                            <div class="command">echo $PATH</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הגדרת משתנה זמני:</p>
+                        <div class="command-wrapper">
+                            <div class="command">export MY_VAR="value"</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+
+                        <p class="description">הצגת כל המשתנים:</p>
+                        <div class="command-wrapper">
+                            <div class="command">env</div>
+                            <button class="copy-btn" onclick="copyCommand(this)"></button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <footer>
+                <p>מדריך Linux/Bash מקיף - פקודות טרמינל שימושיות</p>
+                <p style="margin-top: 0.5rem; opacity: 0.7;">© 2025 CopyCode</p>
+            </footer>
+        </div>
+    </div>
+
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // פונקציה להעתקת פקודה
+        function copyCommand(button) {
+            const commandDiv = button.previousElementSibling;
+            const command = commandDiv.textContent;
+
+            navigator.clipboard.writeText(command).then(() => {
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('שגיאה בהעתקה:', err);
+                alert('לא ניתן להעתיק. נסה שוב.');
+            });
+        }
+
+        // סימון קישור פעיל בניווט
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            // הצגת כפתור גלילה למעלה
+            const scrollTopBtn = document.querySelector('.scroll-top');
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        // גלילה חלקה לסעיפים
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // גלילה למעלה
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+
+</html>

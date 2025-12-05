@@ -218,6 +218,18 @@
             background: #DC143C;
         }
 
+        .guide-card.sqlite::before {
+            background: #003B57;
+        }
+
+        .guide-card.linux::before {
+            background: #FCC624;
+        }
+
+        .guide-card.regex::before {
+            background: #E74C3C;
+        }
+
         .guide-icon {
             width: 64px;
             height: 64px;
@@ -306,6 +318,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -316,6 +329,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -326,6 +340,7 @@
                 opacity: 0;
                 transform: translateX(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -333,18 +348,24 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-10px);
             }
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.05);
             }
@@ -472,7 +493,9 @@
         </a>
         <a href="search.html" class="search-btn">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path
+                    d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             <span>חיפוש</span>
         </a>
@@ -642,6 +665,72 @@
                     <span class="topic-tag">ביצועים</span>
                     <span class="topic-tag">פרטיות</span>
                     <span class="topic-tag">אבטחה</span>
+                </div>
+            </a>
+
+            <a href="sqlite-guide.html" class="guide-card sqlite">
+                <div class="guide-icon">
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="256" height="256" rx="28" fill="#003B57" />
+                        <path d="M80 60h96v20H80zm0 40h96v20H80zm0 40h96v20H80zm0 40h96v20H80z" fill="#A8E6CF" />
+                        <circle cx="60" cy="70" r="8" fill="#A8E6CF" />
+                        <circle cx="60" cy="110" r="8" fill="#A8E6CF" />
+                        <circle cx="60" cy="150" r="8" fill="#A8E6CF" />
+                        <circle cx="60" cy="190" r="8" fill="#A8E6CF" />
+                    </svg>
+                </div>
+                <h3 class="guide-title">SQLite</h3>
+                <p class="guide-subtitle">מסד נתונים קל ועוצמתי</p>
+                <p class="guide-description">
+                    מדריך מקיף ל-SQLite - מיסודות ועד מתקדם.
+                    שאילתות, טבלאות, JOIN, אינדקסים, טרנזקציות ואופטימיזציה.
+                </p>
+                <div class="guide-topics">
+                    <span class="topic-tag">SELECT</span>
+                    <span class="topic-tag">JOIN</span>
+                    <span class="topic-tag">אינדקסים</span>
+                    <span class="topic-tag">טרנזקציות</span>
+                </div>
+            </a>
+
+            <a href="linux-guide.html" class="guide-card linux">
+                <div class="guide-icon">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAzFBMVEVHcEwuLSwSEQ4FBggAAAAAAAAoEwAAAAAAAAAKBwAAAAAJCQkAAAChcAzKkwDYqw76xR28hQBuPQARDguCTwAAAACOVgBHKgAzMzP8yyDeqAD+ziXaqAAAAAD+zBSVXAAnLTX///8AAAH/0jP+yQP/0iXr6+z8/PzfqQLyvQP9zRxeYGPNzs/NlQE7Ozu9vLr6+vdLS03k4+L19fX/0gvMr3Ovr68hISG9igCNcjyvl2uNjY1PNADdsyrayqW4hhn/4pT8z0iLVwB4eHjMpPr/AAAAIXRSTlMA/f3MUiVDBg0bdqv6/VN8jc5nmIfSmKbW1s5gudSso8I6Jf3bAAABfklEQVQ4jZWT6XaCMBSEDQUUl1rtZvdmCBB2FMRdu7z/OzUVxUpNz+n9wQnMl8zckNRq/ytDbar1P/RLABOiS3VV6CARGjKghaJaMuA6IiCfQygyYBAESIMYbVnOgb/uxLBJWxbidcw9dzUGNAlwy7LM4hxQJcDlhochn8OXtXEWb8LxiPoT5bSHuqBB4FA6Aq5P6Uab7moINE8ZRAm1U5oGQY5TjejIHZo41BnleTTB0+8F/L0DtRdQqq3WNQQlIGJGOKss0IpE/iQpgJQogHG8Ar4dbHvfh1LdzqZyDEyqQJfNDkCyJgohRxbnnsnmZYa3bAmsLn7I965lmu7Q2RmMWWc5tZ4PABOyaVpTjPYA+57xUAKuua1stss4Y9Z2ykUF8N63Hqnf8YoPd6WFV3iweRznPhBuX71uuUmPnLsCytwP8RvbAmCW5/a08ujWG0b/qhdyPr1VdV1Xm52QT68M43C2BaFpev9FbzSK4c2NbhjHl6MuNPHcD0XthC9tVD0wzd4fqwAAAABJRU5ErkJggg==" alt="Tux" style="width: 64px; height: 64px;">
+                </div>
+                <h3 class="guide-title">Linux/Bash</h3>
+                <p class="guide-subtitle">פקודות טרמינל שימושיות</p>
+                <p class="guide-description">
+                    מדריך מקיף לפקודות Linux ו-Bash.
+                    ניהול קבצים, הרשאות, חיפוש, תהליכים, רשת ו-pipes.
+                </p>
+                <div class="guide-topics">
+                    <span class="topic-tag">Terminal</span>
+                    <span class="topic-tag">Bash</span>
+                    <span class="topic-tag">Pipes</span>
+                    <span class="topic-tag">grep</span>
+                </div>
+            </a>
+
+            <a href="regex-guide.html" class="guide-card regex">
+                <div class="guide-icon">
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="256" height="256" rx="28" fill="#E74C3C"/>
+                        <circle cx="100" cy="100" r="50" fill="none" stroke="#FFF" stroke-width="12"/>
+                        <line x1="138" y1="138" x2="180" y2="180" stroke="#FFF" stroke-width="12" stroke-linecap="round"/>
+                        <text x="100" y="110" font-family="monospace" font-size="32" fill="#FFF" text-anchor="middle">.*</text>
+                    </svg>
+                </div>
+                <h3 class="guide-title">Regex</h3>
+                <p class="guide-subtitle">ביטויים רגולריים</p>
+                <p class="guide-description">
+                    מדריך מקיף ל-Regular Expressions.
+                    תווים מיוחדים, כמתים, קבוצות, lookahead ודוגמאות נפוצות.
+                </p>
+                <div class="guide-topics">
+                    <span class="topic-tag">Patterns</span>
+                    <span class="topic-tag">Groups</span>
+                    <span class="topic-tag">Lookahead</span>
+                    <span class="topic-tag">Flags</span>
                 </div>
             </a>
         </div>

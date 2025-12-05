@@ -261,6 +261,8 @@
             border: 1px solid #333;
             position: relative;
             overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
         }
 
 
@@ -476,7 +478,6 @@
                 <li class="nav-item"><a href="#github-cli" class="nav-link">GitHub CLI</a></li>
                 <li class="nav-item"><a href="#sync" class="nav-link">סנכרון מוחלט</a></li>
                 <li class="nav-item"><a href="#tools" class="nav-link">כלים נוספים</a></li>
-                <li class="nav-item"><a href="#dart" class="nav-link">Dart Analysis</a></li>
                 <li class="nav-item"><a href="#custom" class="nav-link">פקודות נוספות</a></li>
             </ul>
         </nav>
@@ -791,30 +792,6 @@
                             <div class="command">Ctrl+Shift+P → "line: Open In New Tab"</div>
                             <button class="copy-btn" onclick="copyCommand(this, 'Ctrl+Shift+P')"></button>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dart -->
-            <div class="section" id="dart">
-                <h2 class="section-title">Dart Analysis Server</h2>
-                <div class="command-group">
-                    <div class="command-title">הפעלה מחדש</div>
-                    <div class="description">פתח את Command Palette:</div>
-                    <div class="explanation">פותח את תפריט הפקודות של VS Code</div>
-                    <div class="command-wrapper">
-                        <div class="command">Ctrl+Shift+P</div>
-                        <button class="copy-btn" onclick="copyCommand(this, 'Ctrl+Shift+P')"></button>
-                    </div>
-                    <div class="description">והרץ:</div>
-                    <div class="explanation">מפעיל מחדש את שרת הניתוח של Dart - פותר בעיות של שגיאות שנתקעו או ניתוח לא מדויק</div>
-                    <div class="command-wrapper">
-                        <div class="command">Dart: Restart Analysis Server</div>
-                        <button class="copy-btn" onclick="copyCommand(this, 'Dart: Restart Analysis Server')"></button>
-                    </div>
-                    <div class="note">
-                        <div class="note-title">💡 טיפ</div>
-                        בדרך כלל זה לבד מנקה שגיאות "תקועות" ומפעיל ניתוח קוד מחדש
                     </div>
                 </div>
             </div>

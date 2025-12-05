@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך SQLite מקיף - CopyCode</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: url('images/background.jpg') center center / cover no-repeat fixed;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .site-logo:hover {
+            color: #667eea;
+        }
+
+        .site-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding-top: 90px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1rem;
+            margin-left: 1.5rem;
+            position: sticky;
+            top: 110px;
+            height: calc(100vh - 130px);
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #003B57;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: #5a6c7d;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding-right: 1rem;
+        }
+
+        .nav-link.active {
+            background: #003B57;
+            color: white;
+        }
+
+        .container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: transparent;
+            color: #1a1a1a;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        h1 svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #003B57;
+            font-weight: 600;
+        }
+
+        .command-group {
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .command-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .command-wrapper {
+            position: relative;
+            margin: 0.8rem 0;
+        }
+
+        .command {
+            background: #003B57;
+            color: #A8E6CF;
+            padding: 0.9rem 3rem 0.9rem 1rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid #005F73;
+            position: relative;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #7f8c8d;
+            border: 1px solid #bdc3c7;
+            padding: 0.4rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+        }
+
+        .copy-btn::before {
+            content: '⧉';
+            font-size: 1rem;
+        }
+
+        .copy-btn:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-color: #95a5a6;
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .copy-btn.copied::before {
+            content: '✓';
+        }
+
+        .description {
+            color: #5a6c7d;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .explanation {
+            background: #e8f4f8;
+            border-right: 3px solid #003B57;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            color: #34495e;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-right: 3px solid #ffd43b;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #003B57 0%, #005F73 100%);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 3px solid #003B57;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 2px solid #003B57;
+            }
+
+            .container {
+                margin: 0 1rem 1rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .command {
+                font-size: 0.82rem;
+                padding-left: 0.8rem;
+            }
+
+            .copy-btn {
+                position: relative;
+                display: block;
+                margin-top: 0.5rem;
+                right: 0;
+                transform: none;
+            }
+
+            .copy-btn:active {
+                transform: scale(0.95);
+            }
+
+            .command-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #003B57;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #005F73;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="top-header">
+        <a href="index.html" class="site-logo">
+            <img src="images/logo.png" alt="לוגו האתר">
+            CopyCode
+        </a>
+        <a href="search.html" class="search-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>חיפוש</span>
+        </a>
+    </div>
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-title">תוכן עניינים</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#basics" class="nav-link">יסודות SQLite</a></li>
+                <li class="nav-item"><a href="#create" class="nav-link">יצירת טבלאות</a></li>
+                <li class="nav-item"><a href="#insert" class="nav-link">הוספת נתונים</a></li>
+                <li class="nav-item"><a href="#select" class="nav-link">שאילתות SELECT</a></li>
+                <li class="nav-item"><a href="#update" class="nav-link">עדכון ומחיקה</a></li>
+                <li class="nav-item"><a href="#joins" class="nav-link">JOIN וקשרים</a></li>
+                <li class="nav-item"><a href="#functions" class="nav-link">פונקציות</a></li>
+                <li class="nav-item"><a href="#indexes" class="nav-link">אינדקסים</a></li>
+                <li class="nav-item"><a href="#transactions" class="nav-link">טרנזקציות</a></li>
+                <li class="nav-item"><a href="#advanced" class="nav-link">נושאים מתקדמים</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+        <header>
+            <h1>
+                <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="256" height="256" rx="28" fill="#003B57"/>
+                    <path d="M80 60h96v20H80zm0 40h96v20H80zm0 40h96v20H80zm0 40h96v20H80z" fill="#A8E6CF"/>
+                    <circle cx="60" cy="70" r="8" fill="#A8E6CF"/>
+                    <circle cx="60" cy="110" r="8" fill="#A8E6CF"/>
+                    <circle cx="60" cy="150" r="8" fill="#A8E6CF"/>
+                    <circle cx="60" cy="190" r="8" fill="#A8E6CF"/>
+                </svg>
+                מדריך SQLite מקיף
+            </h1>
+            <p class="subtitle">מסד נתונים קל ועוצמתי - מיסודות ועד מתקדם</p>
+        </header>
+
+        <div class="content">
+
+            <!-- יסודות SQLite -->
+            <section id="basics" class="section">
+                <h2 class="section-title">יסודות SQLite</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה SQLite?</div>
+                    SQLite הוא מסד נתונים קל משקל שלא דורש שרת נפרד - הכל בקובץ אחד!
+                    הוא מושלם לאפליקציות מובייל, אתרים קטנים, ופרויקטים אישיים.
+                    SQLite משמש במיליארדי מכשירים ברחבי העולם.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">פקודות בסיסיות</h3>
+                    
+                    <p class="description">פתיחת/יצירת מסד נתונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">sqlite3 database.db</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת כל הטבלאות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">.tables</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת מבנה טבלה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">.schema table_name</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">יציאה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">.quit</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגה מסודרת של תוצאות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">.mode column
+.headers on</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- יצירת טבלאות -->
+            <section id="create" class="section">
+                <h2 class="section-title">יצירת טבלאות</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">CREATE TABLE</h3>
+                    
+                    <p class="description">טבלה בסיסית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE,
+    age INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <div class="explanation">
+                        <strong>טיפוסי נתונים ב-SQLite:</strong><br>
+                        • INTEGER - מספרים שלמים<br>
+                        • REAL - מספרים עשרוניים<br>
+                        • TEXT - טקסט<br>
+                        • BLOB - נתונים בינאריים<br>
+                        • NULL - ערך ריק
+                    </div>
+                    
+                    <p class="description">מחיקת טבלה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">DROP TABLE IF EXISTS users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שינוי טבלה - הוספת עמודה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">ALTER TABLE users ADD COLUMN phone TEXT;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- הוספת נתונים -->
+            <section id="insert" class="section">
+                <h2 class="section-title">הוספת נתונים (INSERT)</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">הכנסת רשומות</h3>
+                    
+                    <p class="description">הכנסה בסיסית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">INSERT INTO users (name, email, age) 
+VALUES ('Alice', 'alice@example.com', 25);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הכנסת מספר רשומות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">INSERT INTO users (name, email, age) VALUES
+    ('Bob', 'bob@example.com', 30),
+    ('Charlie', 'charlie@example.com', 28),
+    ('Diana', 'diana@example.com', 22);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הכנסה עם כל העמודות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">INSERT INTO users VALUES (NULL, 'Eve', 'eve@example.com', 27, CURRENT_TIMESTAMP);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- שאילתות SELECT -->
+            <section id="select" class="section">
+                <h2 class="section-title">שאילתות SELECT</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">שאילתות בסיסיות</h3>
+                    
+                    <p class="description">בחירת כל הנתונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT * FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">בחירת עמודות ספציפיות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT name, email FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">סינון עם WHERE:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT * FROM users WHERE age > 25;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מספר תנאים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT * FROM users 
+WHERE age >= 25 AND age <= 30;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">חיפוש בטקסט (LIKE):</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT * FROM users WHERE name LIKE 'A%';</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    <div class="explanation">% = כל דבר, _ = תו אחד</div>
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">מיון והגבלה</h3>
+                    
+                    <p class="description">מיון:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT * FROM users ORDER BY age DESC;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הגבלת תוצאות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT * FROM users LIMIT 10;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">דילוג והגבלה (pagination):</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT * FROM users LIMIT 10 OFFSET 20;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ערכים ייחודיים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT DISTINCT age FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- עדכון ומחיקה -->
+            <section id="update" class="section">
+                <h2 class="section-title">עדכון ומחיקה</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">UPDATE</h3>
+                    
+                    <p class="description">עדכון רשומה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">UPDATE users 
+SET age = 26 
+WHERE name = 'Alice';</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">עדכון מספר שדות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">UPDATE users 
+SET age = 31, email = 'bob.new@example.com' 
+WHERE id = 2;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <div class="note">
+                        <div class="note-title">⚠️ זהירות!</div>
+                        UPDATE ללא WHERE יעדכן את כל הרשומות!
+                    </div>
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">DELETE</h3>
+                    
+                    <p class="description">מחיקת רשומה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">DELETE FROM users WHERE id = 5;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מחיקה עם תנאי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">DELETE FROM users WHERE age < 18;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מחיקת כל הנתונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">DELETE FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- JOIN -->
+            <section id="joins" class="section">
+                <h2 class="section-title">JOIN - חיבור טבלאות</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">סוגי JOIN</h3>
+                    
+                    <p class="description">INNER JOIN - רק רשומות תואמות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT users.name, orders.product 
+FROM users 
+INNER JOIN orders ON users.id = orders.user_id;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">LEFT JOIN - כל המשתמשים גם ללא הזמנות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT users.name, orders.product 
+FROM users 
+LEFT JOIN orders ON users.id = orders.user_id;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">חיבור מספר טבלאות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT u.name, o.product, p.amount 
+FROM users u
+INNER JOIN orders o ON u.id = o.user_id
+INNER JOIN payments p ON o.id = p.order_id;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- פונקציות -->
+            <section id="functions" class="section">
+                <h2 class="section-title">פונקציות</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">פונקציות צבירה (Aggregate)</h3>
+                    
+                    <p class="description">ספירה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT COUNT(*) FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ממוצע, מינימום, מקסימום:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT AVG(age), MIN(age), MAX(age) FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">סכום:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT SUM(price) FROM orders;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">קיבוץ (GROUP BY):</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT age, COUNT(*) as count 
+FROM users 
+GROUP BY age;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">סינון אחרי קיבוץ (HAVING):</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT age, COUNT(*) as count 
+FROM users 
+GROUP BY age 
+HAVING count > 2;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">פונקציות מחרוזות</h3>
+                    
+                    <p class="description">אורך מחרוזת:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT name, LENGTH(name) FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">אותיות גדולות/קטנות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT UPPER(name), LOWER(email) FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">חיתוך רווחים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT TRIM(name) FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">חיבור מחרוזות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT name || ' - ' || email as full_info FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">פונקציות תאריך ושעה</h3>
+                    
+                    <p class="description">תאריך ושעה נוכחיים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT datetime('now');</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">תאריך בלבד:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT date('now');</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הוספת זמן:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT datetime('now', '+7 days');</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">פורמט תאריך:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT strftime('%d/%m/%Y', 'now');</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- אינדקסים -->
+            <section id="indexes" class="section">
+                <h2 class="section-title">אינדקסים (Indexes)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 למה אינדקסים?</div>
+                    אינדקסים מאיצים שאילתות באופן דרמטי, במיוחד בטבלאות גדולות.
+                    הם כמו תוכן עניינים בספר - מאפשרים למצוא מידע מהר יותר.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">יצירה וניהול</h3>
+                    
+                    <p class="description">יצירת אינדקס:</p>
+                    <div class="command-wrapper">
+                        <div class="command">CREATE INDEX idx_users_email ON users(email);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">אינדקס ייחודי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">CREATE UNIQUE INDEX idx_users_email_unique ON users(email);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">אינדקס על מספר עמודות:</p>
+                    <div class="command-wrapper">
+                        <div class="command">CREATE INDEX idx_users_name_age ON users(name, age);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מחיקת אינדקס:</p>
+                    <div class="command-wrapper">
+                        <div class="command">DROP INDEX idx_users_email;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">הצגת כל האינדקסים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">.indexes users</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- טרנזקציות -->
+            <section id="transactions" class="section">
+                <h2 class="section-title">טרנזקציות (Transactions)</h2>
+                
+                <div class="note">
+                    <div class="note-title">💡 מה זה טרנזקציה?</div>
+                    טרנזקציה היא קבוצת פעולות שמתבצעות ביחד - או שהכל מצליח, או שהכל נכשל.
+                    זה מבטיח שהמידע במסד הנתונים תמיד יהיה עקבי.
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">שימוש בטרנזקציות</h3>
+                    
+                    <p class="description">טרנזקציה בסיסית:</p>
+                    <div class="command-wrapper">
+                        <div class="command">BEGIN TRANSACTION;
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+
+COMMIT;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ביטול טרנזקציה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">BEGIN TRANSACTION;
+
+DELETE FROM users WHERE age < 18;
+
+ROLLBACK;  -- מבטל את כל השינויים</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <div class="explanation">
+                        <strong>COMMIT</strong> - שומר את השינויים<br>
+                        <strong>ROLLBACK</strong> - מבטל את השינויים
+                    </div>
+                </div>
+            </section>
+
+            <!-- נושאים מתקדמים -->
+            <section id="advanced" class="section">
+                <h2 class="section-title">נושאים מתקדמים</h2>
+                
+                <div class="command-group">
+                    <h3 class="command-title">Views - תצוגות</h3>
+                    
+                    <p class="description">יצירת View:</p>
+                    <div class="command-wrapper">
+                        <div class="command">CREATE VIEW active_users AS
+SELECT id, name, email 
+FROM users 
+WHERE age >= 18;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שימוש ב-View:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT * FROM active_users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">מחיקת View:</p>
+                    <div class="command-wrapper">
+                        <div class="command">DROP VIEW active_users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">Subqueries - תת-שאילתות</h3>
+                    
+                    <p class="description">תת-שאילתה ב-WHERE:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT name FROM users 
+WHERE age > (SELECT AVG(age) FROM users);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">תת-שאילתה ב-FROM:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT * FROM (
+    SELECT name, age FROM users WHERE age > 25
+) AS young_users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">EXISTS:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT name FROM users u
+WHERE EXISTS (
+    SELECT 1 FROM orders o WHERE o.user_id = u.id
+);</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">CASE - תנאים</h3>
+                    
+                    <p class="description">CASE WHEN:</p>
+                    <div class="command-wrapper">
+                        <div class="command">SELECT name, age,
+    CASE 
+        WHEN age < 18 THEN 'קטין'
+        WHEN age < 65 THEN 'בוגר'
+        ELSE 'פנסיונר'
+    END as category
+FROM users;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">ייצוא וייבוא</h3>
+                    
+                    <p class="description">ייצוא לקובץ CSV:</p>
+                    <div class="command-wrapper">
+                        <div class="command">.mode csv
+.output users.csv
+SELECT * FROM users;
+.output stdout</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ייבוא מקובץ CSV:</p>
+                    <div class="command-wrapper">
+                        <div class="command">.mode csv
+.import users.csv users</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">גיבוי מסד נתונים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">.backup backup.db</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">שחזור מגיבוי:</p>
+                    <div class="command-wrapper">
+                        <div class="command">.restore backup.db</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+                
+                <div class="command-group">
+                    <h3 class="command-title">אופטימיזציה</h3>
+                    
+                    <p class="description">ניתוח שאילתה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">EXPLAIN QUERY PLAN 
+SELECT * FROM users WHERE email = 'test@example.com';</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ניקוי ואופטימיזציה:</p>
+                    <div class="command-wrapper">
+                        <div class="command">VACUUM;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                    
+                    <p class="description">ניתוח לשיפור ביצועים:</p>
+                    <div class="command-wrapper">
+                        <div class="command">ANALYZE;</div>
+                        <button class="copy-btn" onclick="copyCommand(this)"></button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>מדריך SQLite מקיף - מסד נתונים קל ועוצמתי</p>
+            <p style="margin-top: 0.5rem; opacity: 0.7;">© 2025 CopyCode</p>
+        </footer>
+    </div>
+    </div>
+
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // פונקציה להעתקת פקודה
+        function copyCommand(button) {
+            const commandDiv = button.previousElementSibling;
+            const command = commandDiv.textContent;
+            
+            navigator.clipboard.writeText(command).then(() => {
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('שגיאה בהעתקה:', err);
+                alert('לא ניתן להעתיק. נסה שוב.');
+            });
+        }
+
+        // סימון קישור פעיל בניווט
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            // הצגת כפתור גלילה למעלה
+            const scrollTopBtn = document.querySelector('.scroll-top');
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        // גלילה חלקה לסעיפים
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // גלילה למעלה
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
